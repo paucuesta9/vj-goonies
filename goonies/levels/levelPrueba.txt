@@ -1,0 +1,10 @@
+TILEMAP
+21 4							-- Size of tile map in tiles
+64 64					-- Tile size & block size
+images/hola.png 	-- Tilesheet
+21 8 								-- Number of tiles in tilesheet
+001002003004005006007008009010011012013014015016017018019020021
+                                                               
+022023024025026027028029030031032033034035036037038039040041042                    
+
+
