@@ -53,29 +53,29 @@ bool TileMap::loadLevel(const string &levelFile)
 	char tile;
 	
 	fin.open(levelFile.c_str());
-	if(!fin.is_open()) // Abrimos el fichero
+	if(!fin.is_open())
 		return false;
 	getline(fin, line);
-	if(line.compare(0, 7, "TILEMAP") != 0) // Miramos si la primera linea incluye el texto TILEMAP
+	if(line.compare(0, 7, "TILEMAP") != 0)
 		return false;
 	getline(fin, line);
 	sstream.str(line);
-	sstream >> mapSize.x >> mapSize.y; //Obtenemos el tamaño del mapa. TamañoX, TamañoY (En tiles)
-	getline(fin, line);	
-	sstream.str(line);
-	sstream >> tileSize >> blockSize; //Obtenemos el tamaño del tile Size y del blocksize (en el caso del ejemplo, tile es el cuadrado y block es todo)
+	sstream >> mapSize.x >> mapSize.y;
 	getline(fin, line);
 	sstream.str(line);
-	sstream >> tilesheetFile; //Obtenemos el fichero donde se encuentra el tilesheet
+	sstream >> tileSize >> blockSize;
+	getline(fin, line);
+	sstream.str(line);
+	sstream >> tilesheetFile;
 	tilesheet.loadFromFile(tilesheetFile, TEXTURE_PIXEL_FORMAT_RGBA);
 	tilesheet.setWrapS(GL_CLAMP_TO_EDGE);
 	tilesheet.setWrapT(GL_CLAMP_TO_EDGE);
 	tilesheet.setMinFilter(GL_NEAREST);
-	tilesheet.setMagFilter(GL_NEAREST); //Cargamos el tilesheet
+	tilesheet.setMagFilter(GL_NEAREST);
 	getline(fin, line);
 	sstream.str(line);
-	sstream >> tilesheetSize.x >> tilesheetSize.y; //Obtenemos el tamaño del tilesheet en tiles
-	tileTexSize = glm::vec2(1.f / tilesheetSize.x, 1.f / tilesheetSize.y); // Obtenemos cuanto ocupa cada tile respecto a 1
+	sstream >> tilesheetSize.x >> tilesheetSize.y;
+	tileTexSize = glm::vec2(1.f / tilesheetSize.x, 1.f / tilesheetSize.y);
 	
 	map = new int[mapSize.x * mapSize.y];
 	for(int j=0; j<mapSize.y; j++)
