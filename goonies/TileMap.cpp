@@ -53,29 +53,29 @@ bool TileMap::loadLevel(const string &levelFile)
 	char tile;
 	
 	fin.open(levelFile.c_str());
-	if(!fin.is_open())
+	if(!fin.is_open()) // Abrimos el fichero
 		return false;
 	getline(fin, line);
-	if(line.compare(0, 7, "TILEMAP") != 0)
+	if(line.compare(0, 7, "TILEMAP") != 0) // Miramos si la primera linea incluye el texto TILEMAP
 		return false;
 	getline(fin, line);
 	sstream.str(line);
-	sstream >> mapSize.x >> mapSize.y;
+	sstream >> mapSize.x >> mapSize.y; //Obtenemos el tamaño del mapa. TamañoX, TamañoY (En tiles)
+	getline(fin, line);	
+	sstream.str(line);
+	sstream >> tileSize >> blockSize; //Obtenemos el tamaño del tile Size y del blocksize (en el caso del ejemplo, tile es el cuadrado y block es todo)
 	getline(fin, line);
 	sstream.str(line);
-	sstream >> tileSize >> blockSize;
-	getline(fin, line);
-	sstream.str(line);
-	sstream >> tilesheetFile;
+	sstream >> tilesheetFile; //Obtenemos el fichero donde se encuentra el tilesheet
 	tilesheet.loadFromFile(tilesheetFile, TEXTURE_PIXEL_FORMAT_RGBA);
 	tilesheet.setWrapS(GL_CLAMP_TO_EDGE);
 	tilesheet.setWrapT(GL_CLAMP_TO_EDGE);
 	tilesheet.setMinFilter(GL_NEAREST);
-	tilesheet.setMagFilter(GL_NEAREST);
+	tilesheet.setMagFilter(GL_NEAREST); //Cargamos el tilesheet
 	getline(fin, line);
 	sstream.str(line);
-	sstream >> tilesheetSize.x >> tilesheetSize.y;
-	tileTexSize = glm::vec2(1.f / tilesheetSize.x, 1.f / tilesheetSize.y);
+	sstream >> tilesheetSize.x >> tilesheetSize.y; //Obtenemos el tamaño del tilesheet en tiles
+	tileTexSize = glm::vec2(1.f / tilesheetSize.x, 1.f / tilesheetSize.y); // Obtenemos cuanto ocupa cada tile respecto a 1
 	
 	map = new int[mapSize.x * mapSize.y];
 	for(int j=0; j<mapSize.y; j++)
@@ -121,10 +121,8 @@ void TileMap::prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program)
 				// Non-empty tile
 				nTiles++;
 				posTile = glm::vec2(minCoords.x + i * tileSize, minCoords.y + j * tileSize);
-				texCoordTile[0] = glm::vec2(float((tile-1)%21) / tilesheetSize.x, float((tile-1)/21) / tilesheetSize.y);
+				texCoordTile[0] = glm::vec2(float((tile-1)%16) / tilesheetSize.x, float((tile-1)/16) / tilesheetSize.y);
 				texCoordTile[1] = texCoordTile[0] + tileTexSize;
-				//texCoordTile[0] += halfTexel;
-				texCoordTile[1] -= halfTexel;
 				// First triangle
 				vertices.push_back(posTile.x); vertices.push_back(posTile.y);
 				vertices.push_back(texCoordTile[0].x); vertices.push_back(texCoordTile[0].y);
