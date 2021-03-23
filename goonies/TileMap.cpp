@@ -77,11 +77,27 @@ bool TileMap::loadLevel(const string &levelFile)
 	sstream >> tilesheetSize.x >> tilesheetSize.y;
 	tileTexSize = glm::vec2(1.f / tilesheetSize.x, 1.f / tilesheetSize.y);
 	
+	int total_tiles = tilesheetSize.x * tilesheetSize.y;
+	//std::string s = std::to_string(total_tiles);
+	total_tiles = std::to_string(total_tiles).length();
 	map = new int[mapSize.x * mapSize.y];
+	
 	for(int j=0; j<mapSize.y; j++)
 	{
-		for(int i=0; i<mapSize.x; i++)
+		for (int i = 0; i < mapSize.x; i++)
 		{
+			string aux = "";
+			for (int k = 0; k < total_tiles; ++k) {
+				fin.get(tile);
+				aux += tile;
+			}
+			int result;
+			std::istringstream(aux) >> result;
+			std:cout << result;
+			if (result == 94) map[j * mapSize.x + i] = 0;
+			else map[j * mapSize.x + i] = result;
+		}
+			/*
 			int aux = 0;
 			fin.get(tile);
 			if(tile == ' ')
@@ -94,6 +110,7 @@ bool TileMap::loadLevel(const string &levelFile)
 				aux += tile - int('0');
 				map[j*mapSize.x+i] = aux;
 		}
+		*/
 		fin.get(tile);
 #ifndef _WIN32
 		fin.get(tile);
