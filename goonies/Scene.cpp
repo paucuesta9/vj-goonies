@@ -5,8 +5,8 @@
 #include "Game.h"
 
 
-#define SCREEN_X 32 //Posicion del nivel respecto la pantalla X
-#define SCREEN_Y 48 //Posicion del nivel respecto la pantalla Y
+#define SCREEN_X 60 //Posicion del nivel respecto la pantalla X
+#define SCREEN_Y 70 //Posicion del nivel respecto la pantalla Y
 
 #define INIT_PLAYER_X_TILES 23 //Posición X inicial del jugador contando en TILES (cuadrados)
 #define INIT_PLAYER_Y_TILES 5.5 //Posición Y inicial del jugador contando en TILES (cuadrados)
@@ -30,7 +30,7 @@ Scene::~Scene()
 void Scene::init()
 {
 	initShaders();
-	map = TileMap::createTileMap("levels/level3_2.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	map = TileMap::createTileMap("levels/level1_2.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
