@@ -13,7 +13,7 @@
 
 enum PlayerAnims
 {
-	STAND_LEFT, STAND_RIGHT, MOVE_LEFT, MOVE_RIGHT, MOVE_UP_DOWN
+	STAND_LEFT, STAND_RIGHT, STAND_UP, MOVE_LEFT, MOVE_RIGHT, MOVE_UP_DOWN
 };
 
 
@@ -22,7 +22,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	bJumping = false;
 	spritesheet.loadFromFile("images/player.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(0.25, 0.25), &spritesheet, &shaderProgram);
-	sprite->setNumberAnimations(4);
+	sprite->setNumberAnimations(6);
 	
 		sprite->setAnimationSpeed(STAND_LEFT, 8);
 		sprite->addKeyframe(STAND_LEFT, glm::vec2(0.f, 0.25f));
@@ -41,6 +41,9 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 		sprite->addKeyframe(MOVE_RIGHT, glm::vec2(0.25, 0.f));
 		sprite->addKeyframe(MOVE_RIGHT, glm::vec2(0.5, 0.f));
 		sprite->addKeyframe(MOVE_RIGHT, glm::vec2(0.75, 0.f));
+
+		sprite->setAnimationSpeed(STAND_UP, 8);
+		sprite->addKeyframe(STAND_UP, glm::vec2(0.f, 0.5f));
 
 		sprite->setAnimationSpeed(MOVE_UP_DOWN, 8);
 		sprite->addKeyframe(MOVE_UP_DOWN, glm::vec2(0.f, 0.5f));
@@ -80,9 +83,9 @@ void Player::update(int deltaTime)
 	}
 	else
 	{
-		if(sprite->animation() == MOVE_LEFT)
+		if (sprite->animation() == MOVE_LEFT)
 			sprite->changeAnimation(STAND_LEFT);
-		else if(sprite->animation() == MOVE_RIGHT)
+		else if (sprite->animation() == MOVE_RIGHT)
 			sprite->changeAnimation(STAND_RIGHT);
 	}
 	
@@ -114,16 +117,21 @@ void Player::update(int deltaTime)
 		{
 			if(Game::instance().getSpecialKey(GLUT_KEY_UP))
 			{
+
 				if (!map->collisionLiana(posPlayer, glm::ivec2(20, 20))) {
 					bJumping = true;
 					jumpAngle = 0;
 					startY = posPlayer.y;
 				}
 				else {
+					if (sprite->animation() != MOVE_UP_DOWN)
+						sprite->changeAnimation(MOVE_UP_DOWN);
 					bJumping = false;
 					posPlayer.y -= FALL_STEP;
 				}
 			}
+			else if (sprite->animation() == MOVE_UP_DOWN)
+				sprite->changeAnimation(STAND_UP);
 		}
 	}
 	

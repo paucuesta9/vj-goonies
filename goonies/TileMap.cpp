@@ -93,7 +93,6 @@ bool TileMap::loadLevel(const string &levelFile)
 			}
 			int result;
 			std::istringstream(aux) >> result;
-			std:cout << result;
 			map[j * mapSize.x + i] = result;
 		}
 		fin.get(tile);
@@ -249,7 +248,7 @@ bool TileMap::isCollision(const glm::ivec2& pos) const {
 
 bool TileMap::collisionLiana(const glm::ivec2& pos, const glm::ivec2& size) const {
 	
-	int liana[] = { 126, 125, 112, 96 };
+	int liana[] = { 126, 112 };
 	int x0, x1, y;
 
 	x0 = pos.x / tileSize;
