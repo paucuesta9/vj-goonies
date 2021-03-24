@@ -105,11 +105,16 @@ void Player::update(int deltaTime)
 	else
 	{
 		posPlayer.y += FALL_STEP;
+		if (Game::instance().getSpecialKey(GLUT_KEY_DOWN)) {
+			if (map->collisionLiana(posPlayer, glm::ivec2(20, 20))) {
+				posPlayer.y += FALL_STEP;
+			}
+		}
 		if(map->collisionMoveDown(posPlayer, glm::ivec2(20, 20), &posPlayer.y))
 		{
 			if(Game::instance().getSpecialKey(GLUT_KEY_UP))
 			{
-				if (!map->collisionLiana(posPlayer, glm::ivec2(16, 16))) {
+				if (!map->collisionLiana(posPlayer, glm::ivec2(20, 20))) {
 					bJumping = true;
 					jumpAngle = 0;
 					startY = posPlayer.y;
@@ -119,13 +124,7 @@ void Player::update(int deltaTime)
 					posPlayer.y -= FALL_STEP;
 				}
 			}
-			if (Game::instance().getSpecialKey(GLUT_KEY_DOWN)) {
-				if (map->collisionLiana(posPlayer, glm::ivec2(16, 16))) {
-					posPlayer.y += FALL_STEP;
-				}
-			}
 		}
-		
 	}
 	
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
