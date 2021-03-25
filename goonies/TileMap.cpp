@@ -164,7 +164,8 @@ bool TileMap::collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size) c
 	y1 = (pos.y + size.y - 1) / tileSize;
 	for(int y=y0; y<=y1; y++)
 	{
-		if (isCollision(glm::ivec2(x, y)))
+		int collision = isCollision(glm::ivec2(x, y));
+		if ((collision == 1 || collision == 2 || collision == 4) && !collisionLiana(pos, size))
 			return true;
 	}
 	
@@ -180,7 +181,8 @@ bool TileMap::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size) 
 	y1 = (pos.y + size.y - 1) / tileSize;
 	for(int y=y0; y<=y1; y++)
 	{
-		if(isCollision(glm::ivec2(x, y)))
+		int collision = isCollision(glm::ivec2(x, y));
+		if ((collision == 1 || collision == 3 || collision == 4) && !collisionLiana(pos, size))
 			return true;
 	}
 	
@@ -196,7 +198,8 @@ bool TileMap::collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size) con
 	y1 = (pos.y + size.y - 1) / tileSize;
 	for (int y = y0; y <= y1; y++)
 	{
-		if (isCollision(glm::ivec2(x, y)))
+		int collision = isCollision(glm::ivec2(x, y));
+		if (collision == 1)
 			return true;
 	}
 
@@ -220,7 +223,8 @@ bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, i
 
 	for(int x=x0; x<=x1; x++)
 	{
-		if(isCollision(glm::ivec2(x, y)))
+		int collision = isCollision(glm::ivec2(x, y));
+		if (collision == 4)
 		{
 			if(*posY - tileSize * y + size.y <= 4)
 			{
@@ -233,33 +237,29 @@ bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, i
 	return false;
 }
 
-bool TileMap::isCollision(const glm::ivec2& pos) const {
+int TileMap::isCollision(const glm::ivec2& pos) const {
 	int mapTile = map[pos.y * mapSize.x + pos.x];
 	int techo[] = {65, 66, 67, 68, 69, 70, 71, 88, 89, 99, 100};
-	if (find(begin(techo), end(techo), mapTile) != end(techo)) return true;
+	if (find(begin(techo), end(techo), mapTile) != end(techo)) return 1;
 	int izquierda[] = {76, 92, 108, 83, 84, 98};
-	if (find(begin(izquierda), end(izquierda), mapTile) != end(izquierda)) return true;
+	if (find(begin(izquierda), end(izquierda), mapTile) != end(izquierda)) return 2;
 	int derecha[] = { 75, 91, 107, 83, 84, 97 };
-	if (find(begin(derecha), end(derecha), mapTile) != end(derecha)) return true;
+	if (find(begin(derecha), end(derecha), mapTile) != end(derecha)) return 3;
 	int abajo[] = { 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 72, 73, 80, 81, 83, 84, 109, 110, 111, 113, 114, 127, 128 };
-	if (find(begin(abajo), end(abajo), mapTile) != end(abajo)) return true;
-	return false;
+	if (find(begin(abajo), end(abajo), mapTile) != end(abajo)) return 4;
+	return 0;
 }
 
 bool TileMap::collisionLiana(const glm::ivec2& pos, const glm::ivec2& size) const {
 	
-	int liana[] = { 126, 112 };
-	int x0, x1, y;
+	int liana[] = { 96, 125, 126, 112 };
+	int x, y;
 
-	x0 = pos.x / tileSize;
-	x1 = (pos.x + size.x - 1) / tileSize;
+	x = (pos.x + (size.x / 2) - 1) / tileSize;
 	y = (pos.y + size.y - 1) / tileSize;
-	for (int x = x0; x <= x1; x++)
-	{
-		int mapTile = map[y * mapSize.x + x];
-		if (find(begin(liana), end(liana), mapTile) != end(liana)) {
-			return true;
-		}
+	int mapTile = map[y * mapSize.x + x];
+	if (find(begin(liana), end(liana), mapTile) != end(liana)) {
+		return true;
 	}
 
 	return false;

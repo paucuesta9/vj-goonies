@@ -20,6 +20,7 @@ enum PlayerAnims
 void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 {
 	bJumping = false;
+	bLiana = false;
 	spritesheet.loadFromFile("images/player.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(0.25, 0.25), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(6);
@@ -61,8 +62,10 @@ void Player::update(int deltaTime)
 	sprite->update(deltaTime);
 	if(Game::instance().getSpecialKey(GLUT_KEY_LEFT))
 	{
-		if(sprite->animation() != MOVE_LEFT)
+		if (sprite->animation() != MOVE_LEFT && !map->collisionLiana(posPlayer, glm::ivec2(16, 20))) {
 			sprite->changeAnimation(MOVE_LEFT);
+			bLiana = false;
+		}			
 		posPlayer.x -= 2;
 		if(map->collisionMoveLeft(posPlayer, glm::ivec2(16, 16)))
 		{
@@ -72,8 +75,10 @@ void Player::update(int deltaTime)
 	}
 	else if(Game::instance().getSpecialKey(GLUT_KEY_RIGHT))
 	{
-		if(sprite->animation() != MOVE_RIGHT)
+		if (sprite->animation() != MOVE_RIGHT && !map->collisionLiana(posPlayer, glm::ivec2(16, 20))) {
 			sprite->changeAnimation(MOVE_RIGHT);
+			bLiana = false;
+		}
 		posPlayer.x += 2;
 		if(map->collisionMoveRight(posPlayer, glm::ivec2(16, 16)))
 		{
@@ -87,6 +92,8 @@ void Player::update(int deltaTime)
 			sprite->changeAnimation(STAND_LEFT);
 		else if (sprite->animation() == MOVE_RIGHT)
 			sprite->changeAnimation(STAND_RIGHT);
+		else if (sprite->animation() == STAND_UP && !bLiana)
+			sprite->changeAnimation(STAND_LEFT);
 	}
 	
 	if(bJumping)
@@ -109,21 +116,25 @@ void Player::update(int deltaTime)
 	{
 		posPlayer.y += FALL_STEP;
 		if (Game::instance().getSpecialKey(GLUT_KEY_DOWN)) {
-			if (map->collisionLiana(posPlayer, glm::ivec2(20, 20))) {
+			if (map->collisionLiana(posPlayer, glm::ivec2(16, 20))) {
 				posPlayer.y += FALL_STEP;
 			}
 		}
-		if(map->collisionMoveDown(posPlayer, glm::ivec2(20, 20), &posPlayer.y))
+		if(map->collisionMoveDown(posPlayer, glm::ivec2(16, 20), &posPlayer.y))
 		{
 			if(Game::instance().getSpecialKey(GLUT_KEY_UP))
 			{
-
-				if (!map->collisionLiana(posPlayer, glm::ivec2(20, 20))) {
-					bJumping = true;
-					jumpAngle = 0;
-					startY = posPlayer.y;
+				if (!map->collisionLiana(posPlayer, glm::ivec2(16, 20))) {
+					if (!bLiana) {
+						bJumping = true;
+						jumpAngle = 0;
+						startY = posPlayer.y;
+						sprite->changeAnimation(STAND_LEFT);
+					}
+					bLiana = false;
 				}
 				else {
+					bLiana = true;
 					if (sprite->animation() != MOVE_UP_DOWN)
 						sprite->changeAnimation(MOVE_UP_DOWN);
 					bJumping = false;
