@@ -66,10 +66,10 @@ void Player::update(int deltaTime)
 			sprite->changeAnimation(MOVE_LEFT);
 			bLiana = false;
 		}			
-		posPlayer.x -= 1;
+		posPlayer.x -= 2;
 		if(map->collisionMoveLeft(posPlayer, glm::ivec2(16, 16)))
 		{
-			posPlayer.x += 1;
+			posPlayer.x += 2;
 			sprite->changeAnimation(STAND_LEFT);
 		}
 	}
@@ -79,10 +79,10 @@ void Player::update(int deltaTime)
 			sprite->changeAnimation(MOVE_RIGHT);
 			bLiana = false;
 		}
-		posPlayer.x += 1;
+		posPlayer.x += 2;
 		if(map->collisionMoveRight(posPlayer, glm::ivec2(16, 16)))
 		{
-			posPlayer.x -= 1;
+			posPlayer.x -= 2;
 			sprite->changeAnimation(STAND_RIGHT);
 		}
 	}
