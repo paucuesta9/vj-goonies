@@ -27,6 +27,7 @@ public:
 	void free();
 	
 	int getTileSize() const { return tileSize; }
+	int getBlockCode(glm::ivec2 pos) const;
 
 	bool collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size) const;
 	bool collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size) const;
@@ -34,6 +35,7 @@ public:
 	bool collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY) const;
 	int isCollision(const glm::ivec2& pos) const;
 	bool collisionLiana(const glm::ivec2& pos, const glm::ivec2& size) const;
+	bool collisionSkullDoor(const glm::ivec2& pos, const glm::ivec2& size) const;
 	
 private:
 	bool loadLevel(const string &levelFile);

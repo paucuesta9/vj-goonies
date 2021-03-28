@@ -21,13 +21,14 @@ public:
 	void setTileMap(TileMap *tileMap);
 	void setPosition(const glm::vec2 &pos);
 	glm::ivec2 getPosition();
-
+	int getDoorCollision();
+	void setDoorCollision(bool state);
 	int isOut();
 	
 private:
-	bool bJumping, bLiana;
+	bool bJumping, bLiana, bdoorCollision;
 	glm::ivec2 tileMapDispl, posPlayer;
-	int jumpAngle, startY;
+	int jumpAngle, startY, animDoorNum;
 	Texture spritesheet;
 	Sprite *sprite;
 	TileMap *map;
