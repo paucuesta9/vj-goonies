@@ -111,35 +111,35 @@ void Scene::update(int deltaTime)
 		if (sceneNum == 1 && screenNum == 3) {
 			changeScreen(2, 1, glm::ivec2(5 * tileSize - 8, 4 * tileSize - 4));
 		}
-		if (sceneNum == 2 && screenNum == 1) {
+		else if (sceneNum == 2 && screenNum == 1) {
 			changeScreen(1, 3, glm::ivec2(28 * tileSize - 8, 7 * tileSize - 4));
 		}
-		if (sceneNum == 2 && screenNum == 3) {
+		else if (sceneNum == 2 && screenNum == 3) {
 			changeScreen(3, 1, glm::ivec2(14 * tileSize - 8, 17 * tileSize - 4));
 		}
-		if (sceneNum == 3 && screenNum == 1) {
+		else if (sceneNum == 3 && screenNum == 1) {
 			changeScreen(2, 3, glm::ivec2(10 * tileSize - 8, 10 * tileSize - 4));
 		}
-		if (sceneNum == 3 && screenNum == 3) {
+		else if (sceneNum == 3 && screenNum == 3) {
 			changeScreen(4, 1, glm::ivec2(4 * tileSize - 8, 14 * tileSize - 4));
 		}
-		if (sceneNum == 4 && screenNum == 1) {
+		else if (sceneNum == 4 && screenNum == 1) {
 			if (position.x < 256 && position.y < 160)
 				changeScreen(4, 2, glm::ivec2(28 * tileSize - 8, 17 * tileSize - 4));
-			if (position.x < 256 && position.y > 160)
+			else if (position.x < 256 && position.y > 160)
 				changeScreen(3, 3, glm::ivec2(2 * tileSize - 8, 13 * tileSize - 4));
-			if (position.x > 256 && position.y < 160)
+			else if (position.x > 256 && position.y < 160)
 				changeScreen(4, 3, glm::ivec2(6 * tileSize - 8, 16 * tileSize - 4));
 		}
-		if (sceneNum == 4 && screenNum == 2) {
+		else if (sceneNum == 4 && screenNum == 2) {
 			changeScreen(4, 1, glm::ivec2(4 * tileSize - 8, 5 * tileSize - 4));
 		}
-		if (sceneNum == 4 && screenNum == 3) {
+		else if (sceneNum == 4 && screenNum == 3) {
 			if (position.x > 14 * tileSize)
 				changeScreen(5, 1, glm::ivec2(3 * tileSize - 8, 4 * tileSize - 4));
 			else changeScreen(4, 1, glm::ivec2(26 * tileSize - 8, 5 * tileSize - 4));
 		}
-		if (sceneNum == 5 && screenNum == 1) {
+		else if (sceneNum == 5 && screenNum == 1) {
 			changeScreen(4, 3, glm::ivec2(14 * tileSize - 8, 15 * tileSize - 4));
 		}
 		player->setDoorCollision(false);
