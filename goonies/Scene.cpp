@@ -142,6 +142,7 @@ void Scene::update(int deltaTime)
 		if (sceneNum == 5 && screenNum == 1) {
 			changeScreen(4, 3, glm::ivec2(14 * tileSize - 8, 15 * tileSize - 4));
 		}
+		player->setDoorCollision(false);
 	}
 }
 

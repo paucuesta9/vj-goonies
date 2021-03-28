@@ -63,21 +63,25 @@ void Player::update(int deltaTime)
 	sprite->update(deltaTime);
 	if (animDoorNum != -1) {
 		if (animDoorNum == 1) {
-			posPlayer.y -= 4;
+			posPlayer.y -= 2;
+		}
+
+		if (animDoorNum == 10) {
+			posPlayer.y -= 2;
 		}
 			
-		if (animDoorNum == 10) {
+		if (animDoorNum == 20) {
 			sprite->changeAnimation(MOVE_RIGHT);
 			posPlayer.x += 5;
 		}
 
-		if (animDoorNum == 20 || animDoorNum == 30 || animDoorNum == 40 || animDoorNum == 50) {
+		if (animDoorNum == 30 || animDoorNum == 40 || animDoorNum == 50 || animDoorNum == 60) {
 			posPlayer.x += 5;
 		}
 		
-		if (animDoorNum == 60) {
+		if (animDoorNum == 70) {
 			posPlayer.x += 5;
-			bdoorCollision = false;
+			bdoorCollision = true;
 			animDoorNum = -2;
 		}
 		++animDoorNum;
@@ -154,12 +158,12 @@ void Player::update(int deltaTime)
 				if (Game::instance().getSpecialKey(GLUT_KEY_UP))
 				{
 					if (map->collisionSkullDoor(posPlayer, glm::ivec2(16, 20)) && !bdoorCollision) {
-						//animDoorNum = 1;
+						animDoorNum = 1;
 						int block = map->getBlockCode(posPlayer);
 						if (block == 55) {
-							posPlayer.x = (((posPlayer.x + 16)/ map->getTileSize())) * map->getTileSize() - 8;
-						} else if (block == 56) posPlayer.x = (posPlayer.x / map->getTileSize()) * map->getTileSize() - 8;
-						else if (block == 57) posPlayer.x = (((posPlayer.x - 16)/ map->getTileSize())) * map->getTileSize() - 8;
+							posPlayer.x = (((posPlayer.x + 28)/ map->getTileSize())) * map->getTileSize() - 8;
+						} else if (block == 56) posPlayer.x = ((posPlayer.x + 12) / map->getTileSize()) * map->getTileSize() - 8;
+						else if (block == 57) posPlayer.x = (((posPlayer.x - 4)/ map->getTileSize())) * map->getTileSize() - 8;
 					}
 					else if (!map->collisionLiana(posPlayer, glm::ivec2(16, 20))) {
 						if (!bLiana) {

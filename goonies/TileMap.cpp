@@ -269,11 +269,10 @@ bool TileMap::collisionSkullDoor(const glm::ivec2& pos, const glm::ivec2& size) 
 
 	int skullDoor[] = { 55, 56, 57 };
 
-	int x0 = pos.x;
-	int x1 = (pos.x + size.x - 8);
+	int x0 = (pos.x) / tileSize;
+	int x1 = (pos.x + size.x - 1) / tileSize;
 	int y = (pos.y + size.y) / tileSize;
 	for (int x = x0; x <= x1; x++) {
-		x = x / tileSize;
 		int mapTile = map[y * mapSize.x + x];
 		if (find(begin(skullDoor), end(skullDoor), mapTile) != end(skullDoor)) {
 			return true;
@@ -285,7 +284,8 @@ bool TileMap::collisionSkullDoor(const glm::ivec2& pos, const glm::ivec2& size) 
 }
 
 int TileMap::getBlockCode(glm::ivec2 pos) const {
-	return map[((pos.y + 20) / tileSize) * mapSize.x + (pos.x) / tileSize];
+	
+	return map[((pos.y + 20) / tileSize) * mapSize.x + (pos.x + 12) / tileSize];
 }
 
 
