@@ -255,7 +255,7 @@ bool TileMap::collisionLiana(const glm::ivec2& pos, const glm::ivec2& size) cons
 	int liana[] = { 96, 125, 126, 112 };
 	int x, y;
 
-	x = (pos.x + (size.x / 2) - 1) / tileSize;
+	x = (pos.x + size.x - 1) / tileSize;
 	y = (pos.y + size.y - 1) / tileSize;
 	int mapTile = map[y * mapSize.x + x];
 	if (find(begin(liana), end(liana), mapTile) != end(liana)) {

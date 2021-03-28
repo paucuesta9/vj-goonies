@@ -22,6 +22,7 @@ public:
 	void init();
 	void update(int deltaTime);
 	void render();
+	void changeScreen(int scene, int screen, glm::vec2 pos);
 
 private:
 	void initShaders();
@@ -32,7 +33,7 @@ private:
 	ShaderProgram texProgram;
 	float currentTime;
 	glm::mat4 projection;
-
+	int sceneNum, screenNum;
 };
 
 

@@ -66,10 +66,10 @@ void Player::update(int deltaTime)
 			sprite->changeAnimation(MOVE_LEFT);
 			bLiana = false;
 		}			
-		posPlayer.x -= 2;
+		posPlayer.x -= 1;
 		if(map->collisionMoveLeft(posPlayer, glm::ivec2(16, 16)))
 		{
-			posPlayer.x += 2;
+			posPlayer.x += 1;
 			sprite->changeAnimation(STAND_LEFT);
 		}
 	}
@@ -79,10 +79,10 @@ void Player::update(int deltaTime)
 			sprite->changeAnimation(MOVE_RIGHT);
 			bLiana = false;
 		}
-		posPlayer.x += 2;
+		posPlayer.x += 1;
 		if(map->collisionMoveRight(posPlayer, glm::ivec2(16, 16)))
 		{
-			posPlayer.x -= 2;
+			posPlayer.x -= 1;
 			sprite->changeAnimation(STAND_RIGHT);
 		}
 	}
@@ -116,10 +116,16 @@ void Player::update(int deltaTime)
 	{
 		posPlayer.y += FALL_STEP;
 		if (Game::instance().getSpecialKey(GLUT_KEY_DOWN)) {
-			if (map->collisionLiana(posPlayer, glm::ivec2(16, 20))) {
+			if (map->collisionLiana(posPlayer, glm::ivec2(16, 20)) || map->collisionLiana(glm::ivec2(posPlayer.x, posPlayer.y + map->getTileSize()), glm::ivec2(16, 20))) {
+				bLiana = true;
 				posPlayer.y += FALL_STEP;
+				posPlayer.x = (posPlayer.x / map->getTileSize()) * map->getTileSize() + 12;
+				if (sprite->animation() != MOVE_UP_DOWN)
+					sprite->changeAnimation(MOVE_UP_DOWN);
 			}
 		}
+		else if (sprite->animation() == MOVE_UP_DOWN)
+			sprite->changeAnimation(STAND_UP);
 		if(map->collisionMoveDown(posPlayer, glm::ivec2(16, 20), &posPlayer.y))
 		{
 			if(Game::instance().getSpecialKey(GLUT_KEY_UP))
@@ -139,6 +145,7 @@ void Player::update(int deltaTime)
 						sprite->changeAnimation(MOVE_UP_DOWN);
 					bJumping = false;
 					posPlayer.y -= FALL_STEP;
+					posPlayer.x = (posPlayer.x / map->getTileSize()) * map->getTileSize() + 12;
 				}
 			}
 			else if (sprite->animation() == MOVE_UP_DOWN)
@@ -163,6 +170,17 @@ void Player::setPosition(const glm::vec2 &pos)
 {
 	posPlayer = pos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
+}
+
+glm::ivec2 Player::getPosition() {
+	return posPlayer;
+}
+
+int Player::isOut() {
+	if (posPlayer.x < 0) return 1;
+	else if (posPlayer.x > 512 - map->getTileSize()) return 2;
+	else if (posPlayer.y < 0) return 3;
+	else if (posPlayer.y > 320 - map->getTileSize()) return 4;
 }
 
 
