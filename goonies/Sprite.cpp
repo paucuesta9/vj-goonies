@@ -33,6 +33,7 @@ Sprite::Sprite(const glm::vec2 &quadSize, const glm::vec2 &sizeInSpritesheet, Te
 	shaderProgram = program;
 	currentAnimation = -1;
 	position = glm::vec2(0.f);
+	scale = glm::vec3(1.f, 1.f, 0.f);
 }
 
 void Sprite::update(int deltaTime)
@@ -52,7 +53,7 @@ void Sprite::update(int deltaTime)
 void Sprite::render() const
 {
 	glm::mat4 modelview = glm::translate(glm::mat4(1.0f), glm::vec3(position.x, position.y, 0.f));
-	modelview = glm::scale(modelview, glm::vec3(2.f,2.f,0));
+	modelview = glm::scale(modelview, scale);
 	shaderProgram->setUniformMatrix4f("modelview", modelview);
 	shaderProgram->setUniform2f("texCoordDispl", texCoordDispl.x, texCoordDispl.y);
 	glEnable(GL_TEXTURE_2D);
@@ -108,5 +109,9 @@ void Sprite::setPosition(const glm::vec2 &pos)
 	position = pos;
 }
 
+void Sprite::setScale(const glm::vec3& sc)
+{
+	scale = sc;
+}
 
 
