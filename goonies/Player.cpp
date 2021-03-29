@@ -10,7 +10,6 @@
 #define JUMP_HEIGHT 96
 #define FALL_STEP 4
 
-
 enum PlayerAnims
 {
 	STAND_LEFT, STAND_RIGHT, STAND_UP, MOVE_LEFT, MOVE_RIGHT, MOVE_UP_DOWN
@@ -146,13 +145,14 @@ void Player::update(int deltaTime)
 				if (map->collisionLiana(posPlayer, glm::ivec2(16, 20)) || map->collisionLiana(glm::ivec2(posPlayer.x, posPlayer.y + map->getTileSize()), glm::ivec2(16, 20))) {
 					bLiana = true;
 					posPlayer.y += FALL_STEP;
-					posPlayer.x = (posPlayer.x / map->getTileSize()) * map->getTileSize() + 12;
+					posPlayer.x = (posPlayer.x / map->getTileSize()) * map->getTileSize() + 8;
 					if (sprite->animation() != MOVE_UP_DOWN)
 						sprite->changeAnimation(MOVE_UP_DOWN);
 				}
 			}
 			else if (sprite->animation() == MOVE_UP_DOWN)
 				sprite->changeAnimation(STAND_UP);
+
 			if (map->collisionMoveDown(posPlayer, glm::ivec2(16, 20), &posPlayer.y))
 			{
 				if (Game::instance().getSpecialKey(GLUT_KEY_UP))
@@ -161,9 +161,10 @@ void Player::update(int deltaTime)
 						animDoorNum = 1;
 						int block = map->getBlockCode(posPlayer);
 						if (block == 55) {
-							posPlayer.x = (((posPlayer.x + 28)/ map->getTileSize())) * map->getTileSize() - 8;
-						} else if (block == 56) posPlayer.x = ((posPlayer.x + 12) / map->getTileSize()) * map->getTileSize() - 8;
-						else if (block == 57) posPlayer.x = (((posPlayer.x - 4)/ map->getTileSize())) * map->getTileSize() - 8;
+							posPlayer.x = (((posPlayer.x + 28) / map->getTileSize())) * map->getTileSize() - 8;
+						}
+						else if (block == 56) posPlayer.x = ((posPlayer.x + 12) / map->getTileSize()) * map->getTileSize() - 8;
+						else if (block == 57) posPlayer.x = (((posPlayer.x - 4) / map->getTileSize())) * map->getTileSize() - 8;
 					}
 					else if (!map->collisionLiana(posPlayer, glm::ivec2(16, 20))) {
 						if (!bLiana) {
@@ -180,11 +181,14 @@ void Player::update(int deltaTime)
 							sprite->changeAnimation(MOVE_UP_DOWN);
 						bJumping = false;
 						posPlayer.y -= FALL_STEP;
-						posPlayer.x = (posPlayer.x / map->getTileSize()) * map->getTileSize() + 12;
+						posPlayer.x = (posPlayer.x / map->getTileSize()) * map->getTileSize() + 8;
 					}
 				}
+				else if (map->collisionLiana(posPlayer, glm::ivec2(16, 20)))
+					sprite->changeAnimation(STAND_UP);
 				else if (sprite->animation() == MOVE_UP_DOWN)
 					sprite->changeAnimation(STAND_UP);
+					
 			}
 		}
 	}

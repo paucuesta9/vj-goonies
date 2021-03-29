@@ -30,9 +30,9 @@ Scene::~Scene()
 void Scene::init()
 {
 	initShaders();
-	sceneNum = 5;
+	sceneNum = 2;
 	screenNum = 1;
-	map = TileMap::createTileMap("levels/level5_1.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	map = TileMap::createTileMap("levels/level2_1.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
