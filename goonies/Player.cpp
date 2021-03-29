@@ -184,8 +184,12 @@ void Player::update(int deltaTime)
 						posPlayer.x = (posPlayer.x / map->getTileSize()) * map->getTileSize() + 8;
 					}
 				}
-				else if (map->collisionLiana(posPlayer, glm::ivec2(16, 20)))
-					sprite->changeAnimation(STAND_UP);
+				else if (map->collisionLiana(posPlayer, glm::ivec2(16, 20))) {
+					if (map->getBlockCode(posPlayer) != 127 && map->getBlockCode(posPlayer) != 128)
+						sprite->changeAnimation(STAND_UP);
+					else if (sprite->animation() != MOVE_RIGHT && sprite->animation() != MOVE_LEFT && sprite->animation() != STAND_LEFT)
+						sprite->changeAnimation(STAND_RIGHT);
+				}
 				else if (sprite->animation() == MOVE_UP_DOWN)
 					sprite->changeAnimation(STAND_UP);
 					
