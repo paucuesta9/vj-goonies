@@ -50,6 +50,9 @@ void Scene::update(int deltaTime)
 	currentTime += deltaTime;
 	player->update(deltaTime);
 	cabezaFlotante->update(deltaTime);
+	if (player->getPosition().x < cabezaFlotante->getPosition().x + 8 && cabezaFlotante->getPosition().x < player->getPosition().x + 16) {
+		player->setAnimation(2);
+	}
 	int out = player->isOut();
 	glm::vec2 pos;
 	switch (out) {

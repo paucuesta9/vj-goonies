@@ -94,3 +94,7 @@ void CabezaFlotante::setPosition(const glm::vec2& pos)
 	posCabeza = pos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posCabeza.x), float(tileMapDispl.y + posCabeza.y)));
 }
+
+glm::ivec2 CabezaFlotante::getPosition() {
+	return posCabeza;
+}

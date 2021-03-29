@@ -23,14 +23,16 @@ public:
 	glm::ivec2 getPosition();
 	int getDoorCollision();
 	void setDoorCollision(bool state);
+	void setAnimation(int animation);
 	int isOut();
+	void setSprite(int numSprite);
 	
 private:
 	bool bJumping, bLiana, bdoorCollision;
 	glm::ivec2 tileMapDispl, posPlayer;
-	int jumpAngle, startY, animDoorNum;
-	Texture spritesheet;
-	Sprite *sprite;
+	int jumpAngle, startY, animDoorNum, animationTime;
+	Texture spritesheetNormal, spritesheetHurt;
+	Sprite *sprite, *spriteNormal, *spriteHurt;
 	TileMap *map;
 
 };

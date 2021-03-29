@@ -12,7 +12,7 @@
 
 enum PlayerAnims
 {
-	STAND_LEFT, STAND_RIGHT, STAND_UP, MOVE_LEFT, MOVE_RIGHT, MOVE_UP_DOWN
+	STAND_LEFT, STAND_RIGHT, STAND_UP, MOVE_LEFT, MOVE_RIGHT, MOVE_UP_DOWN, NONE
 };
 
 
@@ -22,45 +22,104 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	bLiana = false;
 	bdoorCollision = false;
 	animDoorNum = -1;
-	spritesheet.loadFromFile("images/player.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	sprite = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(0.25, 0.25), &spritesheet, &shaderProgram);
-	sprite->setNumberAnimations(6);
+	animationTime = -1;
+	spritesheetNormal.loadFromFile("images/player.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	spriteNormal = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(0.25, 0.25), &spritesheetNormal, &shaderProgram);
+	spriteNormal->setNumberAnimations(7);
 	
-		sprite->setAnimationSpeed(STAND_LEFT, 8);
-		sprite->addKeyframe(STAND_LEFT, glm::vec2(0.f, 0.25f));
+	spriteNormal->setAnimationSpeed(STAND_LEFT, 8);
+	spriteNormal->addKeyframe(STAND_LEFT, glm::vec2(0.f, 0.25f));
 		
-		sprite->setAnimationSpeed(MOVE_LEFT, 8);
-		sprite->addKeyframe(MOVE_LEFT, glm::vec2(0.f, 0.25f));
-		sprite->addKeyframe(MOVE_LEFT, glm::vec2(0.25f, 0.25f));
-		sprite->addKeyframe(MOVE_LEFT, glm::vec2(0.5f, 0.25f));
-		sprite->addKeyframe(MOVE_LEFT, glm::vec2(0.75f, 0.25f));
+	spriteNormal->setAnimationSpeed(MOVE_LEFT, 8);
+	spriteNormal->addKeyframe(MOVE_LEFT, glm::vec2(0.f, 0.25f));
+	spriteNormal->addKeyframe(MOVE_LEFT, glm::vec2(0.25f, 0.25f));
+	spriteNormal->addKeyframe(MOVE_LEFT, glm::vec2(0.5f, 0.25f));
+	spriteNormal->addKeyframe(MOVE_LEFT, glm::vec2(0.75f, 0.25f));
 
-		sprite->setAnimationSpeed(STAND_RIGHT, 8);
-		sprite->addKeyframe(STAND_RIGHT, glm::vec2(0.f, 0.f));
+	spriteNormal->setAnimationSpeed(STAND_RIGHT, 8);
+	spriteNormal->addKeyframe(STAND_RIGHT, glm::vec2(0.f, 0.f));
 		
-		sprite->setAnimationSpeed(MOVE_RIGHT, 8);
-		sprite->addKeyframe(MOVE_RIGHT, glm::vec2(0., 0.f));
-		sprite->addKeyframe(MOVE_RIGHT, glm::vec2(0.25, 0.f));
-		sprite->addKeyframe(MOVE_RIGHT, glm::vec2(0.5, 0.f));
-		sprite->addKeyframe(MOVE_RIGHT, glm::vec2(0.75, 0.f));
+	spriteNormal->setAnimationSpeed(MOVE_RIGHT, 8);
+	spriteNormal->addKeyframe(MOVE_RIGHT, glm::vec2(0., 0.f));
+	spriteNormal->addKeyframe(MOVE_RIGHT, glm::vec2(0.25, 0.f));
+	spriteNormal->addKeyframe(MOVE_RIGHT, glm::vec2(0.5, 0.f));
+	spriteNormal->addKeyframe(MOVE_RIGHT, glm::vec2(0.75, 0.f));
 
-		sprite->setAnimationSpeed(STAND_UP, 8);
-		sprite->addKeyframe(STAND_UP, glm::vec2(0.f, 0.5f));
+	spriteNormal->setAnimationSpeed(STAND_UP, 8);
+	spriteNormal->addKeyframe(STAND_UP, glm::vec2(0.f, 0.5f));
 
-		sprite->setAnimationSpeed(MOVE_UP_DOWN, 8);
-		sprite->addKeyframe(MOVE_UP_DOWN, glm::vec2(0.f, 0.5f));
-		sprite->addKeyframe(MOVE_UP_DOWN, glm::vec2(0.25f, 0.5f));
-		
-	sprite->changeAnimation(0);
+	spriteNormal->setAnimationSpeed(MOVE_UP_DOWN, 8);
+	spriteNormal->addKeyframe(MOVE_UP_DOWN, glm::vec2(0.f, 0.5f));
+	spriteNormal->addKeyframe(MOVE_UP_DOWN, glm::vec2(0.25f, 0.5f));
+
+	spriteNormal->setAnimationSpeed(NONE, 8);
+	spriteNormal->addKeyframe(NONE, glm::vec2(0.75f, 0.75f));
+	
+		spritesheetHurt.loadFromFile("images/player_hurt.png", TEXTURE_PIXEL_FORMAT_RGBA);
+		spriteHurt = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(0.25, 0.25), &spritesheetHurt, &shaderProgram);
+		spriteHurt->setNumberAnimations(7);
+
+		spriteHurt->setAnimationSpeed(STAND_LEFT, 8);
+		spriteHurt->addKeyframe(STAND_LEFT, glm::vec2(0.f, 0.25f));
+		spriteHurt->addKeyframe(STAND_LEFT, glm::vec2(0.75f, 0.75f));
+
+		spriteHurt->setAnimationSpeed(MOVE_LEFT, 8);
+		spriteHurt->addKeyframe(MOVE_LEFT, glm::vec2(0.f, 0.25f));
+		spriteHurt->addKeyframe(MOVE_LEFT, glm::vec2(0.75f, 0.75f));
+		spriteHurt->addKeyframe(MOVE_LEFT, glm::vec2(0.25f, 0.25f));
+		spriteHurt->addKeyframe(MOVE_LEFT, glm::vec2(0.75f, 0.75f));
+		spriteHurt->addKeyframe(MOVE_LEFT, glm::vec2(0.5f, 0.25f));
+		spriteHurt->addKeyframe(MOVE_LEFT, glm::vec2(0.75f, 0.75f));
+		spriteHurt->addKeyframe(MOVE_LEFT, glm::vec2(0.75f, 0.25f));
+		spriteHurt->addKeyframe(MOVE_LEFT, glm::vec2(0.75f, 0.75f));
+
+		spriteHurt->setAnimationSpeed(STAND_RIGHT, 8);
+		spriteHurt->addKeyframe(STAND_RIGHT, glm::vec2(0.f, 0.f));
+		spriteHurt->addKeyframe(STAND_RIGHT, glm::vec2(0.75f, 0.75f));
+
+		spriteHurt->setAnimationSpeed(MOVE_RIGHT, 8);
+		spriteHurt->addKeyframe(MOVE_RIGHT, glm::vec2(0., 0.f));
+		spriteHurt->addKeyframe(MOVE_RIGHT, glm::vec2(0.75f, 0.75f));
+		spriteHurt->addKeyframe(MOVE_RIGHT, glm::vec2(0.25, 0.f));
+		spriteHurt->addKeyframe(MOVE_RIGHT, glm::vec2(0.75f, 0.75f));
+		spriteHurt->addKeyframe(MOVE_RIGHT, glm::vec2(0.5, 0.f));
+		spriteHurt->addKeyframe(MOVE_RIGHT, glm::vec2(0.75f, 0.75f));
+		spriteHurt->addKeyframe(MOVE_RIGHT, glm::vec2(0.75, 0.f));
+		spriteHurt->addKeyframe(MOVE_RIGHT, glm::vec2(0.75f, 0.75f));
+
+		spriteHurt->setAnimationSpeed(STAND_UP, 8);
+		spriteHurt->addKeyframe(STAND_UP, glm::vec2(0.f, 0.5f));
+		spriteHurt->addKeyframe(STAND_UP, glm::vec2(0.75f, 0.75f));
+
+		spriteHurt->setAnimationSpeed(MOVE_UP_DOWN, 8);
+		spriteHurt->addKeyframe(MOVE_UP_DOWN, glm::vec2(0.f, 0.5f));
+		spriteHurt->addKeyframe(MOVE_UP_DOWN, glm::vec2(0.75f, 0.75f));
+		spriteHurt->addKeyframe(MOVE_UP_DOWN, glm::vec2(0.25f, 0.5f));
+		spriteHurt->addKeyframe(MOVE_UP_DOWN, glm::vec2(0.75f, 0.75f));
+
+		spriteHurt->setAnimationSpeed(NONE, 8);
+		spriteHurt->addKeyframe(NONE, glm::vec2(0.75f, 0.75f));
+
+	spriteNormal->changeAnimation(0);
+	spriteHurt->changeAnimation(NONE);
 	tileMapDispl = tileMapPos;
-	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
-	sprite->setScale(glm::vec3(2.f, 2.f, 0.f));
-	
+	spriteNormal->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
+	spriteNormal->setScale(glm::vec3(2.f, 2.f, 0.f));
+	spriteHurt->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
+	spriteHurt->setScale(glm::vec3(2.f, 2.f, 0.f));
+	sprite = spriteNormal;
 }
 
 void Player::update(int deltaTime)
 {
 	sprite->update(deltaTime);
+	if (animationTime != -1) {
+		animationTime += deltaTime;
+		if (animationTime > 2500) {
+			animationTime = -1;
+			setSprite(1);
+		}
+	}
 	if (animDoorNum != -1) {
 		if (animDoorNum == 1) {
 			posPlayer.y -= 2;
@@ -235,5 +294,20 @@ void Player::setDoorCollision(bool state) {
 	bdoorCollision = state;
 }
 
+void Player::setAnimation(int animation) {
+	setSprite(2);
+	animationTime = 0;
+}
 
-
+void Player::setSprite(int numSprite) {
+	if (numSprite == 1) {
+		spriteNormal->changeAnimation(sprite->animation());
+		spriteHurt->changeAnimation(NONE);
+		sprite = spriteNormal;
+	}
+	else {
+		spriteHurt->changeAnimation(sprite->animation());
+		spriteNormal->changeAnimation(NONE);
+		sprite = spriteHurt;
+	}
+}
