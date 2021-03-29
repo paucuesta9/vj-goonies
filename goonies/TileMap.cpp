@@ -191,15 +191,19 @@ bool TileMap::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size) 
 
 bool TileMap::collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size) const
 {
-	int x, y0, y1;
+	int x0, x1, y;
 
-	x = pos.x / tileSize;
+	/*x = pos.x / tileSize;
 	y0 = pos.y / tileSize;
-	y1 = (pos.y + size.y - 1) / tileSize;
-	for (int y = y0; y <= y1; y++)
+	y1 = (pos.y + size.y - 1) / tileSize;*/
+
+	x0 = pos.x / tileSize;
+	x1 = (pos.x + size.x - 1) / tileSize;
+	y = (pos.y) / tileSize;
+	for (int x = x0; x <= x1; x++)
 	{
 		int collision = isCollision(glm::ivec2(x, y));
-		if (collision == 1)
+		if (collision == 1 || collision == 2 || collision == 3)
 			return true;
 	}
 
@@ -239,13 +243,13 @@ bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, i
 
 int TileMap::isCollision(const glm::ivec2& pos) const {
 	int mapTile = map[pos.y * mapSize.x + pos.x];
-	int techo[] = {65, 66, 67, 68, 69, 70, 71, 88, 89, 99, 100};
+	int techo[] = {16, 32, 65, 66, 67, 68, 69, 70, 71, 88, 89, 99, 100};
 	if (find(begin(techo), end(techo), mapTile) != end(techo)) return 1;
 	int izquierda[] = {76, 92, 108, 83, 84, 98};
 	if (find(begin(izquierda), end(izquierda), mapTile) != end(izquierda)) return 2;
 	int derecha[] = { 75, 91, 107, 83, 84, 97 };
 	if (find(begin(derecha), end(derecha), mapTile) != end(derecha)) return 3;
-	int abajo[] = { 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 72, 73, 80, 81, 83, 84, 109, 110, 111, 113, 114, 127, 128 };
+	int abajo[] = { 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 72, 73, 80, 81, 83, 84, 109, 110, 111, 113, 114, 127, 128, 117, 118 };
 	if (find(begin(abajo), end(abajo), mapTile) != end(abajo)) return 4;
 	return 0;
 }
@@ -269,7 +273,7 @@ bool TileMap::collisionSkullDoor(const glm::ivec2& pos, const glm::ivec2& size) 
 
 	int skullDoor[] = { 55, 56, 57 };
 
-	int x0 = (pos.x) / tileSize;
+	int x0 = (pos.x + 12) / tileSize;
 	int x1 = (pos.x + size.x - 1) / tileSize;
 	int y = (pos.y + size.y) / tileSize;
 	for (int x = x0; x <= x1; x++) {
