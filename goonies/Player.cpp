@@ -240,7 +240,7 @@ void Player::update(int deltaTime)
 						sprite->changeAnimation(MOVE_UP_DOWN);
 				}
 			}
-			else if (sprite->animation() == MOVE_UP_DOWN)
+			else if (sprite->animation() == MOVE_UP_DOWN && !Game::instance().getSpecialKey(GLUT_KEY_UP))
 				sprite->changeAnimation(STAND_UP);
 
 			if (map->collisionMoveDown(posPlayer, glm::ivec2(16, 20), &posPlayer.y))
@@ -278,18 +278,19 @@ void Player::update(int deltaTime)
 					}
 				}
 				else if (map->collisionLiana(posPlayer, glm::ivec2(16, 20))) {
-					if (map->getBlockCode(posPlayer) != 127 && map->getBlockCode(posPlayer) != 128 && sprite->animation() != STAND_UP)
+					if (map->getBlockCode(posPlayer) != 127 && map->getBlockCode(posPlayer) != 128 && sprite->animation() != STAND_UP && sprite->animation() != MOVE_UP_DOWN)
 						sprite->changeAnimation(STAND_UP);
-					else if (sprite->animation() != MOVE_RIGHT && sprite->animation() != MOVE_LEFT && sprite->animation() != STAND_LEFT && sprite->animation() != STAND_UP)
+					else if (sprite->animation() != MOVE_RIGHT && sprite->animation() != MOVE_LEFT && sprite->animation() != STAND_LEFT && sprite->animation() != STAND_UP && sprite->animation() != MOVE_UP_DOWN)
 						sprite->changeAnimation(STAND_RIGHT);
 				}
-				else if (sprite->animation() == MOVE_UP_DOWN && sprite->animation() != STAND_UP)
+				else if (sprite->animation() == MOVE_UP_DOWN && sprite->animation() != STAND_UP && !Game::instance().getSpecialKey(GLUT_KEY_DOWN))
 					sprite->changeAnimation(STAND_UP);
 
 			}
 		}
 	}
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
+
 }
 
 void Player::render()
