@@ -21,8 +21,6 @@ public:
 	void setTileMap(TileMap* tileMap);
 	void setPosition(const glm::vec2& pos);
 	glm::ivec2 getPosition();
-	int getDoorCollision();
-	void setDoorCollision(bool state);
 	int isOut();
 
 private:

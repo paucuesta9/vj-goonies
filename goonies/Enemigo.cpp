@@ -65,133 +65,87 @@ void Enemigo::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 void Enemigo::update(int deltaTime)
 {
 	sprite->update(deltaTime);
-	if (animDoorNum != -1) {
-		if (animDoorNum == 1) {
-			posEnemigo.y -= 2;
+	if (Game::instance().getSpecialKey(GLUT_KEY_LEFT))
+	{
+		if (sprite->animation() != MOVE_LEFT && !map->collisionLiana(posEnemigo, glm::ivec2(16, 20))) {
+			sprite->changeAnimation(MOVE_LEFT);
+			bLiana = false;
 		}
-
-		if (animDoorNum == 10) {
-			posEnemigo.y -= 2;
-		}
-
-		if (animDoorNum == 20) {
-			sprite->changeAnimation(MOVE_RIGHT);
-			posEnemigo.x += 5;
-		}
-
-		if (animDoorNum == 30 || animDoorNum == 40 || animDoorNum == 50 || animDoorNum == 60) {
-			posEnemigo.x += 5;
-		}
-
-		if (animDoorNum == 70) {
-			posEnemigo.x += 5;
-			bdoorCollision = true;
-			animDoorNum = -2;
-		}
-		++animDoorNum;
-	}
-	else {
-		if (Game::instance().getSpecialKey(GLUT_KEY_LEFT))
+		posEnemigo.x -= 2;
+		if (map->collisionMoveLeft(posEnemigo, glm::ivec2(16, 16)))
 		{
-			if (sprite->animation() != MOVE_LEFT && !map->collisionLiana(posEnemigo, glm::ivec2(16, 20))) {
-				sprite->changeAnimation(MOVE_LEFT);
-				bLiana = false;
-			}
-			posEnemigo.x -= 2;
-			if (map->collisionMoveLeft(posEnemigo, glm::ivec2(16, 16)))
-			{
-				posEnemigo.x += 2;
-				sprite->changeAnimation(STAND_LEFT);
-			}
-		}
-		else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT))
-		{
-			if (sprite->animation() != MOVE_RIGHT && !map->collisionLiana(posEnemigo, glm::ivec2(16, 20))) {
-				sprite->changeAnimation(MOVE_RIGHT);
-				bLiana = false;
-			}
 			posEnemigo.x += 2;
-			if (map->collisionMoveRight(posEnemigo, glm::ivec2(16, 16)))
-			{
-				posEnemigo.x -= 2;
-				sprite->changeAnimation(STAND_RIGHT);
-			}
+			sprite->changeAnimation(STAND_LEFT);
 		}
-		else
+	}
+	else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT))
+	{
+		if (sprite->animation() != MOVE_RIGHT && !map->collisionLiana(posEnemigo, glm::ivec2(16, 20))) {
+			sprite->changeAnimation(MOVE_RIGHT);
+			bLiana = false;
+		}
+		posEnemigo.x += 2;
+		if (map->collisionMoveRight(posEnemigo, glm::ivec2(16, 16)))
 		{
-			if (sprite->animation() == MOVE_LEFT)
-				sprite->changeAnimation(STAND_LEFT);
-			else if (sprite->animation() == MOVE_RIGHT)
-				sprite->changeAnimation(STAND_RIGHT);
+			posEnemigo.x -= 2;
+			sprite->changeAnimation(STAND_RIGHT);
 		}
+	}
+	else
+	{
+		if (sprite->animation() == MOVE_LEFT)
+			sprite->changeAnimation(STAND_LEFT);
+		else if (sprite->animation() == MOVE_RIGHT)
+			sprite->changeAnimation(STAND_RIGHT);
+	}
 
-		if (bJumping)
-		{
-			jumpAngle += JUMP_ANGLE_STEP;
-			if (jumpAngle == 180)
-			{
-				bJumping = false;
-				posEnemigo.y = startY;
-			}
-			else
-			{
-				posEnemigo.y = int(startY - 48 * sin(3.14159f * jumpAngle / 180.f));
-				if (jumpAngle > 90)
-					bJumping = !map->collisionMoveDown(posEnemigo, glm::ivec2(20, 20), &posEnemigo.y);
-				else bJumping = !map->collisionMoveUp(posEnemigo, glm::ivec2(16, 16));
-			}
-		}
-		else
-		{
+	posEnemigo.y += FALL_STEP;
+	if (Game::instance().getSpecialKey(GLUT_KEY_DOWN)) {
+		if (map->collisionLiana(posEnemigo, glm::ivec2(16, 20)) || map->collisionLiana(glm::ivec2(posEnemigo.x, posEnemigo.y + map->getTileSize()), glm::ivec2(16, 20))) {
+			bLiana = true;
 			posEnemigo.y += FALL_STEP;
-			if (Game::instance().getSpecialKey(GLUT_KEY_DOWN)) {
-				if (map->collisionLiana(posEnemigo, glm::ivec2(16, 20)) || map->collisionLiana(glm::ivec2(posEnemigo.x, posEnemigo.y + map->getTileSize()), glm::ivec2(16, 20))) {
-					bLiana = true;
-					posEnemigo.y += FALL_STEP;
-					posEnemigo.x = (posEnemigo.x / map->getTileSize()) * map->getTileSize() + 8;
-					if (sprite->animation() != MOVE_UP_DOWN)
-						sprite->changeAnimation(MOVE_UP_DOWN);
+			posEnemigo.x = (posEnemigo.x / map->getTileSize()) * map->getTileSize() + 8;
+			if (sprite->animation() != MOVE_UP_DOWN)
+				sprite->changeAnimation(MOVE_UP_DOWN);
+		}
+	}
+
+	if (map->collisionMoveDown(posEnemigo, glm::ivec2(16, 20), &posEnemigo.y))
+	{
+		if (Game::instance().getSpecialKey(GLUT_KEY_UP))
+		{
+			if (map->collisionSkullDoor(posEnemigo, glm::ivec2(16, 20)) && !bdoorCollision) {
+				animDoorNum = 1;
+				int block = map->getBlockCode(posEnemigo);
+				if (block == 55) {
+					posEnemigo.x = (((posEnemigo.x + 28) / map->getTileSize())) * map->getTileSize() - 8;
 				}
+				else if (block == 56) posEnemigo.x = ((posEnemigo.x + 12) / map->getTileSize()) * map->getTileSize() - 8;
+				else if (block == 57) posEnemigo.x = (((posEnemigo.x - 4) / map->getTileSize())) * map->getTileSize() - 8;
 			}
-
-			if (map->collisionMoveDown(posEnemigo, glm::ivec2(16, 20), &posEnemigo.y))
-			{
-				if (Game::instance().getSpecialKey(GLUT_KEY_UP))
-				{
-					if (map->collisionSkullDoor(posEnemigo, glm::ivec2(16, 20)) && !bdoorCollision) {
-						animDoorNum = 1;
-						int block = map->getBlockCode(posEnemigo);
-						if (block == 55) {
-							posEnemigo.x = (((posEnemigo.x + 28) / map->getTileSize())) * map->getTileSize() - 8;
-						}
-						else if (block == 56) posEnemigo.x = ((posEnemigo.x + 12) / map->getTileSize()) * map->getTileSize() - 8;
-						else if (block == 57) posEnemigo.x = (((posEnemigo.x - 4) / map->getTileSize())) * map->getTileSize() - 8;
-					}
-					else if (!map->collisionLiana(posEnemigo, glm::ivec2(16, 20))) {
-						if (!bLiana) {
-							bJumping = true;
-							jumpAngle = 0;
-							startY = posEnemigo.y;
-							sprite->changeAnimation(STAND_LEFT);
-						}
-						bLiana = false;
-					}
-					else {
-						bLiana = true;
-						if (sprite->animation() != MOVE_UP_DOWN)
-							sprite->changeAnimation(MOVE_UP_DOWN);
-						bJumping = false;
-						posEnemigo.y -= FALL_STEP;
-						posEnemigo.x = (posEnemigo.x / map->getTileSize()) * map->getTileSize() + 8;
-					}
+			else if (!map->collisionLiana(posEnemigo, glm::ivec2(16, 20))) {
+				if (!bLiana) {
+					bJumping = true;
+					jumpAngle = 0;
+					startY = posEnemigo.y;
+					sprite->changeAnimation(STAND_LEFT);
 				}
-				else if (map->collisionLiana(posEnemigo, glm::ivec2(16, 20))) {
-					if (sprite->animation() != MOVE_RIGHT && sprite->animation() != MOVE_LEFT && sprite->animation() != STAND_LEFT)
-						sprite->changeAnimation(STAND_RIGHT);
-				}
-
+				bLiana = false;
+			}
+			else {
+				bLiana = true;
+				if (sprite->animation() != MOVE_UP_DOWN)
+					sprite->changeAnimation(MOVE_UP_DOWN);
+				bJumping = false;
+				posEnemigo.y -= FALL_STEP;
+				posEnemigo.x = (posEnemigo.x / map->getTileSize()) * map->getTileSize() + 8;
 			}
 		}
+		else if (map->collisionLiana(posEnemigo, glm::ivec2(16, 20))) {
+			if (sprite->animation() != MOVE_RIGHT && sprite->animation() != MOVE_LEFT && sprite->animation() != STAND_LEFT)
+				sprite->changeAnimation(STAND_RIGHT);
+		}
+
 	}
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posEnemigo.x), float(tileMapDispl.y + posEnemigo.y)));
 }
@@ -221,14 +175,6 @@ int Enemigo::isOut() {
 	else if (posEnemigo.x > 512 - map->getTileSize()) return 2;
 	else if (posEnemigo.y < 0) return 3;
 	else if (posEnemigo.y > 320 - map->getTileSize()) return 4;
-}
-
-int Enemigo::getDoorCollision() {
-	return bdoorCollision;
-}
-
-void Enemigo::setDoorCollision(bool state) {
-	bdoorCollision = state;
 }
 
 
