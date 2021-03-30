@@ -40,8 +40,9 @@ void Esqueleto::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 
 	sprite->changeAnimation(0);
 	tileMapDispl = tileMapPos;
-	sprite->setScale(glm::vec3(2.f, 2.f, 0.f));
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posEsqueleto.x), float(tileMapDispl.y + posEsqueleto.y)));
+	sprite->setScale(glm::vec3(2.f, 2.f, 0.f));
+	
 }
 
 void Esqueleto::update(int deltaTime)
