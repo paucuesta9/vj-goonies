@@ -34,6 +34,7 @@ public:
 	void keyPressed(int key);
 	void keyReleased(int key);
 	void specialKeyPressed(int key);
+	void normalKey(int key);
 	void specialKeyReleased(int key);
 	void mouseMove(int x, int y);
 	void mousePress(int button);

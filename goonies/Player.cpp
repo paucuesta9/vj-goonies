@@ -12,7 +12,7 @@
 
 enum PlayerAnims
 {
-	STAND_LEFT, STAND_RIGHT, STAND_UP, MOVE_LEFT, MOVE_RIGHT, MOVE_UP_DOWN, NONE
+	STAND_LEFT, STAND_RIGHT, STAND_UP, MOVE_LEFT, MOVE_RIGHT, MOVE_UP_DOWN, PUNCH_LEFT, PUNCH_RIGHT, NONE
 };
 
 
@@ -23,9 +23,10 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	bdoorCollision = false;
 	animDoorNum = -1;
 	animationTime = -1;
+	punchTime = -1;
 	spritesheetNormal.loadFromFile("images/player.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	spriteNormal = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(0.25, 0.25), &spritesheetNormal, &shaderProgram);
-	spriteNormal->setNumberAnimations(7);
+	spriteNormal->setNumberAnimations(9);
 	
 	spriteNormal->setAnimationSpeed(STAND_LEFT, 8);
 	spriteNormal->addKeyframe(STAND_LEFT, glm::vec2(0.f, 0.25f));
@@ -52,12 +53,18 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	spriteNormal->addKeyframe(MOVE_UP_DOWN, glm::vec2(0.f, 0.5f));
 	spriteNormal->addKeyframe(MOVE_UP_DOWN, glm::vec2(0.25f, 0.5f));
 
+	spriteNormal->setAnimationSpeed(PUNCH_LEFT, 8);
+	spriteNormal->addKeyframe(PUNCH_LEFT, glm::vec2(0.75f, 0.5f));
+
+	spriteNormal->setAnimationSpeed(PUNCH_RIGHT, 8);
+	spriteNormal->addKeyframe(PUNCH_RIGHT, glm::vec2(0.5f, 0.5f));
+
 	spriteNormal->setAnimationSpeed(NONE, 8);
 	spriteNormal->addKeyframe(NONE, glm::vec2(0.75f, 0.75f));
 	
 		spritesheetHurt.loadFromFile("images/player_hurt.png", TEXTURE_PIXEL_FORMAT_RGBA);
 		spriteHurt = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(0.25, 0.25), &spritesheetHurt, &shaderProgram);
-		spriteHurt->setNumberAnimations(7);
+		spriteHurt->setNumberAnimations(9);
 
 		spriteHurt->setAnimationSpeed(STAND_LEFT, 8);
 		spriteHurt->addKeyframe(STAND_LEFT, glm::vec2(0.f, 0.25f));
@@ -97,6 +104,12 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 		spriteHurt->addKeyframe(MOVE_UP_DOWN, glm::vec2(0.25f, 0.5f));
 		spriteHurt->addKeyframe(MOVE_UP_DOWN, glm::vec2(0.75f, 0.75f));
 
+		spriteHurt->setAnimationSpeed(PUNCH_LEFT, 8);
+		spriteHurt->addKeyframe(PUNCH_LEFT, glm::vec2(0.75f, 0.5f));
+
+		spriteHurt->setAnimationSpeed(PUNCH_RIGHT, 8);
+		spriteHurt->addKeyframe(PUNCH_RIGHT, glm::vec2(0.5f, 0.5f));
+
 		spriteHurt->setAnimationSpeed(NONE, 8);
 		spriteHurt->addKeyframe(NONE, glm::vec2(0.75f, 0.75f));
 
@@ -120,6 +133,16 @@ void Player::update(int deltaTime)
 			setSprite(1);
 		}
 	}
+	if (punchTime != -1) {
+		punchTime += deltaTime;
+		if (punchTime > 100) {
+			if (sprite->animation() == PUNCH_LEFT)
+				sprite->changeAnimation(STAND_LEFT);
+			else if (sprite->animation() == PUNCH_RIGHT)
+				sprite->changeAnimation(STAND_RIGHT);
+			punchTime = -1;
+		}
+	}
 	if (animDoorNum != -1) {
 		if (animDoorNum == 1) {
 			posPlayer.y -= 2;
@@ -128,7 +151,7 @@ void Player::update(int deltaTime)
 		if (animDoorNum == 10) {
 			posPlayer.y -= 2;
 		}
-			
+
 		if (animDoorNum == 20) {
 			sprite->changeAnimation(MOVE_RIGHT);
 			posPlayer.x += 5;
@@ -137,7 +160,7 @@ void Player::update(int deltaTime)
 		if (animDoorNum == 30 || animDoorNum == 40 || animDoorNum == 50 || animDoorNum == 60) {
 			posPlayer.x += 5;
 		}
-		
+
 		if (animDoorNum == 70) {
 			posPlayer.x += 5;
 			bdoorCollision = true;
@@ -146,7 +169,14 @@ void Player::update(int deltaTime)
 		++animDoorNum;
 	}
 	else {
-		if (Game::instance().getSpecialKey(GLUT_KEY_LEFT))
+		if (Game::instance().getKey(32)) {
+			punchTime = 0;
+			if (sprite->animation() == STAND_LEFT || sprite->animation() == MOVE_LEFT)
+				sprite->changeAnimation(PUNCH_LEFT);
+			else if (sprite->animation() == STAND_RIGHT || sprite->animation() == MOVE_RIGHT)
+				sprite->changeAnimation(PUNCH_RIGHT);
+		}
+		else if (Game::instance().getSpecialKey(GLUT_KEY_LEFT))
 		{
 			if (sprite->animation() != MOVE_LEFT && !map->collisionLiana(posPlayer, glm::ivec2(16, 20))) {
 				sprite->changeAnimation(MOVE_LEFT);
@@ -231,7 +261,10 @@ void Player::update(int deltaTime)
 							bJumping = true;
 							jumpAngle = 0;
 							startY = posPlayer.y;
-							sprite->changeAnimation(STAND_LEFT);
+							if (sprite->animation() == STAND_LEFT)
+								sprite->changeAnimation(STAND_LEFT);
+							else if (sprite->animation() == STAND_RIGHT)
+								sprite->changeAnimation(STAND_RIGHT);
 						}
 						bLiana = false;
 					}
@@ -252,7 +285,7 @@ void Player::update(int deltaTime)
 				}
 				else if (sprite->animation() == MOVE_UP_DOWN && sprite->animation() != STAND_UP)
 					sprite->changeAnimation(STAND_UP);
-					
+
 			}
 		}
 	}

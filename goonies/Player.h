@@ -30,7 +30,7 @@ public:
 private:
 	bool bJumping, bLiana, bdoorCollision;
 	glm::ivec2 tileMapDispl, posPlayer;
-	int jumpAngle, startY, animDoorNum, animationTime;
+	int jumpAngle, startY, animDoorNum, animationTime, punchTime;
 	Texture spritesheetNormal, spritesheetHurt;
 	Sprite *sprite, *spriteNormal, *spriteHurt;
 	TileMap *map;
