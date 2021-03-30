@@ -245,12 +245,12 @@ void Player::update(int deltaTime)
 					}
 				}
 				else if (map->collisionLiana(posPlayer, glm::ivec2(16, 20))) {
-					if (map->getBlockCode(posPlayer) != 127 && map->getBlockCode(posPlayer) != 128)
+					if (map->getBlockCode(posPlayer) != 127 && map->getBlockCode(posPlayer) != 128 && sprite->animation() != STAND_UP)
 						sprite->changeAnimation(STAND_UP);
-					else if (sprite->animation() != MOVE_RIGHT && sprite->animation() != MOVE_LEFT && sprite->animation() != STAND_LEFT)
+					else if (sprite->animation() != MOVE_RIGHT && sprite->animation() != MOVE_LEFT && sprite->animation() != STAND_LEFT && sprite->animation() != STAND_UP)
 						sprite->changeAnimation(STAND_RIGHT);
 				}
-				else if (sprite->animation() == MOVE_UP_DOWN)
+				else if (sprite->animation() == MOVE_UP_DOWN && sprite->animation() != STAND_UP)
 					sprite->changeAnimation(STAND_UP);
 					
 			}
@@ -294,20 +294,25 @@ void Player::setDoorCollision(bool state) {
 	bdoorCollision = state;
 }
 
-void Player::setAnimation(int animation) {
-	setSprite(2);
-	animationTime = 0;
+void Player::hurted() {
+	if (sprite != spriteHurt) {
+		setSprite(2);
+		animationTime = 0;
+	}
+	
 }
 
 void Player::setSprite(int numSprite) {
 	if (numSprite == 1) {
 		spriteNormal->changeAnimation(sprite->animation());
 		spriteHurt->changeAnimation(NONE);
+		spriteNormal->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 		sprite = spriteNormal;
 	}
 	else {
 		spriteHurt->changeAnimation(sprite->animation());
 		spriteNormal->changeAnimation(NONE);
+		spriteHurt->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 		sprite = spriteHurt;
 	}
 }

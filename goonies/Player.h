@@ -23,7 +23,7 @@ public:
 	glm::ivec2 getPosition();
 	int getDoorCollision();
 	void setDoorCollision(bool state);
-	void setAnimation(int animation);
+	void hurted();
 	int isOut();
 	void setSprite(int numSprite);
 	
