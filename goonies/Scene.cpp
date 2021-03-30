@@ -208,6 +208,7 @@ void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
 		cabezaFlotante->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 		cabezaFlotante->setPosition(glm::vec2(26 * map->getTileSize(), 4 * map->getTileSize()));
 		cabezaFlotante->setTileMap(map);
+
 	} else if (scene == 2 && screen == 1) {
 		esqueleto = new Esqueleto();
 		esqueleto->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
@@ -254,10 +255,32 @@ void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
 		cabezaFlotante->setPosition(glm::vec2(11 * map->getTileSize(), 17 * map->getTileSize()));
 		cabezaFlotante->setTileMap(map);
 	}
-	else if (scene == 3 && screen == 3) {
+	else if (scene == 4 && screen == 2) {
 		cabezaFlotante = new CabezaFlotante();
 		cabezaFlotante->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-		cabezaFlotante->setPosition(glm::vec2(29 * map->getTileSize(), 12 * map->getTileSize()));
+		cabezaFlotante->setPosition(glm::vec2(26 * map->getTileSize(), 7 * map->getTileSize()));
+		cabezaFlotante->setTileMap(map);
+		esqueleto = new Esqueleto();
+		esqueleto->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		esqueleto->setPosition(glm::vec2(6 * map->getTileSize(), 14 * map->getTileSize()));
+		esqueleto->setTileMap(map);
+	}
+	else if (scene == 4 && screen == 3) {
+		esqueleto = new Esqueleto();
+		esqueleto->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		esqueleto->setPosition(glm::vec2(7 * map->getTileSize(), 2 * map->getTileSize()));
+		esqueleto->setTileMap(map);
+	}
+	else if (scene == 5 && screen == 1) {
+		cabezaFlotante = new CabezaFlotante();
+		cabezaFlotante->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		cabezaFlotante->setPosition(glm::vec2(27 * map->getTileSize(), 2 * map->getTileSize()));
+		cabezaFlotante->setTileMap(map);
+	}
+	else if (scene == 5 && screen == 2) {
+		cabezaFlotante = new CabezaFlotante();
+		cabezaFlotante->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		cabezaFlotante->setPosition(glm::vec2(25 * map->getTileSize(), 6 * map->getTileSize()));
 		cabezaFlotante->setTileMap(map);
 	}
 }
