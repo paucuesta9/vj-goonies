@@ -267,6 +267,8 @@ void Player::update(int deltaTime)
 								sprite->changeAnimation(STAND_RIGHT);
 						}
 						bLiana = false;
+						sprite->changeAnimation(STAND_LEFT);
+
 					}
 					else {
 						bLiana = true;
