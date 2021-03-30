@@ -145,8 +145,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Bone.cpp" />
     <ClCompile Include="CabezaFlotante.cpp" />
     <ClCompile Include="Enemigo.cpp" />
+    <ClCompile Include="Esqueleto.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -160,8 +162,10 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\Windows Kits\10\Include\10.0.18362.0\ucrt\locale.h" />
     <ClInclude Include="AnimKeyframes.h" />
+    <ClInclude Include="Bone.h" />
     <ClInclude Include="CabezaFlotante.h" />
     <ClInclude Include="Enemigo.h" />
+    <ClInclude Include="Esqueleto.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Shader.h" />

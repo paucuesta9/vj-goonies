@@ -41,6 +41,10 @@ void Scene::init()
 	cabezaFlotante->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	cabezaFlotante->setPosition(glm::vec2(3 * map->getTileSize(), 14 * map->getTileSize()));
 	cabezaFlotante->setTileMap(map);
+	esqueleto = new Esqueleto();
+	esqueleto->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	esqueleto->setPosition(glm::vec2(3 * map->getTileSize(), 17 * map->getTileSize()));
+	esqueleto->setTileMap(map);
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 	currentTime = 0.0f;
 }
@@ -50,6 +54,7 @@ void Scene::update(int deltaTime)
 	currentTime += deltaTime;
 	player->update(deltaTime);
 	cabezaFlotante->update(deltaTime);
+	esqueleto->update(deltaTime);
 	if (player->getPosition().x < cabezaFlotante->getPosition().x + 8 && cabezaFlotante->getPosition().x < player->getPosition().x + 32 &&
 		player->getPosition().y < cabezaFlotante->getPosition().y + 8 && cabezaFlotante->getPosition().y < player->getPosition().y + 32) {
 		player->hurted();
@@ -169,6 +174,7 @@ void Scene::render()
 	map->render();
 	player->render();
 	cabezaFlotante->render();
+	esqueleto->render();
 }
 
 void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
