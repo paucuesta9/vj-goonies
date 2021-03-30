@@ -17,19 +17,22 @@ public:
 
 	void setTileMap(TileMap* tileMap);
 	void setPosition(const glm::vec2& pos);
-	void startAnimationAndThrowBone(int from);
+	void startAnimationAndThrowBone();
 	void throwBone();
 	glm::ivec2 getPosition();
+	glm::ivec2 getBonePosition();
 	int isOut();
+	bool isThereBone();
+	void deleteBone();
 
 private: 
 	glm::ivec2 tileMapDispl, posEsqueleto;
-	int jumpAngle, startY, timeAnimation;
+	int jumpAngle, startY, timeAnimation, animationPhase;
 	Texture spritesheet;
 	Sprite* sprite;
 	TileMap* map;
 	Bone* bone;
-	ShaderProgram& shader;
+	ShaderProgram shader;
 };
 
 

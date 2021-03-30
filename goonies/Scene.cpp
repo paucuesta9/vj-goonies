@@ -55,12 +55,26 @@ void Scene::update(int deltaTime)
 	player->update(deltaTime);
 	cabezaFlotante->update(deltaTime);
 	esqueleto->update(deltaTime);
-	if (player->getPosition().x < cabezaFlotante->getPosition().x + 8 && cabezaFlotante->getPosition().x < player->getPosition().x + 32 &&
-		player->getPosition().y < cabezaFlotante->getPosition().y + 8 && cabezaFlotante->getPosition().y < player->getPosition().y + 32) {
+	glm::vec2 pos = player->getPosition();
+	glm::vec2 posCabezaFlotante = cabezaFlotante->getPosition();
+	if (pos.x < posCabezaFlotante.x + 8 && posCabezaFlotante.x < pos.x + 32 &&
+		pos.y < posCabezaFlotante.y + 8 && posCabezaFlotante.y < pos.y + 32) {
+		player->hurted();
+	}
+	if (esqueleto->isThereBone()) {
+		glm::vec2 bonePos = esqueleto->getBonePosition();
+		if (pos.x < bonePos.x + 6 && bonePos.x < pos.x + 32 &&
+			pos.y < bonePos.y + 8 && bonePos.y < pos.y + 32) {
+			player->hurted();
+			esqueleto->deleteBone();
+		}
+	}
+	glm::vec2 posEsqueleto = esqueleto->getPosition();
+	if (pos.x < posEsqueleto.x + 8 && posEsqueleto.x < pos.x + 32 &&
+		pos.y < posEsqueleto.y + 8 && posEsqueleto.y < pos.y + 32) {
 		player->hurted();
 	}
 	int out = player->isOut();
-	glm::vec2 pos;
 	switch (out) {
 		case 1: //Left
 			pos = glm::vec2(512 - map->getTileSize() * 2, player->getPosition().y);

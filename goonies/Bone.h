@@ -10,8 +10,6 @@ class Bone
 {
 
 public:
-	Bone();
-	~Bone();
 	void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, int dir);
 	void update(int deltaTime);
 	void render();
