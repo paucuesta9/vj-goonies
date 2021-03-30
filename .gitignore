@@ -23,6 +23,7 @@ mono_crash.*
 
 # Build results
 Debug/
+Release/
 goonies/Debug
 [Dd]ebugPublic/
 [Rr]eleases/
