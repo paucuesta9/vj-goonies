@@ -62,56 +62,56 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	spriteNormal->setAnimationSpeed(NONE, 8);
 	spriteNormal->addKeyframe(NONE, glm::vec2(0.75f, 0.75f));
 	
-		spritesheetHurt.loadFromFile("images/player_hurt.png", TEXTURE_PIXEL_FORMAT_RGBA);
-		spriteHurt = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(0.25, 0.25), &spritesheetHurt, &shaderProgram);
-		spriteHurt->setNumberAnimations(9);
+	spritesheetHurt.loadFromFile("images/player_hurt.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	spriteHurt = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(0.25, 0.25), &spritesheetHurt, &shaderProgram);
+	spriteHurt->setNumberAnimations(9);
 
-		spriteHurt->setAnimationSpeed(STAND_LEFT, 8);
-		spriteHurt->addKeyframe(STAND_LEFT, glm::vec2(0.f, 0.25f));
-		spriteHurt->addKeyframe(STAND_LEFT, glm::vec2(0.75f, 0.75f));
+	spriteHurt->setAnimationSpeed(STAND_LEFT, 8);
+	spriteHurt->addKeyframe(STAND_LEFT, glm::vec2(0.f, 0.25f));
+	spriteHurt->addKeyframe(STAND_LEFT, glm::vec2(0.75f, 0.75f));
 
-		spriteHurt->setAnimationSpeed(MOVE_LEFT, 8);
-		spriteHurt->addKeyframe(MOVE_LEFT, glm::vec2(0.f, 0.25f));
-		spriteHurt->addKeyframe(MOVE_LEFT, glm::vec2(0.75f, 0.75f));
-		spriteHurt->addKeyframe(MOVE_LEFT, glm::vec2(0.25f, 0.25f));
-		spriteHurt->addKeyframe(MOVE_LEFT, glm::vec2(0.75f, 0.75f));
-		spriteHurt->addKeyframe(MOVE_LEFT, glm::vec2(0.5f, 0.25f));
-		spriteHurt->addKeyframe(MOVE_LEFT, glm::vec2(0.75f, 0.75f));
-		spriteHurt->addKeyframe(MOVE_LEFT, glm::vec2(0.75f, 0.25f));
-		spriteHurt->addKeyframe(MOVE_LEFT, glm::vec2(0.75f, 0.75f));
+	spriteHurt->setAnimationSpeed(MOVE_LEFT, 8);
+	spriteHurt->addKeyframe(MOVE_LEFT, glm::vec2(0.f, 0.25f));
+	spriteHurt->addKeyframe(MOVE_LEFT, glm::vec2(0.75f, 0.75f));
+	spriteHurt->addKeyframe(MOVE_LEFT, glm::vec2(0.25f, 0.25f));
+	spriteHurt->addKeyframe(MOVE_LEFT, glm::vec2(0.75f, 0.75f));
+	spriteHurt->addKeyframe(MOVE_LEFT, glm::vec2(0.5f, 0.25f));
+	spriteHurt->addKeyframe(MOVE_LEFT, glm::vec2(0.75f, 0.75f));
+	spriteHurt->addKeyframe(MOVE_LEFT, glm::vec2(0.75f, 0.25f));
+	spriteHurt->addKeyframe(MOVE_LEFT, glm::vec2(0.75f, 0.75f));
 
-		spriteHurt->setAnimationSpeed(STAND_RIGHT, 8);
-		spriteHurt->addKeyframe(STAND_RIGHT, glm::vec2(0.f, 0.f));
-		spriteHurt->addKeyframe(STAND_RIGHT, glm::vec2(0.75f, 0.75f));
+	spriteHurt->setAnimationSpeed(STAND_RIGHT, 8);
+	spriteHurt->addKeyframe(STAND_RIGHT, glm::vec2(0.f, 0.f));
+	spriteHurt->addKeyframe(STAND_RIGHT, glm::vec2(0.75f, 0.75f));
 
-		spriteHurt->setAnimationSpeed(MOVE_RIGHT, 8);
-		spriteHurt->addKeyframe(MOVE_RIGHT, glm::vec2(0., 0.f));
-		spriteHurt->addKeyframe(MOVE_RIGHT, glm::vec2(0.75f, 0.75f));
-		spriteHurt->addKeyframe(MOVE_RIGHT, glm::vec2(0.25, 0.f));
-		spriteHurt->addKeyframe(MOVE_RIGHT, glm::vec2(0.75f, 0.75f));
-		spriteHurt->addKeyframe(MOVE_RIGHT, glm::vec2(0.5, 0.f));
-		spriteHurt->addKeyframe(MOVE_RIGHT, glm::vec2(0.75f, 0.75f));
-		spriteHurt->addKeyframe(MOVE_RIGHT, glm::vec2(0.75, 0.f));
-		spriteHurt->addKeyframe(MOVE_RIGHT, glm::vec2(0.75f, 0.75f));
+	spriteHurt->setAnimationSpeed(MOVE_RIGHT, 8);
+	spriteHurt->addKeyframe(MOVE_RIGHT, glm::vec2(0., 0.f));
+	spriteHurt->addKeyframe(MOVE_RIGHT, glm::vec2(0.75f, 0.75f));
+	spriteHurt->addKeyframe(MOVE_RIGHT, glm::vec2(0.25, 0.f));
+	spriteHurt->addKeyframe(MOVE_RIGHT, glm::vec2(0.75f, 0.75f));
+	spriteHurt->addKeyframe(MOVE_RIGHT, glm::vec2(0.5, 0.f));
+	spriteHurt->addKeyframe(MOVE_RIGHT, glm::vec2(0.75f, 0.75f));
+	spriteHurt->addKeyframe(MOVE_RIGHT, glm::vec2(0.75, 0.f));
+	spriteHurt->addKeyframe(MOVE_RIGHT, glm::vec2(0.75f, 0.75f));
 
-		spriteHurt->setAnimationSpeed(STAND_UP, 8);
-		spriteHurt->addKeyframe(STAND_UP, glm::vec2(0.f, 0.5f));
-		spriteHurt->addKeyframe(STAND_UP, glm::vec2(0.75f, 0.75f));
+	spriteHurt->setAnimationSpeed(STAND_UP, 8);
+	spriteHurt->addKeyframe(STAND_UP, glm::vec2(0.f, 0.5f));
+	spriteHurt->addKeyframe(STAND_UP, glm::vec2(0.75f, 0.75f));
 
-		spriteHurt->setAnimationSpeed(MOVE_UP_DOWN, 8);
-		spriteHurt->addKeyframe(MOVE_UP_DOWN, glm::vec2(0.f, 0.5f));
-		spriteHurt->addKeyframe(MOVE_UP_DOWN, glm::vec2(0.75f, 0.75f));
-		spriteHurt->addKeyframe(MOVE_UP_DOWN, glm::vec2(0.25f, 0.5f));
-		spriteHurt->addKeyframe(MOVE_UP_DOWN, glm::vec2(0.75f, 0.75f));
+	spriteHurt->setAnimationSpeed(MOVE_UP_DOWN, 8);
+	spriteHurt->addKeyframe(MOVE_UP_DOWN, glm::vec2(0.f, 0.5f));
+	spriteHurt->addKeyframe(MOVE_UP_DOWN, glm::vec2(0.75f, 0.75f));
+	spriteHurt->addKeyframe(MOVE_UP_DOWN, glm::vec2(0.25f, 0.5f));
+	spriteHurt->addKeyframe(MOVE_UP_DOWN, glm::vec2(0.75f, 0.75f));
 
-		spriteHurt->setAnimationSpeed(PUNCH_LEFT, 8);
-		spriteHurt->addKeyframe(PUNCH_LEFT, glm::vec2(0.75f, 0.5f));
+	spriteHurt->setAnimationSpeed(PUNCH_LEFT, 8);
+	spriteHurt->addKeyframe(PUNCH_LEFT, glm::vec2(0.75f, 0.5f));
 
-		spriteHurt->setAnimationSpeed(PUNCH_RIGHT, 8);
-		spriteHurt->addKeyframe(PUNCH_RIGHT, glm::vec2(0.5f, 0.5f));
+	spriteHurt->setAnimationSpeed(PUNCH_RIGHT, 8);
+	spriteHurt->addKeyframe(PUNCH_RIGHT, glm::vec2(0.5f, 0.5f));
 
-		spriteHurt->setAnimationSpeed(NONE, 8);
-		spriteHurt->addKeyframe(NONE, glm::vec2(0.75f, 0.75f));
+	spriteHurt->setAnimationSpeed(NONE, 8);
+	spriteHurt->addKeyframe(NONE, glm::vec2(0.75f, 0.75f));
 
 	spriteNormal->changeAnimation(0);
 	spriteHurt->changeAnimation(NONE);

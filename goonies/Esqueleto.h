@@ -22,14 +22,15 @@ public:
 	glm::ivec2 getPosition();
 	glm::ivec2 getBonePosition();
 	int isOut();
+	void die();
 	bool isThereBone();
 	void deleteBone();
 
 private: 
 	glm::ivec2 tileMapDispl, posEsqueleto;
-	int jumpAngle, startY, timeAnimation, animationPhase;
-	Texture spritesheet;
-	Sprite* sprite;
+	int jumpAngle, startY, timeAnimation, animationPhase, Status;
+	Texture spritesheetMovement, spritesheetBornDie;
+	Sprite* sprite, *spriteBornDie, *spriteMove;
 	TileMap* map;
 	Bone* bone;
 	ShaderProgram shader;

@@ -16,6 +16,8 @@ Scene::Scene()
 {
 	map = NULL;
 	player = NULL;
+	cabezaFlotante = NULL;
+	esqueleto = NULL;
 }
 
 Scene::~Scene()
@@ -24,6 +26,10 @@ Scene::~Scene()
 		delete map;
 	if(player != NULL)
 		delete player;
+	if (cabezaFlotante != NULL)
+		delete cabezaFlotante;
+	if (esqueleto != NULL)
+		delete esqueleto;
 }
 
 
@@ -43,27 +49,34 @@ void Scene::update(int deltaTime)
 {
 	currentTime += deltaTime;
 	player->update(deltaTime);
-	cabezaFlotante->update(deltaTime);
-	esqueleto->update(deltaTime);
 	glm::vec2 pos = player->getPosition();
-	glm::vec2 posCabezaFlotante = cabezaFlotante->getPosition();
-	if (pos.x < posCabezaFlotante.x + 8 && posCabezaFlotante.x < pos.x + 32 &&
-		pos.y < posCabezaFlotante.y + 8 && posCabezaFlotante.y < pos.y + 32) {
-		player->hurted();
-	}
-	if (esqueleto->isThereBone()) {
-		glm::vec2 bonePos = esqueleto->getBonePosition();
-		if (pos.x < bonePos.x + 6 && bonePos.x < pos.x + 32 &&
-			pos.y < bonePos.y + 8 && bonePos.y < pos.y + 32) {
+	if (cabezaFlotante != NULL) {
+		glm::vec2 posCabezaFlotante = cabezaFlotante->getPosition();
+		cabezaFlotante->update(deltaTime);
+		if (pos.x < posCabezaFlotante.x + 8 && posCabezaFlotante.x < pos.x + 32 &&
+			pos.y < posCabezaFlotante.y + 8 && posCabezaFlotante.y < pos.y + 32) {
 			player->hurted();
-			esqueleto->deleteBone();
 		}
+		if (cabezaFlotante->getStatus() == 3) delete cabezaFlotante;
 	}
-	glm::vec2 posEsqueleto = esqueleto->getPosition();
-	if (pos.x < posEsqueleto.x + 8 && posEsqueleto.x < pos.x + 32 &&
-		pos.y < posEsqueleto.y + 8 && posEsqueleto.y < pos.y + 32) {
-		player->hurted();
+	if (esqueleto != NULL) {
+		esqueleto->update(deltaTime);
+		if (esqueleto->isThereBone()) {
+			glm::vec2 bonePos = esqueleto->getBonePosition();
+			if (pos.x < bonePos.x + 6 && bonePos.x < pos.x + 32 &&
+				pos.y < bonePos.y + 8 && bonePos.y < pos.y + 32) {
+				player->hurted();
+				esqueleto->deleteBone();
+			}
+		}
+		glm::vec2 posEsqueleto = esqueleto->getPosition();
+		if (pos.x < posEsqueleto.x + 8 && posEsqueleto.x < pos.x + 32 &&
+			pos.y < posEsqueleto.y + 8 && posEsqueleto.y < pos.y + 32) {
+			player->hurted();
+		}
+		if (cabezaFlotante->getStatus() == 3) delete cabezaFlotante;
 	}
+	
 	int out = player->isOut();
 	switch (out) {
 		case 1: //Left
@@ -177,8 +190,8 @@ void Scene::render()
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 	map->render();
 	player->render();
-	cabezaFlotante->render();
-	esqueleto->render();
+	if (cabezaFlotante != NULL) cabezaFlotante->render();
+	if (esqueleto != NULL) esqueleto->render();
 }
 
 void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
@@ -188,21 +201,18 @@ void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
 	map = TileMap::createTileMap("levels/level" + to_string(scene) + "_" + to_string(screen) + ".txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	player->setPosition(pos);
 	player->setTileMap(map);
+	esqueleto = NULL;
+	cabezaFlotante = NULL;
 	if (scene == 1 && screen == 1) {
 		cabezaFlotante = new CabezaFlotante();
 		cabezaFlotante->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 		cabezaFlotante->setPosition(glm::vec2(22 * map->getTileSize(), 10 * map->getTileSize()));
 		cabezaFlotante->setTileMap(map);
-		//QUITAR
-		esqueleto = new Esqueleto();
-		esqueleto->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-		esqueleto->setPosition(glm::vec2(10 * map->getTileSize(), 13 * map->getTileSize()));
-		esqueleto->setTileMap(map);
 	}
 	else if (scene == 1 && screen == 2) {
 		esqueleto = new Esqueleto();
 		esqueleto->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-		esqueleto->setPosition(glm::vec2(10 * map->getTileSize(), 13 * map->getTileSize()));
+		esqueleto->setPosition(glm::vec2(10 * map->getTileSize(), 15 * map->getTileSize() - 4));
 		esqueleto->setTileMap(map);
 		cabezaFlotante = new CabezaFlotante();
 		cabezaFlotante->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
@@ -212,7 +222,7 @@ void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
 	} else if (scene == 2 && screen == 1) {
 		esqueleto = new Esqueleto();
 		esqueleto->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-		esqueleto->setPosition(glm::vec2(24 * map->getTileSize(), 3 * map->getTileSize()));
+		esqueleto->setPosition(glm::vec2(24 * map->getTileSize(), 4 * map->getTileSize() - 4));
 		esqueleto->setTileMap(map);
 		cabezaFlotante = new CabezaFlotante();
 		cabezaFlotante->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
@@ -222,7 +232,7 @@ void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
 	else if (scene == 2 && screen == 2) {
 		esqueleto = new Esqueleto();
 		esqueleto->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-		esqueleto->setPosition(glm::vec2(27 * map->getTileSize(), 6 * map->getTileSize()));
+		esqueleto->setPosition(glm::vec2(24 * map->getTileSize(), 8 * map->getTileSize()- 4));
 		esqueleto->setTileMap(map);
 		cabezaFlotante = new CabezaFlotante();
 		cabezaFlotante->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
@@ -232,7 +242,7 @@ void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
 	else if (scene == 2 && screen == 3) {
 		esqueleto = new Esqueleto();
 		esqueleto->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-		esqueleto->setPosition(glm::vec2(23 * map->getTileSize(), 16 * map->getTileSize()));
+		esqueleto->setPosition(glm::vec2(23 * map->getTileSize(), 18 * map->getTileSize() - 4));
 		esqueleto->setTileMap(map);
 		cabezaFlotante = new CabezaFlotante();
 		cabezaFlotante->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
@@ -248,11 +258,11 @@ void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
 	else if (scene == 3 && screen == 2) {
 		esqueleto = new Esqueleto();
 		esqueleto->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-		esqueleto->setPosition(glm::vec2(12 * map->getTileSize(), 2 * map->getTileSize()));
+		esqueleto->setPosition(glm::vec2(12 * map->getTileSize(), 3 * map->getTileSize() - 4));
 		esqueleto->setTileMap(map);
 		cabezaFlotante = new CabezaFlotante();
 		cabezaFlotante->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-		cabezaFlotante->setPosition(glm::vec2(11 * map->getTileSize(), 17 * map->getTileSize()));
+		cabezaFlotante->setPosition(glm::vec2(11 * map->getTileSize(), 16 * map->getTileSize()));
 		cabezaFlotante->setTileMap(map);
 	}
 	else if (scene == 4 && screen == 2) {
@@ -262,13 +272,13 @@ void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
 		cabezaFlotante->setTileMap(map);
 		esqueleto = new Esqueleto();
 		esqueleto->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-		esqueleto->setPosition(glm::vec2(6 * map->getTileSize(), 14 * map->getTileSize()));
+		esqueleto->setPosition(glm::vec2(6 * map->getTileSize(), 16 * map->getTileSize() - 4));
 		esqueleto->setTileMap(map);
 	}
 	else if (scene == 4 && screen == 3) {
 		esqueleto = new Esqueleto();
 		esqueleto->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-		esqueleto->setPosition(glm::vec2(7 * map->getTileSize(), 2 * map->getTileSize()));
+		esqueleto->setPosition(glm::vec2(7 * map->getTileSize(), 4 * map->getTileSize() - 4));
 		esqueleto->setTileMap(map);
 	}
 	else if (scene == 5 && screen == 1) {
