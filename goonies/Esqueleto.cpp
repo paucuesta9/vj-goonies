@@ -57,6 +57,7 @@ void Esqueleto::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 
 	spriteBornDie->changeAnimation(BORN);
 	tileMapDispl = tileMapPos;
+	posEsqueleto.y -= 8;
 	spriteMove->setPosition(glm::vec2(float(tileMapDispl.x + posEsqueleto.x), float(tileMapDispl.y + posEsqueleto.y)));
 	spriteMove->setScale(glm::vec3(2.f, 2.f, 0.f));
 	spriteBornDie->setPosition(glm::vec2(float(tileMapDispl.x + posEsqueleto.x), float(tileMapDispl.y + posEsqueleto.y)));
@@ -70,8 +71,8 @@ void Esqueleto::update(int deltaTime)
 	sprite->update(deltaTime); 
 	if (Status == 1) {
 		if (bone != NULL) bone->update(deltaTime);
-		srand(time(NULL));
-		if (deltaTime * rand() % 500 < 10) {
+		/*srand(time(NULL));
+		if (deltaTime * rand() % 500 < 20) {
 			if (sprite->animation() == MOVE_RIGHT)
 				sprite->changeAnimation(STAND_RIGHT);
 			else if (sprite->animation() == MOVE_LEFT)
@@ -79,7 +80,7 @@ void Esqueleto::update(int deltaTime)
 			throwBone();
 			timeAnimation = 900;
 			animationPhase = 3;
-		}
+		}*/
 	} 
 	if (timeAnimation != -1) {
 		timeAnimation += deltaTime;
@@ -119,6 +120,12 @@ void Esqueleto::update(int deltaTime)
 				if (sprite->animation() == MOVE_RIGHT) sprite->changeAnimation(STAND_LEFT);
 				else sprite->changeAnimation(STAND_RIGHT);
 				++animationPhase;
+			}
+		}
+		else if (Status == 2) {
+			if (timeAnimation > 500) {
+				Status = 3;
+				timeAnimation = -1;
 			}
 		}
 	}
@@ -193,10 +200,16 @@ int Esqueleto::isOut() {
 
 void Esqueleto::die()
 {
+	posEsqueleto.y -= 8;
 	spriteBornDie->setPosition(glm::vec2(float(tileMapDispl.x + posEsqueleto.x), float(tileMapDispl.y + posEsqueleto.y)));
 	sprite = spriteBornDie;
+	spriteBornDie->changeAnimation(DIE);
 	Status = 2;
 	timeAnimation = 0;
+}
+
+int Esqueleto::getStatus() {
+	return Status;
 }
 
 void Esqueleto::startAnimationAndThrowBone() {
@@ -227,6 +240,14 @@ bool Esqueleto::isThereBone() {
 
 glm::ivec2 Esqueleto::getBonePosition() {
 	return bone->getPosition();
+}
+
+int Esqueleto::getBoneStatus() {
+	return bone->getStatus();
+}
+
+void Esqueleto::dieBone() {
+	bone->die();
 }
 
 void Esqueleto::deleteBone() {

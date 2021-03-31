@@ -50,6 +50,7 @@ void CabezaFlotante::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderPro
 
 	spriteBornDie->changeAnimation(BORN);
 	tileMapDispl = tileMapPos;
+	posCabeza.y -= 8;
 	spriteBornDie->setPosition(glm::vec2(float(tileMapDispl.x + posCabeza.x), float(tileMapDispl.y + posCabeza.y)));
 	spriteMovement->setPosition(glm::vec2(float(tileMapDispl.x + posCabeza.x), float(tileMapDispl.y + posCabeza.y)));
 	spriteBornDie->setScale(glm::vec3(2.f, 2.f, 0.f));
@@ -133,8 +134,10 @@ void CabezaFlotante::setPosition(const glm::vec2& pos)
 
 void CabezaFlotante::die()
 {
+	posCabeza.y -= 8;
 	spriteBornDie->setPosition(glm::vec2(float(tileMapDispl.x + posCabeza.x), float(tileMapDispl.y + posCabeza.y)));
 	sprite = spriteBornDie;
+	spriteBornDie->changeAnimation(DIE);
 	Status = 2;
 	animationTime = 0;
 }

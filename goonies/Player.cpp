@@ -267,7 +267,7 @@ void Player::update(int deltaTime)
 								sprite->changeAnimation(STAND_RIGHT);
 						}
 						bLiana = false;
-						sprite->changeAnimation(STAND_LEFT);
+						if (sprite->animation() == MOVE_UP_DOWN) sprite->changeAnimation(STAND_LEFT);
 
 					}
 					else {
@@ -337,7 +337,6 @@ void Player::hurted() {
 	}
 	
 }
-
 void Player::setSprite(int numSprite) {
 	if (numSprite == 1) {
 		spriteNormal->changeAnimation(sprite->animation());
@@ -351,4 +350,10 @@ void Player::setSprite(int numSprite) {
 		spriteHurt->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 		sprite = spriteHurt;
 	}
+}
+
+int Player::isPunching() {
+	if (sprite->animation() == PUNCH_LEFT) return 1;
+	else if (sprite->animation() == PUNCH_RIGHT) return 2;
+	else return 0;
 }

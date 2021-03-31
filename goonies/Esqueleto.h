@@ -21,10 +21,13 @@ public:
 	void throwBone();
 	glm::ivec2 getPosition();
 	glm::ivec2 getBonePosition();
+	int getBoneStatus();
 	int isOut();
 	void die();
+	int getStatus();
 	bool isThereBone();
 	void deleteBone();
+	void dieBone();
 
 private: 
 	glm::ivec2 tileMapDispl, posEsqueleto;

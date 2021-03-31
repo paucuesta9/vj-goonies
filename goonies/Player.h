@@ -26,6 +26,7 @@ public:
 	void hurted();
 	int isOut();
 	void setSprite(int numSprite);
+	int isPunching();
 	
 private:
 	bool bJumping, bLiana, bdoorCollision;

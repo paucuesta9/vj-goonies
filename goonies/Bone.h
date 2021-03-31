@@ -19,13 +19,15 @@ public:
 	glm::ivec2 getPosition();
 	int getState();
 	int isOut();
+	void die();
+	int getStatus();
 
 private:
 	glm::ivec2 tileMapDispl, posBone;
-	Texture spritesheet;
-	Sprite* sprite;
+	Texture spritesheetMove, spritesheetBornDie;
+	Sprite* sprite, *spriteMove, *spriteBornDie;
 	TileMap* map;
-	int direction;
+	int direction, Status, animationTime;
 	bool isActive;
 };
 

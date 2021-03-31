@@ -53,28 +53,55 @@ void Scene::update(int deltaTime)
 	if (cabezaFlotante != NULL) {
 		glm::vec2 posCabezaFlotante = cabezaFlotante->getPosition();
 		cabezaFlotante->update(deltaTime);
-		if (pos.x < posCabezaFlotante.x + 8 && posCabezaFlotante.x < pos.x + 32 &&
-			pos.y < posCabezaFlotante.y + 8 && posCabezaFlotante.y < pos.y + 32) {
-			player->hurted();
+		if (player->isPunching() == 1 && pos.x - 16 < posCabezaFlotante.x + 8 && pos.x - 16 > posCabezaFlotante.x + 4 && 
+			pos.y < posCabezaFlotante.y + 8 && posCabezaFlotante.y < pos.y + 32)
+			cabezaFlotante->die();
+		else if (player->isPunching() == 2 && pos.x + 36 > posCabezaFlotante.x && pos.x + 32 < posCabezaFlotante.x && 
+			pos.y < posCabezaFlotante.y + 8 && posCabezaFlotante.y < pos.y + 32) cabezaFlotante->die();
+		if (cabezaFlotante->getStatus() == 3) {
+			cabezaFlotante = NULL;
+			delete cabezaFlotante;
 		}
-		if (cabezaFlotante->getStatus() == 3) delete cabezaFlotante;
+		else if (pos.x < posCabezaFlotante.x + 8 && posCabezaFlotante.x < pos.x + 32 &&
+			pos.y < posCabezaFlotante.y + 8 && posCabezaFlotante.y < pos.y + 32 && cabezaFlotante->getStatus()==1) {
+			player->hurted();
+		}	
 	}
 	if (esqueleto != NULL) {
 		esqueleto->update(deltaTime);
-		if (esqueleto->isThereBone()) {
-			glm::vec2 bonePos = esqueleto->getBonePosition();
-			if (pos.x < bonePos.x + 6 && bonePos.x < pos.x + 32 &&
-				pos.y < bonePos.y + 8 && bonePos.y < pos.y + 32) {
+		glm::vec2 posEsqueleto = esqueleto->getPosition();
+		if (player->isPunching() == 1 && pos.x - 16 < posEsqueleto.x + 8 && pos.x - 16 > posEsqueleto.x + 4 &&
+			pos.y < posEsqueleto.y + 8 && posEsqueleto.y < pos.y + 32)
+			esqueleto->die();
+		else if (player->isPunching() == 2 && pos.x + 36 > posEsqueleto.x && pos.x + 32 < posEsqueleto.x &&
+			pos.y < posEsqueleto.y + 8 && posEsqueleto.y < pos.y + 32) esqueleto->die();
+		if (esqueleto->getStatus() == 3) {
+			esqueleto = NULL;
+			delete esqueleto;
+		}
+		else {
+			if (esqueleto->isThereBone()) {
+				glm::vec2 posBone = esqueleto->getBonePosition();
+				if (player->isPunching() == 1 && pos.x > posBone.x + 6  && pos.x  < posBone.x + 24 &&
+					pos.y < posBone.y + 8 && posBone.y < pos.y + 32)
+					esqueleto->dieBone();
+				else if (player->isPunching() == 2 && pos.x + 38 > posBone.x && pos.x + 32 < posBone.x &&
+					pos.y < posBone.y + 8 && posBone.y < pos.y + 32) esqueleto->dieBone();
+				if (esqueleto->getBoneStatus() == 3) {
+					esqueleto->deleteBone();
+				}
+				else if (pos.x < posBone.x + 6 && posBone.x < pos.x + 32 &&
+					pos.y < posBone.y + 8 && posBone.y < pos.y + 32 && esqueleto->getBoneStatus() == 1) {
+					player->hurted();
+					esqueleto->deleteBone();
+				}
+			}
+
+			if (pos.x < posEsqueleto.x + 8 && posEsqueleto.x < pos.x + 32 &&
+				pos.y < posEsqueleto.y + 8 && posEsqueleto.y < pos.y + 32 && esqueleto->getStatus() == 1) {
 				player->hurted();
-				esqueleto->deleteBone();
 			}
 		}
-		glm::vec2 posEsqueleto = esqueleto->getPosition();
-		if (pos.x < posEsqueleto.x + 8 && posEsqueleto.x < pos.x + 32 &&
-			pos.y < posEsqueleto.y + 8 && posEsqueleto.y < pos.y + 32) {
-			player->hurted();
-		}
-		if (cabezaFlotante->getStatus() == 3) delete cabezaFlotante;
 	}
 	
 	int out = player->isOut();
