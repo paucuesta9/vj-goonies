@@ -8,6 +8,7 @@
 #include "Player.h"
 #include "CabezaFlotante.h"
 #include "Esqueleto.h"
+#include "Cascada.h"
 
 
 // Scene contains all the entities of our game.
@@ -34,10 +35,11 @@ private:
 	Player *player;
 	CabezaFlotante *cabezaFlotante;
 	Esqueleto *esqueleto;
+	Cascada *cascada;
 	ShaderProgram texProgram;
 	float currentTime;
 	glm::mat4 projection;
-	int sceneNum, screenNum;
+	int sceneNum, screenNum, numCascada, sizeCascada, timeCascada;
 };
 
 

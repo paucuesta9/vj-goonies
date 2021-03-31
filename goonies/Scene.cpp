@@ -18,6 +18,7 @@ Scene::Scene()
 	player = NULL;
 	cabezaFlotante = NULL;
 	esqueleto = NULL;
+	cascada = NULL;
 }
 
 Scene::~Scene()
@@ -30,6 +31,8 @@ Scene::~Scene()
 		delete cabezaFlotante;
 	if (esqueleto != NULL)
 		delete esqueleto;
+	if (cascada != NULL)
+		delete cascada;
 }
 
 
@@ -38,6 +41,9 @@ void Scene::init()
 	initShaders();
 	sceneNum = 1;
 	screenNum = 1;
+	timeCascada = -1;
+	numCascada = 0;
+	sizeCascada = 0;
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	changeScreen(sceneNum, screenNum, glm::vec2(INIT_PLAYER_X_TILES * 16, INIT_PLAYER_Y_TILES * 16));
@@ -101,6 +107,49 @@ void Scene::update(int deltaTime)
 				pos.y < posEsqueleto.y + 8 && posEsqueleto.y < pos.y + 32 && esqueleto->getStatus() == 1) {
 				player->hurted();
 			}
+		}
+	}
+	if (cascada != NULL) {
+		if (timeCascada != -1) {
+			timeCascada += deltaTime;
+			if (timeCascada > 5000) {
+				timeCascada = 0;
+				if (numCascada < sizeCascada) {
+					cascada[numCascada].setStatus(2);
+					for (int i = numCascada; i < sizeCascada; ++i) cascada[i].update(deltaTime);
+					if (numCascada > sizeCascada) {
+						timeCascada = -1;
+						cascada = NULL;
+					}
+					++numCascada;
+				}
+				else if (numCascada > 0) delete& cascada[numCascada - 1];
+			}
+			else {
+				for (int i = 0; i < sizeCascada; ++i) cascada[i].update(deltaTime);
+			}
+		}
+		else {
+			for (int i = 0; i < numCascada; ++i) {
+				int cascadaStatus = cascada[i].getStatus();
+				if (cascadaStatus == 0) cascada[i].setStatus(1);
+				if (i == sizeCascada - 1 && cascadaStatus != 3) {
+					cascada[i].setStatus(3);
+					timeCascada = 0;
+
+				}
+				cascada[i].update(deltaTime);
+			}
+			if (numCascada < sizeCascada) {
+				cascada[numCascada].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+				glm::vec2 posNewCascada = cascada[numCascada - 1].getPosition();
+				posNewCascada.y += 16;
+				cascada[numCascada].setPosition(posNewCascada);
+				cascada[numCascada].setTileMap(map);
+				cascada[numCascada].update(deltaTime);
+				++numCascada;
+			}
+			else if (numCascada == sizeCascada) numCascada = 0;
 		}
 	}
 	
@@ -219,6 +268,12 @@ void Scene::render()
 	player->render();
 	if (cabezaFlotante != NULL) cabezaFlotante->render();
 	if (esqueleto != NULL) esqueleto->render();
+	if (cascada != NULL) {
+		if (timeCascada == -1)
+			for (int i = 0; i < numCascada; ++i) cascada[i].render();
+		else if (numCascada == 0) for (int i = 0; i < sizeCascada; ++i) cascada[i].render();
+		else for (int i = numCascada - 1; i < sizeCascada; ++i) cascada[i].render();
+	}
 }
 
 void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
@@ -230,6 +285,9 @@ void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
 	player->setTileMap(map);
 	esqueleto = NULL;
 	cabezaFlotante = NULL;
+	cascada = NULL;
+	numCascada = 0;
+	sizeCascada = 0;
 	if (scene == 1 && screen == 1) {
 		cabezaFlotante = new CabezaFlotante();
 		cabezaFlotante->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
@@ -245,7 +303,12 @@ void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
 		cabezaFlotante->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 		cabezaFlotante->setPosition(glm::vec2(26 * map->getTileSize(), 4 * map->getTileSize()));
 		cabezaFlotante->setTileMap(map);
-
+		cascada = new Cascada[14];
+		cascada[0].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		cascada[0].setPosition(glm::vec2(10 * map->getTileSize(), 4 * map->getTileSize()));
+		cascada[0].setTileMap(map);
+		numCascada = 1;
+		sizeCascada = 14;
 	} else if (scene == 2 && screen == 1) {
 		esqueleto = new Esqueleto();
 		esqueleto->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
