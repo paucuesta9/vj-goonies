@@ -62,6 +62,7 @@ void Gota::update(int deltaTime)
 	else if (sprite->animation() == FALL) {
 		posGota.y += 4;
 		if (map->collisionMoveDown(posGota, glm::vec2(8, 8), &posGota.y)) {
+			posGota.y += 8;
 			sprite->changeAnimation(HIT_FLOOR);
 			animationTime = 0;
 		}

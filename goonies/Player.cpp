@@ -26,6 +26,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	punchTime = -1;
 	life = 100;
 	exp = 0;
+	Status = -1;
 	spritesheetNormal.loadFromFile("images/player.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	spriteNormal = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(0.25, 0.25), &spritesheetNormal, &shaderProgram);
 	spriteNormal->setNumberAnimations(9);
@@ -145,27 +146,42 @@ void Player::update(int deltaTime)
 			punchTime = -1;
 		}
 	}
-	if (animDoorNum != -1) {
-		if (animDoorNum == 1) {
-			posPlayer.y -= 2;
-		}
+	if (animDoorNum != -1 && animDoorNum != -2) {
+		if (Status == 0) {
+			if (animDoorNum == 1) {
+				posPlayer.y -= 2;
+			}
 
-		if (animDoorNum == 10) {
-			posPlayer.y -= 2;
-		}
+			if (animDoorNum == 10) {
+				posPlayer.y -= 2;
+			}
 
-		if (animDoorNum == 20) {
-			sprite->changeAnimation(MOVE_RIGHT);
-			posPlayer.x += 5;
-		}
+			if (animDoorNum == 20) {
+				sprite->changeAnimation(MOVE_RIGHT);
+				posPlayer.x += 5;
+			}
 
-		if (animDoorNum == 30 || animDoorNum == 40 || animDoorNum == 50 || animDoorNum == 60) {
-			posPlayer.x += 5;
-		}
+			if (animDoorNum == 30 || animDoorNum == 40 || animDoorNum == 50 || animDoorNum == 60) {
+				posPlayer.x += 5;
+			}
 
-		if (animDoorNum == 70) {
-			posPlayer.x += 5;
-			animDoorNum = -3;
+			if (animDoorNum == 70) {
+				posPlayer.x += 5;
+				animDoorNum = -3;
+				Status = -1;
+			}
+		}
+		else if (Status == 1) {
+			sprite->changeAnimation(STAND_RIGHT);
+			if (animDoorNum == 50) {
+				posPlayer.y += 2;
+			}
+
+			if (animDoorNum == 70) {
+				posPlayer.y += 2;
+				animDoorNum = -2;
+				Status = -1;
+			}
 		}
 		++animDoorNum;
 	}
@@ -319,7 +335,14 @@ int Player::getAnimDoorNum() {
 }
 
 void Player::setDoorCollision(bool state) {
-	if (state) animDoorNum = 0;
+	if (state) {
+		animDoorNum = 0;
+		bJumping = false;
+		Status = 0;
+	}
+	else if (Status == 1) {
+		animDoorNum = 0;
+	}
 	else animDoorNum = -1;
 }
 
@@ -353,5 +376,10 @@ int Player::isPunching() {
 }
 
 void Player::animateChange() {
+	animDoorNum = 0;
+	Status = 1;
+}
 
+void Player::ganeExp(int quantity) {
+	exp += quantity;
 }

@@ -21,7 +21,7 @@ void SkullDoor::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram,
 	posDoor = pos;
 	sprite = new Sprite();
 	spritesheet.loadFromFile("images/puerta_skull.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	sprite = Sprite::createSprite(glm::ivec2(24, 32), glm::vec2(1.0, 1.0), &spritesheet, &shaderProgram);
+	sprite = Sprite::createSprite(glm::ivec2(32, 32), glm::vec2(1.0, 1.0), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(1);
 
 	sprite->setAnimationSpeed(SKULL_DOOR, 8);

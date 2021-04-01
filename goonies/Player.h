@@ -28,6 +28,7 @@ public:
 	void setSprite(int numSprite);
 	int isPunching();
 	void animateChange();
+	void ganeExp(int quantity);
 	
 private:
 	bool bJumping, bLiana, bdoorCollision;
@@ -36,7 +37,7 @@ private:
 	Texture spritesheetNormal, spritesheetHurt;
 	Sprite *sprite, *spriteNormal, *spriteHurt;
 	TileMap *map;
-	int life, exp;
+	int life, exp, Status;
 };
 
 

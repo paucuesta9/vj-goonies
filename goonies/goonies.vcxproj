@@ -151,8 +151,10 @@
     <ClCompile Include="Cascada.cpp" />
     <ClCompile Include="Enemigo.cpp" />
     <ClCompile Include="Esqueleto.cpp" />
+    <ClCompile Include="Friend.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Gota.cpp" />
+    <ClCompile Include="GreenDoor.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Scene.cpp" />
@@ -160,6 +162,7 @@
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="SkullDoor.cpp" />
     <ClCompile Include="Sprite.cpp" />
+    <ClCompile Include="StartEndDoor.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TileMap.cpp" />
   </ItemGroup>
@@ -172,13 +175,16 @@
     <ClInclude Include="Cascada.h" />
     <ClInclude Include="Enemigo.h" />
     <ClInclude Include="Esqueleto.h" />
+    <ClInclude Include="Friend.h" />
     <ClInclude Include="Gota.h" />
+    <ClInclude Include="GreenDoor.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="SkullDoor.h" />
     <ClInclude Include="Sprite.h" />
+    <ClInclude Include="StartEndDoor.h" />
     <ClInclude Include="TileMap.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

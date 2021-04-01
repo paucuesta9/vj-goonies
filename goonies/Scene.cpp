@@ -240,39 +240,39 @@ void Scene::update(int deltaTime)
 	if (player->getAnimDoorNum() == -2) {
 		glm::ivec2 position = player->getPosition();
 		if (sceneNum == 1 && screenNum == 3) {
-			changeScreen(2, 1, glm::ivec2(5 * tileSize - 8, 4 * tileSize - 4));
+			changeScreen(2, 1, glm::ivec2(5 * tileSize, 4 * tileSize - 8));
 		}
 		else if (sceneNum == 2 && screenNum == 1) {
-			changeScreen(1, 3, glm::ivec2(28 * tileSize - 8, 7 * tileSize - 4));
+			changeScreen(1, 3, glm::ivec2(28 * tileSize, 7 * tileSize - 8));
 		}
 		else if (sceneNum == 2 && screenNum == 3) {
-			changeScreen(3, 1, glm::ivec2(14 * tileSize - 8, 17 * tileSize - 4));
+			changeScreen(3, 1, glm::ivec2(14 * tileSize, 17 * tileSize - 8));
 		}
 		else if (sceneNum == 3 && screenNum == 1) {
-			changeScreen(2, 3, glm::ivec2(10 * tileSize - 8, 10 * tileSize - 4));
+			changeScreen(2, 3, glm::ivec2(10 * tileSize, 10 * tileSize - 8));
 		}
 		else if (sceneNum == 3 && screenNum == 3) {
-			changeScreen(4, 1, glm::ivec2(4 * tileSize - 8, 14 * tileSize - 4));
+			changeScreen(4, 1, glm::ivec2(4 * tileSize, 14 * tileSize - 8));
 		}
 		else if (sceneNum == 4 && screenNum == 1) {
-			if (position.x == 4*tileSize + 22 && position.y == 5*tileSize - 8)
-				changeScreen(4, 2, glm::ivec2(28 * tileSize - 8, 17 * tileSize - 4));
-			else if (position.x == 4*tileSize + 22 && position.y == 14*tileSize - 8)
-				changeScreen(3, 3, glm::ivec2(2 * tileSize - 8, 13 * tileSize - 4));
-			else if (position.x == 27*tileSize + 22 && position.y == 5*tileSize - 8)
-				changeScreen(4, 3, glm::ivec2(6 * tileSize - 8, 16 * tileSize - 4));
+			if (position.x == 4*tileSize + 24 && position.y == 5*tileSize - 8)
+				changeScreen(4, 2, glm::ivec2(28 * tileSize, 17 * tileSize - 8));
+			else if (position.x == 4*tileSize + 24 && position.y == 14*tileSize - 8)
+				changeScreen(3, 3, glm::ivec2(2 * tileSize, 13 * tileSize - 8));
+			else if (position.x == 27*tileSize + 24 && position.y == 5*tileSize - 8)
+				changeScreen(4, 3, glm::ivec2(6 * tileSize, 16 * tileSize - 8));
 		}
 		else if (sceneNum == 4 && screenNum == 2) {
-			changeScreen(4, 1, glm::ivec2(4 * tileSize - 8, 5 * tileSize - 4));
+			changeScreen(4, 1, glm::ivec2(4 * tileSize, 5 * tileSize - 8));
 		}
 		else if (sceneNum == 4 && screenNum == 3) {
-			if (position.x == 14 * tileSize + 22 && position.y == 15*tileSize - 8)
-				changeScreen(5, 1, glm::ivec2(3 * tileSize - 8, 4 * tileSize - 4));
-			else if (position.x == 6*tileSize + 22 && position.y == 16*tileSize - 8)
-				changeScreen(4, 1, glm::ivec2(26 * tileSize - 8, 5 * tileSize - 4));
+			if (position.x == 14 * tileSize + 24 && position.y == 15*tileSize - 8)
+				changeScreen(5, 1, glm::ivec2(3 * tileSize, 4 * tileSize - 8));
+			else if (position.x == 6*tileSize + 24 && position.y == 16*tileSize - 8)
+				changeScreen(4, 1, glm::ivec2(26 * tileSize, 5 * tileSize - 8));
 		}
 		else if (sceneNum == 5 && screenNum == 1) {
-			changeScreen(4, 3, glm::ivec2(14 * tileSize - 8, 15 * tileSize - 4));
+			changeScreen(4, 3, glm::ivec2(14 * tileSize, 15 * tileSize - 8));
 		}
 		player->setDoorCollision(false);
 	}
@@ -308,7 +308,6 @@ void Scene::render()
 
 void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
 {
-	changingScene = false;
 	sceneNum = scene;
 	screenNum = screen;
 	map = TileMap::createTileMap("levels/level" + to_string(scene) + "_" + to_string(screen) + ".txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
@@ -317,6 +316,7 @@ void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
 	if (changingScene) {
 		player->animateChange();
 	}
+	changingScene = false;
 	esqueleto = NULL;
 	cabezaFlotante = NULL;
 	cascada = NULL;
@@ -370,6 +370,10 @@ void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
 		cabezaFlotante->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 		cabezaFlotante->setPosition(glm::vec2(7 * map->getTileSize(), 14 * map->getTileSize()));
 		cabezaFlotante->setTileMap(map);
+		numSkullDoors = 1;
+		skullDoor = new SkullDoor[1];
+		skullDoor[0].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(4 * map->getTileSize(), 2 * map->getTileSize()));
+		skullDoor[0].setTileMap(map);
 	}
 	else if (scene == 2 && screen == 2) {
 		esqueleto = new Esqueleto();
@@ -390,6 +394,10 @@ void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
 		cabezaFlotante->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 		cabezaFlotante->setPosition(glm::vec2(7 * map->getTileSize(), 4 * map->getTileSize()));
 		cabezaFlotante->setTileMap(map);
+		numSkullDoors = 1;
+		skullDoor = new SkullDoor[1];
+		skullDoor[0].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(9 * map->getTileSize(), 8 * map->getTileSize()));
+		skullDoor[0].setTileMap(map);
 	}
 	else if (scene == 3 && screen == 1) {
 		cabezaFlotante = new CabezaFlotante();
@@ -406,6 +414,10 @@ void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
 		aspersor[2].setTileMap(map);
 		aspersor[3].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(29 * map->getTileSize(), 7 * map->getTileSize()));
 		aspersor[3].setTileMap(map);
+		numSkullDoors = 1;
+		skullDoor = new SkullDoor[1];
+		skullDoor[0].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(13 * map->getTileSize(), 15 * map->getTileSize()));
+		skullDoor[0].setTileMap(map);
 	}
 	else if (scene == 3 && screen == 2) {
 		esqueleto = new Esqueleto();
@@ -424,7 +436,10 @@ void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
 		aspersor[1].setTileMap(map);
 	}
 	else if (scene == 3 && screen == 3) {
-
+		numSkullDoors = 1;
+		skullDoor = new SkullDoor[1];
+		skullDoor[0].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(1 * map->getTileSize(), 11 * map->getTileSize()));
+		skullDoor[0].setTileMap(map);
 	}
 	else if (scene == 4 && screen == 1) {
 		numCasc = 2;
@@ -433,6 +448,14 @@ void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
 		cascada[0].setTileMap(map);
 		cascada[1].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(16 * map->getTileSize(), 5 * map->getTileSize()), 12);
 		cascada[1].setTileMap(map);
+		numSkullDoors = 3;
+		skullDoor = new SkullDoor[3];
+		skullDoor[0].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(3 * map->getTileSize(), 12 * map->getTileSize()));
+		skullDoor[0].setTileMap(map);
+		skullDoor[1].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(3 * map->getTileSize(), 3 * map->getTileSize()));
+		skullDoor[1].setTileMap(map);
+		skullDoor[2].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(26 * map->getTileSize(), 3 * map->getTileSize()));
+		skullDoor[2].setTileMap(map);
 	}
 	else if (scene == 4 && screen == 2) {
 		cabezaFlotante = new CabezaFlotante();
@@ -443,6 +466,10 @@ void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
 		esqueleto->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 		esqueleto->setPosition(glm::vec2(6 * map->getTileSize(), 16 * map->getTileSize() - 4));
 		esqueleto->setTileMap(map);
+		numSkullDoors = 1;
+		skullDoor = new SkullDoor[1];
+		skullDoor[0].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(27 * map->getTileSize(), 15 * map->getTileSize()));
+		skullDoor[0].setTileMap(map);
 	}
 	else if (scene == 4 && screen == 3) {
 		esqueleto = new Esqueleto();
@@ -453,6 +480,12 @@ void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
 		cascada = new Cascada[1];
 		cascada[0].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(18 * map->getTileSize(), 9 * map->getTileSize()), 9);
 		cascada[0].setTileMap(map);
+		numSkullDoors = 2;
+		skullDoor = new SkullDoor[2];
+		skullDoor[0].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(5 * map->getTileSize(), 14 * map->getTileSize()));
+		skullDoor[0].setTileMap(map);
+		skullDoor[1].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(13 * map->getTileSize(), 13 * map->getTileSize()));
+		skullDoor[1].setTileMap(map);
 	}
 	else if (scene == 5 && screen == 1) {
 		cabezaFlotante = new CabezaFlotante();
@@ -465,6 +498,10 @@ void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
 		aspersor[0].setTileMap(map);
 		aspersor[1].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(15 * map->getTileSize(), 16 * map->getTileSize()));
 		aspersor[1].setTileMap(map);
+		numSkullDoors = 1;
+		skullDoor = new SkullDoor[1];
+		skullDoor[0].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(2 * map->getTileSize(), 2 * map->getTileSize()));
+		skullDoor[0].setTileMap(map);
 	}
 	else if (scene == 5 && screen == 2) {
 		cabezaFlotante = new CabezaFlotante();
