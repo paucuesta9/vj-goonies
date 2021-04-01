@@ -16,7 +16,7 @@ StartEndDoor::~StartEndDoor() {
 		delete sprite;
 }
 
-void StartEndDoor::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, glm::ivec2 pos)
+void StartEndDoor::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, glm::ivec2 pos, int state)
 {
 	posDoor = pos;
 	sprite = new Sprite();
@@ -30,7 +30,7 @@ void StartEndDoor::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgr
 	sprite->setAnimationSpeed(OPENED, 8);
 	sprite->addKeyframe(OPENED, glm::vec2(0.5f, 0.f));
 
-	sprite->changeAnimation(OPENED);
+	sprite->changeAnimation(state);
 	tileMapDispl = tileMapPos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posDoor.x), float(tileMapDispl.y + posDoor.y)));
 	sprite->setScale(glm::vec3(2.f, 2.f, 0.f));

@@ -12,6 +12,8 @@
 #include "Aspersor.h"
 #include "Gota.h"
 #include "SkullDoor.h"
+#include "GreenDoor.h"
+#include "StartEndDoor.h"
 
 
 // Scene contains all the entities of our game.
@@ -42,11 +44,15 @@ private:
 	Aspersor *aspersor;
 	Gota* gota;
 	SkullDoor* skullDoor;
+	GreenDoor* greenDoor;
+	StartEndDoor* startEndDoor;
 	ShaderProgram texProgram;
 	float currentTime;
 	glm::mat4 projection;
-	int sceneNum, screenNum, numAsp, numCasc, numGotas, numSkullDoors;
+	int sceneNum, screenNum, numAsp, numCasc, numGotas, numSkullDoors, numGreenDoors;
 	bool changingScene;
+	int numFriends;
+	bool first;
 };
 
 

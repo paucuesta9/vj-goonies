@@ -11,7 +11,7 @@ class StartEndDoor
 
 public:
 	~StartEndDoor();
-	void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, glm::ivec2 pos);
+	void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, glm::ivec2 pos, int state);
 	void update(int deltaTime);
 	void render();
 
