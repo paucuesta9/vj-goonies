@@ -28,6 +28,7 @@ public:
 	void setSprite(int numSprite);
 	int isPunching();
 	void animateChange();
+	void pickPowerUp(int powerUp);
 	void ganeExp(int quantity);
 	
 private:
@@ -37,7 +38,8 @@ private:
 	Texture spritesheetNormal, spritesheetHurt;
 	Sprite *sprite, *spriteNormal, *spriteHurt;
 	TileMap *map;
-	int life, exp, Status;
+	int life, exp, Status, speed;
+	bool hypershoes;
 };
 
 

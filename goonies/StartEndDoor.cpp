@@ -22,13 +22,13 @@ void StartEndDoor::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgr
 	sprite = new Sprite();
 	spritesheet.loadFromFile("images/puerta_colores.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(24, 32), glm::vec2(0.5, 1.0), &spritesheet, &shaderProgram);
-	sprite->setNumberAnimations(1);
+	sprite->setNumberAnimations(2);
 
 	sprite->setAnimationSpeed(CLOSED, 8);
-	sprite->addKeyframe(CLOSED, glm::vec2(0.f, 0.f));
+	sprite->addKeyframe(CLOSED, glm::vec2(0.5f, 0.f));
 
 	sprite->setAnimationSpeed(OPENED, 8);
-	sprite->addKeyframe(OPENED, glm::vec2(0.5f, 0.f));
+	sprite->addKeyframe(OPENED, glm::vec2(0.f, 0.f));
 
 	sprite->changeAnimation(state);
 	tileMapDispl = tileMapPos;

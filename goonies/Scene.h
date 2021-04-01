@@ -14,6 +14,7 @@
 #include "SkullDoor.h"
 #include "GreenDoor.h"
 #include "StartEndDoor.h"
+#include "Object.h"
 
 
 // Scene contains all the entities of our game.
@@ -46,10 +47,11 @@ private:
 	SkullDoor* skullDoor;
 	GreenDoor* greenDoor;
 	StartEndDoor* startEndDoor;
+	Object* object;
 	ShaderProgram texProgram;
 	float currentTime;
 	glm::mat4 projection;
-	int sceneNum, screenNum, numAsp, numCasc, numGotas, numSkullDoors, numGreenDoors;
+	int sceneNum, screenNum, numAsp, numCasc, numGotas, numSkullDoors, numGreenDoors, numObjects;
 	bool changingScene;
 	int numFriends;
 	bool first;

@@ -24,6 +24,7 @@ Scene::Scene()
 	skullDoor = NULL;
 	greenDoor = NULL;
 	startEndDoor = NULL;
+	object = NULL;
 }
 
 Scene::~Scene()
@@ -48,19 +49,22 @@ Scene::~Scene()
 		delete greenDoor;
 	if (startEndDoor != NULL)
 		delete startEndDoor;
+	if (object != NULL)
+		delete object;
 }
 
 
 void Scene::init()
 {
 	initShaders();
-	sceneNum = 1;
+	sceneNum = 2;
 	screenNum = 1;
 	numAsp = 0;
 	numCasc = 0;
 	numGotas = 0;
 	numSkullDoors = 0;
 	numGreenDoors = 0;
+	numObjects = 0;
 	numFriends = 0;
 	first = true;
 	changingScene = false;
@@ -265,6 +269,19 @@ void Scene::update(int deltaTime)
 			}
 			break;
 	}
+	if (object != NULL) {
+		for (int i = 0; i < numObjects; ++i) {
+			glm::vec2 position = object[i].getPosition();
+			if (pos.x < position.x + 16 && position.x < pos.x + 24 &&
+				pos.y < position.y + 16 && position.y < pos.y + 32 && !object[i].getPicked()) {
+				if (object[i].getType() == 1) {
+					player->pickPowerUp(object[i].getPowerUp());
+					object[i].setPicked();
+					object[i].update(deltaTime);
+				}
+			}
+		}
+	}
 	int tileSize = map->getTileSize();
 	if (player->getAnimDoorNum() == -2) {
 		glm::ivec2 position = player->getPosition();
@@ -330,6 +347,11 @@ void Scene::render()
 	}
 	if (greenDoor != NULL) for (int i = 0; i < numGreenDoors; ++i) greenDoor[i].render();
 	if (startEndDoor != NULL) startEndDoor->render();
+	if (object != NULL) {
+		for (int i = 0; i < numObjects; ++i) {
+			if (!object[i].getPicked()) object[i].render();
+		}
+	}
 	if (!changingScene && skullDoor != NULL) for (int i = 0; i < numSkullDoors; ++i) skullDoor[i].render();
 	player->render();
 	if (changingScene && skullDoor != NULL) for (int i = 0; i < numSkullDoors; ++i) skullDoor[i].render();
@@ -412,6 +434,10 @@ void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
 		skullDoor = new SkullDoor[1];
 		skullDoor[0].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(4 * map->getTileSize(), 2 * map->getTileSize()));
 		skullDoor[0].setTileMap(map);
+		numObjects = 1;
+		object = new Object[1];
+		object[0].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(26 * map->getTileSize(), 10 * map->getTileSize()), 1, 1);
+		object[0].setTileMap(map);
 	}
 	else if (scene == 2 && screen == 2) {
 		esqueleto = new Esqueleto();
