@@ -9,6 +9,7 @@
 #include "CabezaFlotante.h"
 #include "Esqueleto.h"
 #include "Cascada.h"
+#include "Aspersor.h"
 
 
 // Scene contains all the entities of our game.
@@ -36,10 +37,11 @@ private:
 	CabezaFlotante *cabezaFlotante;
 	Esqueleto *esqueleto;
 	Cascada *cascada;
+	Aspersor* aspersor;
 	ShaderProgram texProgram;
 	float currentTime;
 	glm::mat4 projection;
-	int sceneNum, screenNum, numCascada, sizeCascada, timeCascada;
+	int sceneNum, screenNum, numAsp;
 };
 
 

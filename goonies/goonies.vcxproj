@@ -145,6 +145,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Aspersor.cpp" />
     <ClCompile Include="Bone.cpp" />
     <ClCompile Include="CabezaFlotante.cpp" />
     <ClCompile Include="Cascada.cpp" />
@@ -163,6 +164,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\Windows Kits\10\Include\10.0.18362.0\ucrt\locale.h" />
     <ClInclude Include="AnimKeyframes.h" />
+    <ClInclude Include="Aspersor.h" />
     <ClInclude Include="Bone.h" />
     <ClInclude Include="CabezaFlotante.h" />
     <ClInclude Include="Cascada.h" />

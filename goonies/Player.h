@@ -23,7 +23,7 @@ public:
 	glm::ivec2 getPosition();
 	int getDoorCollision();
 	void setDoorCollision(bool state);
-	void hurted();
+	void hurted(int damage);
 	int isOut();
 	void setSprite(int numSprite);
 	int isPunching();
@@ -35,7 +35,7 @@ private:
 	Texture spritesheetNormal, spritesheetHurt;
 	Sprite *sprite, *spriteNormal, *spriteHurt;
 	TileMap *map;
-
+	int life, exp;
 };
 
 

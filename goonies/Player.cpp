@@ -24,6 +24,8 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	animDoorNum = -1;
 	animationTime = -1;
 	punchTime = -1;
+	life = 100;
+	exp = 0;
 	spritesheetNormal.loadFromFile("images/player.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	spriteNormal = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(0.25, 0.25), &spritesheetNormal, &shaderProgram);
 	spriteNormal->setNumberAnimations(9);
@@ -330,11 +332,12 @@ void Player::setDoorCollision(bool state) {
 	bdoorCollision = state;
 }
 
-void Player::hurted() {
+void Player::hurted(int damage) {
 	if (sprite != spriteHurt) {
 		setSprite(2);
 		animationTime = 0;
 	}
+	life -= damage;
 	
 }
 void Player::setSprite(int numSprite) {
