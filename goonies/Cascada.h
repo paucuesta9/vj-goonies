@@ -11,7 +11,7 @@ class Cascada
 
 public:
 	~Cascada();
-	void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram);
+	void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, glm::ivec2 pos, int size);
 	void update(int deltaTime);
 	void render();
 
@@ -20,12 +20,15 @@ public:
 	glm::ivec2 getPosition();
 	int getStatus();
 	void setStatus(int Status);
+	void initSprite(int spriteNum);
 
 private:
 	glm::ivec2 tileMapDispl, posCascada;
 	Texture spritesheet;
 	Sprite* sprite;
 	TileMap* map;
+	ShaderProgram shader;
+	int num, size, time;
 };
 
 
