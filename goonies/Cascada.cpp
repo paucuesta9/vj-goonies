@@ -61,7 +61,7 @@ void Cascada::update(int deltaTime)
 	time += deltaTime;
 	if (Status == BORN) {
 		for (int i = 0; i < num; ++i) {
-			if (time > 100) {
+			if (time > 50) {
 				int state = sprite[i].animation();
 				if (state == BORN) sprite[i].changeAnimation(LIVE);
 				if (i == size - 1 && state != WATER) {
@@ -71,7 +71,7 @@ void Cascada::update(int deltaTime)
 			}
 			sprite[i].update(deltaTime);
 		}
-		if (num < size && time > 100) {
+		if (num < size && time > 50) {
 			initSprite(num);
 			sprite[num].update(deltaTime);
 			++num;
@@ -90,7 +90,7 @@ void Cascada::update(int deltaTime)
 		}
 	}
 	else if (Status == DIE) {
-		if (num <= size && time > 500) {
+		if (num <= size && time > 50) {
 			time = 0;
 			if (num < size) sprite[num].changeAnimation(DIE);
 			for (int i = num; i < size; ++i) sprite[i].update(deltaTime);
