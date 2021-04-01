@@ -19,7 +19,7 @@ public:
 	void setPosition(const glm::vec2& pos);
 	glm::ivec2 getPosition();
 	int getStatus();
-	void setStatus(int Status);
+	int getSize();
 	void initSprite(int spriteNum);
 
 private:
@@ -28,7 +28,7 @@ private:
 	Sprite* sprite;
 	TileMap* map;
 	ShaderProgram shader;
-	int num, size, time;
+	int num, size, time, Status;
 };
 
 

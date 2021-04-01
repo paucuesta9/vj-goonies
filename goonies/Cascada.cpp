@@ -23,7 +23,8 @@ void Cascada::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, g
 	size = sizeCascada;
 	num = 1;
 	spritesheet.loadFromFile("images/cascada.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	time = -1;
+	time = 0;
+	Status = BORN;
 
 	tileMapDispl = tileMapPos;	
 	shader = shaderProgram;
@@ -57,49 +58,66 @@ void Cascada::initSprite(int spriteNum) {
 
 void Cascada::update(int deltaTime)
 {
-	if (time != -1) {
-		time += deltaTime;
-		if (time > 5000) {
-			time = 0;
-			if (num < size) {
-				sprite[num].changeAnimation(DIE);
-				for (int i = num; i < size; ++i) sprite[i].update(deltaTime);
-				if (num > size) {
-					time = -1;
-				}
-				++num;
-			}
-			else if (num > 0) delete& sprite[num - 1];
-		}
-		else {
-			for (int i = 0; i < size; ++i) sprite[i].update(deltaTime);
-		}
-	}
-	else {
+	time += deltaTime;
+	if (Status == BORN) {
 		for (int i = 0; i < num; ++i) {
-			int Status = sprite[i].animation();
-			if (Status == 0) sprite[i].changeAnimation(LIVE);
-			if (i == size - 1 && Status != 3) {
-				sprite[i].changeAnimation(WATER);
-				time = 0;
-
+			if (time > 100) {
+				int state = sprite[i].animation();
+				if (state == BORN) sprite[i].changeAnimation(LIVE);
+				if (i == size - 1 && state != WATER) {
+					sprite[i].changeAnimation(WATER);
+					time = 0;
+				}
 			}
 			sprite[i].update(deltaTime);
 		}
-		if (num < size) {
+		if (num < size && time > 100) {
 			initSprite(num);
 			sprite[num].update(deltaTime);
 			++num;
+			time = 0;
 		}
-		else if (num == size) num = 0;
+		else if (num == size) {
+			num = 0;
+			Status = LIVE;
+		}
+	}
+	else if (Status == LIVE) {
+		for (int i = 0; i < size; ++i) sprite[i].update(deltaTime);
+		if (time > 5000) {
+			Status = DIE;
+			time = 0;
+		}
+	}
+	else if (Status == DIE) {
+		if (num <= size && time > 500) {
+			time = 0;
+			if (num < size) sprite[num].changeAnimation(DIE);
+			for (int i = num; i < size; ++i) sprite[i].update(deltaTime);
+			++num;
+		}
+		else if (num > size) {
+			Status = WATER;
+		}
+		//else if (num > 0) delete& sprite[num - 1];
+	}
+	else if (Status == WATER) {
+		if (time > 5000) {
+			time = 0;
+			Status = BORN;
+			num = 0;
+		}
 	}
 }
 
 void Cascada::render()
 {
-	if (time == -1)	for (int i = 0; i < num; ++i) sprite[i].render();
-	else if (num == 0) for (int i = 0; i < size; ++i) sprite[i].render();
-	else for (int i = num - 1; i < size; ++i) sprite[i].render();
+	if (Status == BORN) for (int i = 0; i < num; ++i) sprite[i].render();
+	else if (Status == LIVE) for (int i = 0; i < size; ++i) sprite[i].render();
+	else if (Status == DIE) {
+		if (num > 0) for (int i = num - 1; i < size; ++i) sprite[i].render();
+		else for (int i = 0; i < size; ++i) sprite[i].render();
+	}
 }
 
 void Cascada::setTileMap(TileMap* tileMap)
@@ -114,14 +132,18 @@ void Cascada::setPosition(const glm::vec2& pos)
 }
 
 glm::ivec2 Cascada::getPosition() {
-	return posCascada;
-}
-
-void Cascada::setStatus(int Status)
-{
-	sprite->changeAnimation(Status);
+	if (Status == BORN || Status == LIVE) return posCascada;
+	else if (Status == DIE) return glm::vec2(posCascada.x, posCascada.y + num * 16);
+	else return glm::vec2(0, 0);
 }
 
 int Cascada::getStatus() {
-	return sprite->animation();
+	return Status;
+}
+
+int Cascada::getSize() {
+	if (Status == BORN) return num;
+	else if (Status == LIVE) return size;
+	else if (Status == DIE) return size - num;
+	else return 0;
 }

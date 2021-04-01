@@ -111,6 +111,14 @@ void Scene::update(int deltaTime)
 	}
 	if (cascada != NULL) {
 		cascada->update(deltaTime);
+		int size = cascada->getSize();
+		if (size != 0) {
+			glm::vec2 positionCascada = cascada->getPosition();
+			if (pos.x < positionCascada.x + 24 && positionCascada.x < pos.x + 32 &&
+				pos.y < positionCascada.y + size * 16 && positionCascada.y < pos.y + 32) {
+				player->hurted();
+			}
+		}		
 	}
 	
 	int out = player->isOut();
