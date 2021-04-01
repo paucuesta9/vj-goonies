@@ -21,12 +21,13 @@ public:
 	void setTileMap(TileMap *tileMap);
 	void setPosition(const glm::vec2 &pos);
 	glm::ivec2 getPosition();
-	int getDoorCollision();
+	int getAnimDoorNum();
 	void setDoorCollision(bool state);
 	void hurted(int damage);
 	int isOut();
 	void setSprite(int numSprite);
 	int isPunching();
+	void animateChange();
 	
 private:
 	bool bJumping, bLiana, bdoorCollision;

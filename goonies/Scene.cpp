@@ -21,6 +21,7 @@ Scene::Scene()
 	cascada = NULL;
 	aspersor = NULL;
 	gota = NULL;
+	skullDoor = NULL;
 }
 
 Scene::~Scene()
@@ -39,6 +40,8 @@ Scene::~Scene()
 		delete aspersor;
 	if (gota != NULL)
 		delete gota;
+	if (skullDoor != NULL)
+		delete skullDoor;
 }
 
 
@@ -46,10 +49,12 @@ void Scene::init()
 {
 	initShaders();
 	sceneNum = 1;
-	screenNum = 1;
+	screenNum = 3;
 	numAsp = 0;
 	numCasc = 0;
 	numGotas = 0;
+	numSkullDoors = 0;
+	changingScene = false;
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	changeScreen(sceneNum, screenNum, glm::vec2(INIT_PLAYER_X_TILES * 16, INIT_PLAYER_Y_TILES * 16));
@@ -160,6 +165,18 @@ void Scene::update(int deltaTime)
 			gota[i].update(deltaTime);
 		}
 	}
+	if (skullDoor != NULL) {
+		for (int i = 0; i < numSkullDoors; ++i) {
+			skullDoor[i].update(deltaTime);
+			glm::vec2 position = skullDoor[i].getPosition();
+			if (pos.x < position.x + 40 && position.x < pos.x + 24 &&
+				pos.y < position.y + 32 && position.y < pos.y + 32 && !changingScene && Game::instance().getSpecialKey(0x0065)) {
+				changingScene = true;
+				player->setPosition(glm::vec2(position.x + 10, position.y + 28));
+				player->setDoorCollision(true);
+			}
+		}
+	}
 	int out = player->isOut();
 	switch (out) {
 		case 1: //Left
@@ -220,7 +237,7 @@ void Scene::update(int deltaTime)
 			break;
 	}
 	int tileSize = map->getTileSize();
-	if (player->getDoorCollision()) {
+	if (player->getAnimDoorNum() == -2) {
 		glm::ivec2 position = player->getPosition();
 		if (sceneNum == 1 && screenNum == 3) {
 			changeScreen(2, 1, glm::ivec2(5 * tileSize - 8, 4 * tileSize - 4));
@@ -282,26 +299,34 @@ void Scene::render()
 				gota[i].render();
 		}
 	}
+	if (!changingScene) for (int i = 0; i < numSkullDoors; ++i) skullDoor[i].render();
 	player->render();
+	if (changingScene) for (int i = 0; i < numSkullDoors; ++i) skullDoor[i].render();
 	if (cabezaFlotante != NULL) cabezaFlotante->render();
 	if (esqueleto != NULL) esqueleto->render();
 }
 
 void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
 {
+	changingScene = false;
 	sceneNum = scene;
 	screenNum = screen;
 	map = TileMap::createTileMap("levels/level" + to_string(scene) + "_" + to_string(screen) + ".txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	player->setPosition(pos);
 	player->setTileMap(map);
+	if (changingScene) {
+		player->animateChange();
+	}
 	esqueleto = NULL;
 	cabezaFlotante = NULL;
 	cascada = NULL;
 	aspersor = NULL;
 	gota = NULL;
+	skullDoor = NULL;
 	numAsp = 0;
 	numCasc = 0;
 	numGotas = 0;
+	numSkullDoors = 0;
 	if (scene == 1 && screen == 1) {
 		cabezaFlotante = new CabezaFlotante();
 		cabezaFlotante->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
@@ -331,6 +356,10 @@ void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
 		aspersor = new Aspersor[1];
 		aspersor[0].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(8 * map->getTileSize(), 14 * map->getTileSize()));
 		aspersor[0].setTileMap(map);
+		numSkullDoors = 1;
+		skullDoor = new SkullDoor[1];
+		skullDoor[0].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(27 * map->getTileSize(), 5 * map->getTileSize()));
+		skullDoor[0].setTileMap(map);
 	}
 	else if (scene == 2 && screen == 1) {
 		esqueleto = new Esqueleto();

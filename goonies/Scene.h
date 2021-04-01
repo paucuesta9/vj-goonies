@@ -11,6 +11,7 @@
 #include "Cascada.h"
 #include "Aspersor.h"
 #include "Gota.h"
+#include "SkullDoor.h"
 
 
 // Scene contains all the entities of our game.
@@ -40,10 +41,12 @@ private:
 	Cascada *cascada;
 	Aspersor *aspersor;
 	Gota* gota;
+	SkullDoor* skullDoor;
 	ShaderProgram texProgram;
 	float currentTime;
 	glm::mat4 projection;
-	int sceneNum, screenNum, numAsp, numCasc, numGotas;
+	int sceneNum, screenNum, numAsp, numCasc, numGotas, numSkullDoors;
+	bool changingScene;
 };
 
 
