@@ -19,6 +19,8 @@ Scene::Scene()
 	cabezaFlotante = NULL;
 	esqueleto = NULL;
 	cascada = NULL;
+	aspersor = NULL;
+	gota = NULL;
 }
 
 Scene::~Scene()
@@ -33,6 +35,10 @@ Scene::~Scene()
 		delete esqueleto;
 	if (cascada != NULL)
 		delete cascada;
+	if (aspersor != NULL)
+		delete aspersor;
+	if (gota != NULL)
+		delete gota;
 }
 
 
@@ -43,6 +49,7 @@ void Scene::init()
 	screenNum = 1;
 	numAsp = 0;
 	numCasc = 0;
+	numGotas = 0;
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	changeScreen(sceneNum, screenNum, glm::vec2(INIT_PLAYER_X_TILES * 16, INIT_PLAYER_Y_TILES * 16));
@@ -140,6 +147,17 @@ void Scene::update(int deltaTime)
 					player->hurted(1);
 				}
 			}
+		}
+	}
+	if (gota != NULL) {
+		for (int i = 0; i < numGotas; ++i) {
+			glm::vec2 position = gota[i].getPosition();
+			if (pos.x < position.x + 16 && position.x < pos.x + 24 &&
+				pos.y < position.y + 16 && position.y < pos.y + 32 && gota[i].getStatus() != 5) {
+				player->hurted(1);
+				gota[i].hitObject();
+			}
+			gota[i].update(deltaTime);
 		}
 	}
 	int out = player->isOut();
@@ -258,6 +276,12 @@ void Scene::render()
 	if (aspersor != NULL) {
 		for (int i = 0; i < numAsp; ++i) aspersor[i].render();
 	}
+	if (gota != NULL) {
+		for (int i = 0; i < numGotas; ++i) {
+			if (gota[i].getStatus() != 5)
+				gota[i].render();
+		}
+	}
 	player->render();
 	if (cabezaFlotante != NULL) cabezaFlotante->render();
 	if (esqueleto != NULL) esqueleto->render();
@@ -274,13 +298,19 @@ void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
 	cabezaFlotante = NULL;
 	cascada = NULL;
 	aspersor = NULL;
+	gota = NULL;
 	numAsp = 0;
 	numCasc = 0;
+	numGotas = 0;
 	if (scene == 1 && screen == 1) {
 		cabezaFlotante = new CabezaFlotante();
 		cabezaFlotante->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 		cabezaFlotante->setPosition(glm::vec2(22 * map->getTileSize(), 10 * map->getTileSize()));
 		cabezaFlotante->setTileMap(map);
+		numGotas = 1;
+		gota = new Gota[1];
+		gota[0].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(5 * map->getTileSize(), 2 * map->getTileSize()));
+		gota[0].setTileMap(map);
 	}
 	else if (scene == 1 && screen == 2) {
 		esqueleto = new Esqueleto();

@@ -152,6 +152,7 @@
     <ClCompile Include="Enemigo.cpp" />
     <ClCompile Include="Esqueleto.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Gota.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Scene.cpp" />
@@ -170,6 +171,7 @@
     <ClInclude Include="Cascada.h" />
     <ClInclude Include="Enemigo.h" />
     <ClInclude Include="Esqueleto.h" />
+    <ClInclude Include="Gota.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Shader.h" />
