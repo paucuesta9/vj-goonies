@@ -39,9 +39,10 @@ Scene::~Scene()
 void Scene::init()
 {
 	initShaders();
-	sceneNum = 3;
+	sceneNum = 1;
 	screenNum = 1;
 	numAsp = 0;
+	numCasc = 0;
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	changeScreen(sceneNum, screenNum, glm::vec2(INIT_PLAYER_X_TILES * 16, INIT_PLAYER_Y_TILES * 16));
@@ -108,15 +109,17 @@ void Scene::update(int deltaTime)
 		}
 	}
 	if (cascada != NULL) {
-		cascada->update(deltaTime);
-		int size = cascada->getSize();
-		if (size != 0) {
-			glm::vec2 positionCascada = cascada->getPosition();
-			if (pos.x < positionCascada.x + 40 && positionCascada.x < pos.x + 24 &&
-				pos.y < positionCascada.y + size * 16 && positionCascada.y < pos.y + 32) {
-				player->hurted(1);
+		for (int i = 0; i < numCasc; ++i) {
+			cascada[i].update(deltaTime);
+			int size = cascada[i].getSize();
+			if (size != 0) {
+				glm::vec2 positionCascada = cascada[i].getPosition();
+				if (pos.x < positionCascada.x + 40 && positionCascada.x < pos.x + 24 &&
+					pos.y < positionCascada.y + size * 16 && positionCascada.y < pos.y + 32) {
+					player->hurted(1);
+				}
 			}
-		}		
+		}	
 	}
 	if (aspersor != NULL) {
 		for (int i = 0; i < numAsp; ++i) {
@@ -251,7 +254,7 @@ void Scene::render()
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 	map->render();
-	if (cascada != NULL) cascada->render();
+	if (cascada != NULL) for (int i = 0; i < numCasc; ++i) cascada[i].render();
 	if (aspersor != NULL) {
 		for (int i = 0; i < numAsp; ++i) aspersor[i].render();
 	}
@@ -272,6 +275,7 @@ void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
 	cascada = NULL;
 	aspersor = NULL;
 	numAsp = 0;
+	numCasc = 0;
 	if (scene == 1 && screen == 1) {
 		cabezaFlotante = new CabezaFlotante();
 		cabezaFlotante->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
@@ -287,10 +291,18 @@ void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
 		cabezaFlotante->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 		cabezaFlotante->setPosition(glm::vec2(26 * map->getTileSize(), 4 * map->getTileSize()));
 		cabezaFlotante->setTileMap(map);
-		cascada = new Cascada();
-		cascada->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(10 * map->getTileSize(), 4 * map->getTileSize()), 14);
-		cascada->setTileMap(map);
-	} else if (scene == 2 && screen == 1) {
+		numCasc = 1;
+		cascada = new Cascada[1];
+		cascada[0].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(10 * map->getTileSize(), 4 * map->getTileSize()), 14);
+		cascada[0].setTileMap(map);
+	} 
+	else if (scene == 1 and screen == 3) {
+		numAsp = 1;
+		aspersor = new Aspersor[1];
+		aspersor[0].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(8 * map->getTileSize(), 14 * map->getTileSize()));
+		aspersor[0].setTileMap(map);
+	}
+	else if (scene == 2 && screen == 1) {
 		esqueleto = new Esqueleto();
 		esqueleto->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 		esqueleto->setPosition(glm::vec2(24 * map->getTileSize(), 4 * map->getTileSize() - 4));
@@ -345,6 +357,23 @@ void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
 		cabezaFlotante->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 		cabezaFlotante->setPosition(glm::vec2(11 * map->getTileSize(), 16 * map->getTileSize()));
 		cabezaFlotante->setTileMap(map);
+		numAsp = 2;
+		aspersor = new Aspersor[4];
+		aspersor[0].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(6 * map->getTileSize(), 7 * map->getTileSize()));
+		aspersor[0].setTileMap(map);
+		aspersor[1].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(14 * map->getTileSize(), 7 * map->getTileSize()));
+		aspersor[1].setTileMap(map);
+	}
+	else if (scene == 3 && screen == 3) {
+
+	}
+	else if (scene == 4 && screen == 1) {
+		numCasc = 2;
+		cascada = new Cascada[2];
+		cascada[0].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(9 * map->getTileSize(), 2 * map->getTileSize()), 15);
+		cascada[0].setTileMap(map);
+		cascada[1].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(16 * map->getTileSize(), 5 * map->getTileSize()), 12);
+		cascada[1].setTileMap(map);
 	}
 	else if (scene == 4 && screen == 2) {
 		cabezaFlotante = new CabezaFlotante();
@@ -361,18 +390,44 @@ void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
 		esqueleto->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 		esqueleto->setPosition(glm::vec2(7 * map->getTileSize(), 4 * map->getTileSize() - 4));
 		esqueleto->setTileMap(map);
+		numCasc = 1;
+		cascada = new Cascada[1];
+		cascada[0].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(18 * map->getTileSize(), 9 * map->getTileSize()), 9);
+		cascada[0].setTileMap(map);
 	}
 	else if (scene == 5 && screen == 1) {
 		cabezaFlotante = new CabezaFlotante();
 		cabezaFlotante->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 		cabezaFlotante->setPosition(glm::vec2(27 * map->getTileSize(), 2 * map->getTileSize()));
 		cabezaFlotante->setTileMap(map);
+		numAsp = 2;
+		aspersor = new Aspersor[2];
+		aspersor[0].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(7 * map->getTileSize(), 16 * map->getTileSize()));
+		aspersor[0].setTileMap(map);
+		aspersor[1].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(15 * map->getTileSize(), 16 * map->getTileSize()));
+		aspersor[1].setTileMap(map);
 	}
 	else if (scene == 5 && screen == 2) {
 		cabezaFlotante = new CabezaFlotante();
 		cabezaFlotante->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 		cabezaFlotante->setPosition(glm::vec2(25 * map->getTileSize(), 6 * map->getTileSize()));
 		cabezaFlotante->setTileMap(map);
+		numAsp = 1;
+		aspersor = new Aspersor[1];
+		aspersor[0].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(4 * map->getTileSize(), 15 * map->getTileSize()));
+		aspersor[0].setTileMap(map);
+	}
+	else if (scene = 5 && screen == 3) {
+		numCasc = 1;
+		cascada = new Cascada[1];
+		cascada[0].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(7 * map->getTileSize(), 2 * map->getTileSize()), 14);
+		cascada[0].setTileMap(map);
+		numAsp = 2;
+		aspersor = new Aspersor[2];
+		aspersor[0].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(15 * map->getTileSize(), 3 * map->getTileSize()));
+		aspersor[0].setTileMap(map);
+		aspersor[1].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(15 * map->getTileSize(), 8 * map->getTileSize()));
+		aspersor[1].setTileMap(map);
 	}
 }
 

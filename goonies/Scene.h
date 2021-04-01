@@ -41,7 +41,7 @@ private:
 	ShaderProgram texProgram;
 	float currentTime;
 	glm::mat4 projection;
-	int sceneNum, screenNum, numAsp;
+	int sceneNum, screenNum, numAsp, numCasc;
 };
 
 
