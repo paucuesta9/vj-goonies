@@ -57,7 +57,7 @@ Scene::~Scene()
 void Scene::init()
 {
 	initShaders();
-	sceneNum = 2;
+	sceneNum = 1;
 	screenNum = 1;
 	numAsp = 0;
 	numCasc = 0;
