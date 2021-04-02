@@ -25,6 +25,7 @@ Scene::Scene()
 	greenDoor = NULL;
 	startEndDoor = NULL;
 	object = NULL;
+	powerUp = NULL;
 }
 
 Scene::~Scene()
@@ -51,6 +52,8 @@ Scene::~Scene()
 		delete startEndDoor;
 	if (object != NULL)
 		delete object;
+	if (powerUp != NULL)
+		delete powerUp;
 }
 
 
@@ -66,11 +69,15 @@ void Scene::init()
 	numGreenDoors = 0;
 	numObjects = 0;
 	numFriends = 0;
+	numPowerUp = -1;
+	nextPos = SCREEN_X;
 	first = true;
 	changingScene = false;
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	changeScreen(sceneNum, screenNum, glm::vec2(INIT_PLAYER_X_TILES * 16 + 8, INIT_PLAYER_Y_TILES * 16 + 4));
+	powerUp = new PowerUp[5];
+	for (int i = 0; i < 5; ++i)	powerUp[i].init(glm::ivec2(SCREEN_X, SCREEN_Y + 20 * map->getTileSize()), texProgram);
 	startEndDoor = new StartEndDoor();
 	startEndDoor->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(22 * map->getTileSize(), 3 * map->getTileSize()), 1);
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
@@ -96,7 +103,7 @@ void Scene::update(int deltaTime)
 		}
 		else if (pos.x < posCabezaFlotante.x + 8 && posCabezaFlotante.x < pos.x + 32 &&
 			pos.y < posCabezaFlotante.y + 8 && posCabezaFlotante.y < pos.y + 32 && cabezaFlotante->getStatus()==1) {
-			player->hurted(5);
+			if (!player->getBlueSpellbook())player->hurted(5);
 		}	
 	}
 	if (esqueleto != NULL) {
@@ -131,7 +138,7 @@ void Scene::update(int deltaTime)
 
 			if (pos.x < posEsqueleto.x + 8 && posEsqueleto.x < pos.x + 32 &&
 				pos.y < posEsqueleto.y + 8 && posEsqueleto.y < pos.y + 32 && esqueleto->getStatus() == 1) {
-				player->hurted(5);
+				if (!player->getYellowSpellbook()) player->hurted(5);
 			}
 		}
 	}
@@ -143,7 +150,7 @@ void Scene::update(int deltaTime)
 				glm::vec2 positionCascada = cascada[i].getPosition();
 				if (pos.x < positionCascada.x + 40 && positionCascada.x < pos.x + 24 &&
 					pos.y < positionCascada.y + size * 16 && positionCascada.y < pos.y + 32) {
-					player->hurted(1);
+					if (!player->getBlueRaincoat()) player->hurted(1);
 				}
 			}
 		}	
@@ -174,7 +181,7 @@ void Scene::update(int deltaTime)
 			glm::vec2 position = gota[i].getPosition();
 			if (pos.x < position.x + 16 && position.x < pos.x + 24 &&
 				pos.y < position.y + 16 && position.y < pos.y + 32 && gota[i].getStatus() != 5) {
-				player->hurted(1);
+				if (!player->getGrayRaincoat()) player->hurted(1);
 				gota[i].hitObject();
 			}
 			gota[i].update(deltaTime);
@@ -275,9 +282,13 @@ void Scene::update(int deltaTime)
 			if (pos.x < position.x + 16 && position.x < pos.x + 24 &&
 				pos.y < position.y + 16 && position.y < pos.y + 32 && !object[i].getPicked()) {
 				if (object[i].getType() == 1) {
-					player->pickPowerUp(object[i].getPowerUp());
+					numPowerUp = object[i].getPowerUp();
+					player->pickPowerUp(numPowerUp);
 					object[i].setPicked();
 					object[i].update(deltaTime);
+					powerUp[numPowerUp].setSpritePowerUp(numPowerUp);
+					powerUp[numPowerUp].update(deltaTime);
+
 				}
 			}
 		}
@@ -350,6 +361,8 @@ void Scene::render()
 	if (object != NULL) {
 		for (int i = 0; i < numObjects; ++i) {
 			if (!object[i].getPicked()) object[i].render();
+			else powerUp[numPowerUp].render();
+
 		}
 	}
 	if (!changingScene && skullDoor != NULL) for (int i = 0; i < numSkullDoors; ++i) skullDoor[i].render();
@@ -436,7 +449,7 @@ void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
 		skullDoor[0].setTileMap(map);
 		numObjects = 1;
 		object = new Object[1];
-		object[0].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(26 * map->getTileSize(), 10 * map->getTileSize()), 1, 1);
+		object[0].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(26 * map->getTileSize(), 10 * map->getTileSize()), 1, 0);
 		object[0].setTileMap(map);
 	}
 	else if (scene == 2 && screen == 2) {

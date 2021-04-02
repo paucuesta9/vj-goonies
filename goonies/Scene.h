@@ -15,6 +15,7 @@
 #include "GreenDoor.h"
 #include "StartEndDoor.h"
 #include "Object.h"
+#include "PowerUp.h"
 
 
 // Scene contains all the entities of our game.
@@ -48,12 +49,13 @@ private:
 	GreenDoor* greenDoor;
 	StartEndDoor* startEndDoor;
 	Object* object;
+	PowerUp* powerUp;
 	ShaderProgram texProgram;
 	float currentTime;
 	glm::mat4 projection;
-	int sceneNum, screenNum, numAsp, numCasc, numGotas, numSkullDoors, numGreenDoors, numObjects;
+	int sceneNum, screenNum, numAsp, numCasc, numGotas, numSkullDoors, numGreenDoors, numObjects, numPowerUp;
 	bool changingScene;
-	int numFriends;
+	int numFriends, nextPos;
 	bool first;
 };
 

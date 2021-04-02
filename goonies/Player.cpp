@@ -21,14 +21,21 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	bJumping = false;
 	bLiana = false;
 	bdoorCollision = false;
-	hypershoes = false;
+
 	animDoorNum = -1;
 	animationTime = -1;
 	punchTime = -1;
+
 	life = 100;
 	exp = 0;
+
 	Status = -1;
 	speed = 1;
+
+	blueRaincoat = false;
+	grayRaincoat = false;
+	yellowSpellbook = false;
+	blueSpellbook = false;;
 	spritesheetNormal.loadFromFile("images/player.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	spriteNormal = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(0.25, 0.25), &spritesheetNormal, &shaderProgram);
 	spriteNormal->setNumberAnimations(9);
@@ -389,10 +396,38 @@ void Player::ganeExp(int quantity) {
 void Player::pickPowerUp(int powerUp) {
 	switch (powerUp)
 	{
-	case 1:
+	case 0:
 		speed *= 2;
+		break;
+	case 1:
+		blueRaincoat = true;
+		break;
+	case 2:
+		grayRaincoat = true;
+		break;
+	case 3:
+		yellowSpellbook = true;
+		break;
+	case 4:
+		blueSpellbook = true;
 		break;
 	default:
 		break;
 	}
+}
+
+bool Player::getBlueRaincoat() {
+	return blueRaincoat;
+}
+
+bool Player::getGrayRaincoat() {
+	return grayRaincoat;
+}
+
+bool Player::getYellowSpellbook() {
+	return yellowSpellbook;
+}
+
+bool Player::getBlueSpellbook() {
+	return blueSpellbook;
 }

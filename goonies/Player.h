@@ -30,6 +30,10 @@ public:
 	void animateChange();
 	void pickPowerUp(int powerUp);
 	void ganeExp(int quantity);
+	bool getBlueRaincoat();
+	bool getGrayRaincoat();
+	bool getYellowSpellbook();
+	bool getBlueSpellbook();
 	
 private:
 	bool bJumping, bLiana, bdoorCollision;
@@ -39,7 +43,7 @@ private:
 	Sprite *sprite, *spriteNormal, *spriteHurt;
 	TileMap *map;
 	int life, exp, Status, speed;
-	bool hypershoes;
+	bool blueRaincoat, grayRaincoat, yellowSpellbook, blueSpellbook;
 };
 
 
