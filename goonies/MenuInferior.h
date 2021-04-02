@@ -1,8 +1,9 @@
 #ifndef _MENU_INFERIOR_INCLUDE
 #define _MENU_INFERIOR_INCLUDE
 
-
+#include <glm/glm.hpp>
 #include "Sprite.h"
+#include "ShaderProgram.h"
 
 
 class MenuInferior
@@ -10,17 +11,20 @@ class MenuInferior
 
 public:
 	~MenuInferior();
-	void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram);
 
+	void init();
 	void update(int deltaTime);
 	void render();
+	void initShaders();
 
-	void setPowerUp(int powerUp, bool active);
+	void setPowerUp(int powerUp);
+	void savedNewFriend();
 
 private:
-	glm::ivec2 tileMapDispl;
-	Texture spritesheetPowerUps;
-	Sprite* spritePowerUps;
+	ShaderProgram texProgram;
+	Texture spritesheetPowerUps, spriteSheetSavedFriends;
+	Sprite* spritePowerUps, *spriteSavedFriends;
+	int friendsSaved, activePowerUps;
 };
 
 
