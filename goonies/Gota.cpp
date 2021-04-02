@@ -68,7 +68,7 @@ void Gota::update(int deltaTime)
 		}
 	}
 	else if (sprite->animation() == HIT_OBJECT) {
-		if (animationTime > 50) {
+		if (animationTime > 150) {
 			sprite->changeAnimation(NONE);
 		}
 	}

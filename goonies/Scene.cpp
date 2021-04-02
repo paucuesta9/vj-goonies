@@ -181,7 +181,7 @@ void Scene::update(int deltaTime)
 		for (int i = 0; i < numGotas; ++i) {
 			glm::vec2 position = gota[i].getPosition();
 			if (pos.x < position.x + 16 && position.x < pos.x + 24 &&
-				pos.y < position.y + 16 && position.y < pos.y + 32 && gota[i].getStatus() != 5 && gota[i].getStatus() != 4) {
+				pos.y < position.y + 16 && position.y < pos.y + 32 && gota[i].getStatus() != 5 && gota[i].getStatus() != 4 && gota[i].getStatus() != 3) {
 				if (!player->getGrayRaincoat()) player->hurted(1);
 				gota[i].hitObject();
 			}
