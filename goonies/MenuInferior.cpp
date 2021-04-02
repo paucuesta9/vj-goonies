@@ -23,15 +23,14 @@ MenuInferior::~MenuInferior() {
 		delete spriteSavedFriends;
 }
 
-void MenuInferior::init()
+void MenuInferior::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 {
-	initShaders();
 	friendsSaved = 0;
 	activePowerUps = 0;
 	spritePowerUps = new Sprite[8];
 	spritesheetPowerUps.loadFromFile("images/powerups.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	for (int i = 0; i < 8; ++i) {
-		spritePowerUps[i] = *Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(0.0625, 0.5), &spritesheetPowerUps, &texProgram);
+		spritePowerUps[i] = *Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(0.0625, 0.5), &spritesheetPowerUps, &shaderProgram);
 		spritePowerUps[i].setNumberAnimations(6);
 
 		spritePowerUps[i].setAnimationSpeed(HYPER_SHOES, 8);
@@ -53,14 +52,14 @@ void MenuInferior::init()
 		spritePowerUps[i].addKeyframe(NONE, glm::vec2(0.9375f, 0.f));
 
 		spritePowerUps[i].changeAnimation(NONE);
-		spritePowerUps[i].setPosition(glm::vec2(float(60 + i * 32), float(70 + 20 * 16)));
+		spritePowerUps[i].setPosition(glm::vec2(float(tileMapPos.x + i * 32), float(tileMapPos.y)));
 		spritePowerUps[i].setScale(glm::vec3(2.f, 2.f, 0.f));
 	}
 	
 	spriteSavedFriends = new Sprite[20];
 	spriteSheetSavedFriends.loadFromFile("images/compis.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	for (int i = 0; i < 20; ++i) {
-		spriteSavedFriends[i] = *Sprite::createSprite(glm::ivec2(8, 8), glm::vec2(0.25, 0.5), &spriteSheetSavedFriends, &texProgram);
+		spriteSavedFriends[i] = *Sprite::createSprite(glm::ivec2(8, 8), glm::vec2(0.25, 0.5), &spriteSheetSavedFriends, &shaderProgram);
 		spriteSavedFriends[i].setNumberAnimations(6);
 
 		spriteSavedFriends[i].setAnimationSpeed(ROUND_UP, 8);
@@ -92,11 +91,12 @@ void MenuInferior::init()
 		else 
 			spriteSavedFriends[i].changeAnimation(NONE_FRIENDS);
 		if (i < 17)
-			spriteSavedFriends[i].setPosition(glm::vec2(float(60 + 255 + i * 15), float(70 + 20 * 16)));
+			spriteSavedFriends[i].setPosition(glm::vec2(float(tileMapPos.x + 255 + i * 15), float(tileMapPos.y)));
 		else
-			spriteSavedFriends[i].setPosition(glm::vec2(float(60 + 255 + 12 * 15 + (i - 17) * 15), float(70 + 20 * 16 + 20)));
+			spriteSavedFriends[i].setPosition(glm::vec2(float(tileMapPos.x + 255 + 12 * 15 + (i - 17) * 15), float(tileMapPos.y + 20)));
 		spriteSavedFriends[i].setScale(glm::vec3(2.f, 2.f, 0.f));
 	}
+	tileMapDispl = tileMapPos;
 }
 
 void MenuInferior::update(int deltaTime)
@@ -127,39 +127,5 @@ void MenuInferior::savedNewFriend() {
 	++friendsSaved;
 	if (friendsSaved < 5)
 		spriteSavedFriends[11 + friendsSaved].changeAnimation(FRIEND_UP);
-	else spriteSavedFriends[12 + friendsSaved].changeAnimation(FRIEND_UP);
+	else spriteSavedFriends[12 + friendsSaved].changeAnimation(FRIEND_DOWN);
 }
-
-
-void MenuInferior::initShaders()
-{
-	Shader vShader, fShader;
-
-	vShader.initFromFile(VERTEX_SHADER, "shaders/texture.vert");
-	if (!vShader.isCompiled())
-	{
-		cout << "Vertex Shader Error" << endl;
-		cout << "" << vShader.log() << endl << endl;
-	}
-	fShader.initFromFile(FRAGMENT_SHADER, "shaders/texture.frag");
-	if (!fShader.isCompiled())
-	{
-		cout << "Fragment Shader Error" << endl;
-		cout << "" << fShader.log() << endl << endl;
-	}
-	texProgram.init();
-	texProgram.addShader(vShader);
-	texProgram.addShader(fShader);
-	texProgram.link();
-	if (!texProgram.isLinked())
-	{
-		cout << "Shader Linking Error" << endl;
-		cout << "" << texProgram.log() << endl << endl;
-	}
-	texProgram.bindFragmentOutput("outColor");
-	vShader.free();
-	fShader.free();
-}
-
-
-

@@ -8,13 +8,11 @@ void Game::init()
 	bPlay = true;
 	glClearColor(0.f, 0.f, 0.f, 1.0f);
 	scene.init();
-	menuInferior.init();
 }
 
 bool Game::update(int deltaTime)
 {
 	scene.update(deltaTime);
-	menuInferior.update(deltaTime);
 	
 	return bPlay;
 }
@@ -23,7 +21,6 @@ void Game::render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	scene.render();
-	menuInferior.render();
 }
 
 void Game::keyPressed(int key)
