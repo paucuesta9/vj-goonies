@@ -180,7 +180,7 @@ void Scene::update(int deltaTime)
 		for (int i = 0; i < numGotas; ++i) {
 			glm::vec2 position = gota[i].getPosition();
 			if (pos.x < position.x + 16 && position.x < pos.x + 24 &&
-				pos.y < position.y + 16 && position.y < pos.y + 32 && gota[i].getStatus() != 5) {
+				pos.y < position.y + 16 && position.y < pos.y + 32 && gota[i].getStatus() != 5 && gota[i].getStatus() != 4) {
 				if (!player->getGrayRaincoat()) player->hurted(1);
 				gota[i].hitObject();
 			}
@@ -401,10 +401,12 @@ void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
 		cabezaFlotante->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 		cabezaFlotante->setPosition(glm::vec2(22 * map->getTileSize(), 10 * map->getTileSize()));
 		cabezaFlotante->setTileMap(map);
-		numGotas = 1;
-		gota = new Gota[1];
-		gota[0].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(5 * map->getTileSize(), 2 * map->getTileSize()));
+		numGotas = 2;
+		gota = new Gota[2];
+		gota[0].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(6 * map->getTileSize(), 2 * map->getTileSize()));
 		gota[0].setTileMap(map);
+		gota[1].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(3 * map->getTileSize(), 14 * map->getTileSize()));
+		gota[1].setTileMap(map);
 	}
 	else if (scene == 1 && screen == 2) {
 		esqueleto = new Esqueleto();

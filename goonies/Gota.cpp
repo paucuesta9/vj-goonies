@@ -77,10 +77,14 @@ void Gota::update(int deltaTime)
 			sprite->changeAnimation(NONE);
 		}
 	}
-	else if (sprite->animation() == NONE && animationTime > 5000) {
-		sprite->changeAnimation(BORN_1);
-		posGota = initialPos;
-		animationTime = 0;
+	else if (sprite->animation() == NONE) {
+		int timeGota = (posGota.x / 16 - posGota.y / 16 + 40);
+		if (timeGota < 40) timeGota += 40;
+		if (animationTime > 85 * timeGota) {
+			sprite->changeAnimation(BORN_1);
+			posGota = initialPos;
+			animationTime = 0;
+		}
 	}
 	sprite->update(deltaTime);
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posGota.x), float(tileMapDispl.y + posGota.y)));
