@@ -156,9 +156,9 @@
     <ClCompile Include="Gota.cpp" />
     <ClCompile Include="GreenDoor.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MenuInferior.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Object.cpp" />
-    <ClCompile Include="PowerUp.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
@@ -180,9 +180,9 @@
     <ClInclude Include="Friend.h" />
     <ClInclude Include="Gota.h" />
     <ClInclude Include="GreenDoor.h" />
+    <ClInclude Include="MenuInferior.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Object.h" />
-    <ClInclude Include="PowerUp.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderProgram.h" />
