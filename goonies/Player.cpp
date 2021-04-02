@@ -30,7 +30,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	exp = 0;
 
 	Status = -1;
-	speed = 1;
+	speed = 2;
 
 	blueRaincoat = false;
 	grayRaincoat = false;

@@ -7,7 +7,7 @@
 
 enum PowerUps
 {
-	HYPER_SHOES, BLUE_RAINCOAT, GRAY_RAINCOAT, YELLOW_SPELLBOOK, BLUE_SPELLBOOK
+	HYPER_SHOES, BLUE_RAINCOAT, GRAY_RAINCOAT, YELLOW_SPELLBOOK, BLUE_SPELLBOOK, NONE
 };
 
 PowerUp::~PowerUp() {
@@ -17,11 +17,10 @@ PowerUp::~PowerUp() {
 
 void PowerUp::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 {
-	nextPos = 0;
 	spritePowerUp = new Sprite();
 	spritesheetPowerUp.loadFromFile("images/powerups.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	spritePowerUp = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(0.0625, 0.5), &spritesheetPowerUp, &shaderProgram);
-	spritePowerUp->setNumberAnimations(5);
+	spritePowerUp->setNumberAnimations(6);
 
 	spritePowerUp->setAnimationSpeed(HYPER_SHOES, 8);
 	spritePowerUp->addKeyframe(HYPER_SHOES, glm::vec2(0.25f, 0.5f));
@@ -38,18 +37,20 @@ void PowerUp::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	spritePowerUp->setAnimationSpeed(BLUE_SPELLBOOK, 8);
 	spritePowerUp->addKeyframe(BLUE_SPELLBOOK, glm::vec2(0.9375f, 0.0f));
 
-	spritePowerUp->changeAnimation(0);
+	spritePowerUp->setAnimationSpeed(NONE, 8);
+	spritePowerUp->addKeyframe(NONE, glm::vec2(0.5625f, 0.5f));
+
+	spritePowerUp->changeAnimation(NONE);
 	tileMapDispl = tileMapPos;
 	spritePowerUp->setPosition(glm::vec2(float(tileMapDispl.x), float(tileMapDispl.y)));
 	spritePowerUp->setScale(glm::vec3(2.0, 2.0, 0.0));
 
 }
 
-void PowerUp::update(int deltaTime)
+void PowerUp::update(int deltaTime, int nextPos)
 {
 	spritePowerUp->update(deltaTime);
 	spritePowerUp->setPosition(glm::vec2(float(tileMapDispl.x + nextPos), float(tileMapDispl.y)));
-	nextPos += 16;
 }
 
 void PowerUp::render()

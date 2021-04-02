@@ -11,11 +11,6 @@ enum Objects
 	KEY, POWERUP, LOCK, POTION
 };
 
-enum PowerUps
-{
-	HYPER_SHOES, BLUE_RAINCOAT, GRAY_RAINCOAT, YELLOW_SPELLBOOK, BLUE_SPELLBOOK
-};
-
 Object::~Object() {
 	if (sprite != NULL)
 		delete sprite;
