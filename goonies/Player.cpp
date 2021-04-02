@@ -26,7 +26,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	animationTime = -1;
 	punchTime = -1;
 
-	life = 100;
+	life = 500;
 	exp = 0;
 
 	Status = -1;

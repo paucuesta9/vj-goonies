@@ -26,6 +26,7 @@ Scene::Scene()
 	startEndDoor = NULL;
 	object = NULL;
 	menuInferior = NULL;
+	menuSuperior = NULL;
 }
 
 Scene::~Scene()
@@ -54,6 +55,8 @@ Scene::~Scene()
 		delete object;
 	if (menuInferior != NULL)
 		delete menuInferior;
+	if (menuSuperior != NULL)
+		delete menuSuperior;
 }
 
 
@@ -62,7 +65,6 @@ void Scene::init()
 	initShaders();
 	sceneNum = 1;
 	screenNum = 1;
-	nextPos = 0;
 	numAsp = 0;
 	numCasc = 0;
 	numGotas = 0;
@@ -71,7 +73,6 @@ void Scene::init()
 	numObjects = 0;
 	numFriends = 0;
 	numPowerUp = -1;
-	nextPos = SCREEN_X;
 	first = true;
 	changingScene = false;
 	player = new Player();
@@ -79,6 +80,8 @@ void Scene::init()
 	changeScreen(sceneNum, screenNum, glm::vec2(INIT_PLAYER_X_TILES * 16 + 8, INIT_PLAYER_Y_TILES * 16 + 4));
 	menuInferior = new MenuInferior();
 	menuInferior->init(glm::ivec2(SCREEN_X, SCREEN_Y + 20 * map->getTileSize()), texProgram);
+	menuSuperior = new MenuSuperior();
+	menuSuperior->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	startEndDoor = new StartEndDoor();
 	startEndDoor->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(22 * map->getTileSize(), 3 * map->getTileSize()), 1);
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
@@ -104,7 +107,10 @@ void Scene::update(int deltaTime)
 		}
 		else if (pos.x < posCabezaFlotante.x + 8 && posCabezaFlotante.x < pos.x + 32 &&
 			pos.y < posCabezaFlotante.y + 8 && posCabezaFlotante.y < pos.y + 32 && cabezaFlotante->getStatus()==1) {
-			if (!player->getBlueSpellbook())player->hurted(5);
+			if (!player->getBlueSpellbook()) {
+				player->hurted(5);
+				
+			}
 		}	
 	}
 	if (esqueleto != NULL) {
@@ -288,7 +294,6 @@ void Scene::update(int deltaTime)
 					object[i].update(deltaTime);
 					menuInferior->setPowerUp(numPowerUp, true);
 					menuInferior->update(deltaTime);
-					nextPos += 16;
 
 				}
 				else if (object[i].getType() == 0) {
@@ -297,9 +302,6 @@ void Scene::update(int deltaTime)
 				}
 			}
 		}
-	}
-	if (first) {
-		for (int i = 0; i < 8; ++i) menuInferior->update(deltaTime);
 	}
 	int tileSize = map->getTileSize();
 	if (player->getAnimDoorNum() == -2) {
@@ -373,6 +375,8 @@ void Scene::render()
 		}
 	}
 	menuInferior->render();
+	menuSuperior->calculateVitExp(543, 4);
+	menuSuperior->render();
 	if (!changingScene && skullDoor != NULL) for (int i = 0; i < numSkullDoors; ++i) skullDoor[i].render();
 	player->render();
 	if (changingScene && skullDoor != NULL) for (int i = 0; i < numSkullDoors; ++i) skullDoor[i].render();
@@ -474,7 +478,7 @@ void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
 		skullDoor[0].setTileMap(map);
 		numObjects = 2;
 		//if (object == NULL || object != NULL && !object->getPicked()) {
-			object = new Object[1];
+			object = new Object[2];
 			object[0].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(26 * map->getTileSize(), 10 * map->getTileSize()), 1, 0);
 			object[0].setTileMap(map);
 			object[1].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(26 * map->getTileSize(), 18 * map->getTileSize()), 3, 0);
