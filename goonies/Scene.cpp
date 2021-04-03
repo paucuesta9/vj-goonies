@@ -78,11 +78,11 @@ void Scene::init()
 	changingScene = false;
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	changeScreen(sceneNum, screenNum, glm::vec2(INIT_PLAYER_X_TILES * 16 + 8, INIT_PLAYER_Y_TILES * 16 + 4));
 	menuInferior = new MenuInferior();
-	menuInferior->init(glm::ivec2(SCREEN_X, SCREEN_Y + 20 * map->getTileSize()), texProgram);
+	menuInferior->init(glm::ivec2(SCREEN_X, SCREEN_Y + 20 * 16), texProgram);
 	menuSuperior = new MenuSuperior();
 	menuSuperior->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	changeScreen(sceneNum, screenNum, glm::vec2(INIT_PLAYER_X_TILES * 16 + 8, INIT_PLAYER_Y_TILES * 16 + 4));
 	startEndDoor = new StartEndDoor();
 	startEndDoor->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(22 * map->getTileSize(), 3 * map->getTileSize()), 1);
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
@@ -105,53 +105,90 @@ void Scene::update(int deltaTime)
 	if (cabezaFlotante != NULL) {
 		glm::vec2 posCabezaFlotante = cabezaFlotante->getPosition();
 		cabezaFlotante->update(deltaTime);
-		if (player->isPunching() == 1 && pos.x - 16 < posCabezaFlotante.x + 8 && pos.x - 16 > posCabezaFlotante.x + 4 && 
-			pos.y < posCabezaFlotante.y + 8 && posCabezaFlotante.y < pos.y + 32)
-			cabezaFlotante->die();
-		else if (player->isPunching() == 2 && pos.x + 36 > posCabezaFlotante.x && pos.x + 32 < posCabezaFlotante.x && 
-			pos.y < posCabezaFlotante.y + 8 && posCabezaFlotante.y < pos.y + 32) cabezaFlotante->die();
+		if (player->isPunching() == 1 && pos.x - 16 < posCabezaFlotante.x + 8 && pos.x - 16 > posCabezaFlotante.x + 4 &&
+			pos.y < posCabezaFlotante.y + 8 && posCabezaFlotante.y < pos.y + 32) {
+				cabezaFlotante->die();
+				player->setPoints(50);
+				menuSuperior->setPoints(player->getPoints());
+		}
+		else if (player->isPunching() == 2 && pos.x + 36 > posCabezaFlotante.x && pos.x + 32 < posCabezaFlotante.x &&
+			pos.y < posCabezaFlotante.y + 8 && posCabezaFlotante.y < pos.y + 32) {
+				cabezaFlotante->die();
+				player->setPoints(50);
+				menuSuperior->setPoints(player->getPoints());
+		}
 		if (cabezaFlotante->getStatus() == 3) {
 			cabezaFlotante = NULL;
 			delete cabezaFlotante;
 		}
 		else if (pos.x < posCabezaFlotante.x + 8 && posCabezaFlotante.x < pos.x + 32 &&
-			pos.y < posCabezaFlotante.y + 8 && posCabezaFlotante.y < pos.y + 32 && cabezaFlotante->getStatus()==1) {
-			if (!player->getBlueSpellbook()) player->hurted(5);
+			pos.y < posCabezaFlotante.y + 8 && posCabezaFlotante.y < pos.y + 32 && cabezaFlotante->getStatus()==1 && !player->isHurted() && !player->isBall()) {
+			if (!player->getBlueSpellbook()) {
+				player->hurted(40);
+				if (player->getLife() <= 0) die();
+				menuSuperior->calculateVitExp(player->getLife(), 0);
+			}
 		}	
 	}
 	if (esqueleto != NULL) {
 		esqueleto->update(deltaTime);
 		glm::vec2 posEsqueleto = esqueleto->getPosition();
 		if (player->isPunching() == 1 && pos.x - 16 < posEsqueleto.x + 8 && pos.x - 16 > posEsqueleto.x + 4 &&
-			pos.y < posEsqueleto.y + 8 && posEsqueleto.y < pos.y + 32)
-			esqueleto->die();
+			pos.y < posEsqueleto.y + 8 && posEsqueleto.y < pos.y + 32) {
+				esqueleto->die();
+				player->setPoints(50);
+				menuSuperior->setPoints(player->getPoints());
+		}
+			
 		else if (player->isPunching() == 2 && pos.x + 36 > posEsqueleto.x && pos.x + 32 < posEsqueleto.x &&
-			pos.y < posEsqueleto.y + 8 && posEsqueleto.y < pos.y + 32) esqueleto->die();
+			pos.y < posEsqueleto.y + 8 && posEsqueleto.y < pos.y + 32) {
+				esqueleto->die();
+				player->setPoints(50);
+				menuSuperior->setPoints(player->getPoints());
+		}
 		if (esqueleto->getStatus() == 3) {
 			esqueleto = NULL;
 			delete esqueleto;
 		}
 		else {
+		
 			if (esqueleto->isThereBone()) {
 				glm::vec2 posBone = esqueleto->getBonePosition();
-				if (player->isPunching() == 1 && pos.x > posBone.x + 6  && pos.x  < posBone.x + 24 &&
-					pos.y < posBone.y + 8 && posBone.y < pos.y + 32)
+				if (player->isPunching() == 1 && pos.x > posBone.x + 6 && pos.x < posBone.x + 24 &&
+					pos.y < posBone.y + 8 && posBone.y < pos.y + 32) {
 					esqueleto->dieBone();
+					if (esqueleto->getBoneStatus() == 2) {
+						player->setPoints(25);
+						menuSuperior->setPoints(player->getPoints());
+					}
+				}
 				else if (player->isPunching() == 2 && pos.x + 38 > posBone.x && pos.x + 32 < posBone.x &&
-					pos.y < posBone.y + 8 && posBone.y < pos.y + 32) esqueleto->dieBone();
+					pos.y < posBone.y + 8 && posBone.y < pos.y + 32) {
+					esqueleto->dieBone();
+					if (esqueleto->getBoneStatus() == 2) {
+						player->setPoints(25);
+						menuSuperior->setPoints(player->getPoints());
+					}
+				}
 				if (esqueleto->getBoneStatus() == 3) {
 					esqueleto->deleteBone();
 				}
 				else if (pos.x < posBone.x + 6 && posBone.x < pos.x + 32 &&
-					pos.y < posBone.y + 8 && posBone.y < pos.y + 32 && esqueleto->getBoneStatus() == 1) {
-					player->hurted(10);
+					pos.y < posBone.y + 8 && posBone.y < pos.y + 32 && esqueleto->getBoneStatus() == 1 && !player->isBall()) {
+					player->hurted(80);
 					esqueleto->deleteBone();
+					if (player->getLife() <= 0) die();
+					menuSuperior->calculateVitExp(player->getLife(), 0);
 				}
 			}
 
 			if (pos.x < posEsqueleto.x + 8 && posEsqueleto.x < pos.x + 32 &&
-				pos.y < posEsqueleto.y + 8 && posEsqueleto.y < pos.y + 32 && esqueleto->getStatus() == 1) {
-				if (!player->getYellowSpellbook()) player->hurted(5);
+				pos.y < posEsqueleto.y + 8 && posEsqueleto.y < pos.y + 32 && esqueleto->getStatus() == 1 && !player->isHurted() && !player->isBall()) {
+				if (!player->getYellowSpellbook()) {
+					player->hurted(40);
+					if (player->getLife() <= 0) die();
+					menuSuperior->calculateVitExp(player->getLife(), 0);
+				}
 			}
 		}
 	}
@@ -162,8 +199,12 @@ void Scene::update(int deltaTime)
 			if (size != 0) {
 				glm::vec2 positionCascada = cascada[i].getPosition();
 				if (pos.x < positionCascada.x + 40 && positionCascada.x < pos.x + 24 &&
-					pos.y < positionCascada.y + size * 16 && positionCascada.y < pos.y + 32) {
-					if (!player->getBlueRaincoat()) player->hurted(1);
+					pos.y < positionCascada.y + size * 16 && positionCascada.y < pos.y + 32 && !player->isBall()) {
+					if (!player->getBlueRaincoat()) {
+						player->hurted(1);
+						if (player->getLife() <= 0) die();
+						menuSuperior->calculateVitExp(player->getLife(), 0);
+					}
 				}
 			}
 		}	
@@ -175,16 +216,20 @@ void Scene::update(int deltaTime)
 			if (sizeLeft != 0) {
 				glm::vec2 position = aspersor[i].getPosition(true);
 				if (pos.x < position.x + sizeLeft && position.x < pos.x + 24 &&
-					pos.y < position.y + 32 && position.y < pos.y + 32) {
+					pos.y < position.y + 32 && position.y < pos.y + 32 && !player->isBall()) {
 					player->hurted(1);
+					if (player->getLife() <= 0) die();
+					menuSuperior->calculateVitExp(player->getLife(), 0);
 				}
 			}
 			int sizeRight = aspersor[i].getSize(false);
 			if (sizeRight != 0) {
 				glm::vec2 position = aspersor[i].getPosition(false);
 				if (pos.x < position.x + sizeRight && position.x < pos.x + 24 &&
-					pos.y < position.y + 32 && position.y < pos.y + 32) {
+					pos.y < position.y + 32 && position.y < pos.y + 32 && !player->isBall()) {
 					player->hurted(1);
+					if (player->getLife() <= 0) die();
+					menuSuperior->calculateVitExp(player->getLife(), 0);
 				}
 			}
 		}
@@ -193,8 +238,13 @@ void Scene::update(int deltaTime)
 		for (int i = 0; i < numGotas; ++i) {
 			glm::vec2 position = gota[i].getPosition();
 			if (pos.x < position.x + 16 && position.x < pos.x + 24 &&
-				pos.y < position.y + 16 && position.y < pos.y + 32 && gota[i].getStatus() != 5 && gota[i].getStatus() != 4 && gota[i].getStatus() != 3) {
-				if (!player->getGrayRaincoat()) player->hurted(1);
+				pos.y < position.y + 16 && position.y < pos.y + 32 && gota[i].getStatus() != 5 
+				&& gota[i].getStatus() != 4 && gota[i].getStatus() != 3 && !player->isHurted() && !player->isBall()) {
+				if (!player->getGrayRaincoat()) {
+					player->hurted(20);
+					if (player->getLife() <= 0) die();
+					menuSuperior->calculateVitExp(player->getLife(), 0);
+				}
 				gota[i].hitObject();
 			}
 			gota[i].update(deltaTime);
@@ -381,7 +431,6 @@ void Scene::render()
 		}
 	}
 	menuInferior->render();
-	menuSuperior->calculateVitExp(543, 4);
 	menuSuperior->render();
 	if (!changingScene && skullDoor != NULL) for (int i = 0; i < numSkullDoors; ++i) skullDoor[i].render();
 	player->render();
@@ -394,6 +443,7 @@ void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
 {
 	sceneNum = scene;
 	screenNum = screen;
+	menuSuperior->setScreen(scene, screen);
 	map = TileMap::createTileMap("levels/level" + to_string(scene) + "_" + to_string(screen) + ".txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	player->setPosition(pos);
 	player->setTileMap(map);
@@ -664,6 +714,15 @@ void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
 		if (numFriends == 6) startEndDoor->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(21 * map->getTileSize(), 11 * map->getTileSize()), 1);
 		else startEndDoor->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(21 * map->getTileSize(), 11 * map->getTileSize()), 0);
 	}
+}
+
+void Scene::die() {
+	menuSuperior->setPoints(0);
+	menuSuperior->calculateVitExp(1000, 0);
+	menuInferior->setInit();
+	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	changeScreen(1, 1, glm::vec2(INIT_PLAYER_X_TILES * 16 + 8, INIT_PLAYER_Y_TILES * 16 + 4));
+
 }
 
 void Scene::initShaders()

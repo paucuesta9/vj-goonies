@@ -18,6 +18,7 @@ public:
 
 	void setPowerUp(int powerUp);
 	void savedNewFriend();
+	void setInit();
 
 private:
 	glm::ivec2 tileMapDispl;

@@ -34,6 +34,11 @@ public:
 	bool getGrayRaincoat();
 	bool getYellowSpellbook();
 	bool getBlueSpellbook();
+	int getLife();
+	bool isHurted();
+	bool isBall();
+	void setPoints(int points);
+	int getPoints();
 	
 private:
 	bool bJumping, bLiana, bdoorCollision;
@@ -42,7 +47,7 @@ private:
 	Texture spritesheetNormal, spritesheetHurt;
 	Sprite *sprite, *spriteNormal, *spriteHurt;
 	TileMap *map;
-	int life, exp, Status, speed;
+	int life, exp, Status, speed, points;
 	bool blueRaincoat, grayRaincoat, yellowSpellbook, blueSpellbook;
 };
 

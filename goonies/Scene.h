@@ -34,6 +34,7 @@ public:
 	void update(int deltaTime);
 	void render();
 	void changeScreen(int scene, int screen, glm::vec2 pos);
+	void die();
 
 private:
 	void initShaders();

@@ -12,7 +12,7 @@
 
 enum PlayerAnims
 {
-	STAND_LEFT, STAND_RIGHT, STAND_UP, MOVE_LEFT, MOVE_RIGHT, MOVE_UP_DOWN, PUNCH_LEFT, PUNCH_RIGHT, NONE
+	STAND_LEFT, STAND_RIGHT, STAND_UP, MOVE_LEFT, MOVE_RIGHT, MOVE_UP_DOWN, PUNCH_LEFT, PUNCH_RIGHT, BALL, WATER, NONE
 };
 
 
@@ -26,8 +26,9 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	animationTime = -1;
 	punchTime = -1;
 
-	life = 500;
+	life = 1000;
 	exp = 0;
+	points = 0;
 
 	Status = -1;
 	speed = 2;
@@ -35,10 +36,10 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	blueRaincoat = false;
 	grayRaincoat = false;
 	yellowSpellbook = false;
-	blueSpellbook = false;;
+	blueSpellbook = false;
 	spritesheetNormal.loadFromFile("images/player.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	spriteNormal = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(0.25, 0.25), &spritesheetNormal, &shaderProgram);
-	spriteNormal->setNumberAnimations(9);
+	spriteNormal->setNumberAnimations(11);
 	
 	spriteNormal->setAnimationSpeed(STAND_LEFT, 8);
 	spriteNormal->addKeyframe(STAND_LEFT, glm::vec2(0.f, 0.25f));
@@ -71,12 +72,18 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	spriteNormal->setAnimationSpeed(PUNCH_RIGHT, 8);
 	spriteNormal->addKeyframe(PUNCH_RIGHT, glm::vec2(0.5f, 0.5f));
 
+	spriteNormal->setAnimationSpeed(BALL, 8);
+	spriteNormal->addKeyframe(BALL, glm::vec2(0.25f, 0.75f));
+
+	spriteNormal->setAnimationSpeed(WATER, 8);
+	spriteNormal->addKeyframe(WATER, glm::vec2(0.0f, 0.75f));
+
 	spriteNormal->setAnimationSpeed(NONE, 8);
 	spriteNormal->addKeyframe(NONE, glm::vec2(0.75f, 0.75f));
 	
 	spritesheetHurt.loadFromFile("images/player_hurt.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	spriteHurt = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(0.25, 0.25), &spritesheetHurt, &shaderProgram);
-	spriteHurt->setNumberAnimations(9);
+	spriteHurt->setNumberAnimations(11);
 
 	spriteHurt->setAnimationSpeed(STAND_LEFT, 8);
 	spriteHurt->addKeyframe(STAND_LEFT, glm::vec2(0.f, 0.25f));
@@ -121,6 +128,12 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 
 	spriteHurt->setAnimationSpeed(PUNCH_RIGHT, 8);
 	spriteHurt->addKeyframe(PUNCH_RIGHT, glm::vec2(0.5f, 0.5f));
+
+	spriteHurt->setAnimationSpeed(BALL, 8);
+	spriteHurt->addKeyframe(BALL, glm::vec2(0.025f, 0.75f));
+
+	spriteHurt->setAnimationSpeed(WATER, 8);
+	spriteHurt->addKeyframe(WATER, glm::vec2(0.0f, 0.75f));
 
 	spriteHurt->setAnimationSpeed(NONE, 8);
 	spriteHurt->addKeyframe(NONE, glm::vec2(0.75f, 0.75f));
@@ -195,14 +208,15 @@ void Player::update(int deltaTime)
 		++animDoorNum;
 	}
 	else {
-		if (Game::instance().getKey(32)) {
+		if (Game::instance().getKey(32) && sprite->animation() != BALL) {
 			punchTime = 0;
 			if (sprite->animation() == STAND_LEFT || sprite->animation() == MOVE_LEFT)
 				sprite->changeAnimation(PUNCH_LEFT);
 			else if (sprite->animation() == STAND_RIGHT || sprite->animation() == MOVE_RIGHT)
 				sprite->changeAnimation(PUNCH_RIGHT);
+			Game::instance().keyReleased(32);
 		}
-		else if (Game::instance().getSpecialKey(GLUT_KEY_LEFT))
+		else if (Game::instance().getSpecialKey(GLUT_KEY_LEFT) && sprite->animation() != BALL && sprite->animation() != WATER)
 		{
 			if (sprite->animation() != MOVE_LEFT && !map->collisionLiana(posPlayer, glm::ivec2(16, 20))) {
 				sprite->changeAnimation(MOVE_LEFT);
@@ -215,7 +229,7 @@ void Player::update(int deltaTime)
 				sprite->changeAnimation(STAND_LEFT);
 			}
 		}
-		else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT))
+		else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT) && sprite->animation() != BALL && sprite->animation() != WATER)
 		{
 			if (sprite->animation() != MOVE_RIGHT && !map->collisionLiana(posPlayer, glm::ivec2(16, 20))) {
 				sprite->changeAnimation(MOVE_RIGHT);
@@ -236,6 +250,8 @@ void Player::update(int deltaTime)
 				sprite->changeAnimation(STAND_RIGHT);
 			else if (sprite->animation() == STAND_UP && !bLiana)
 				sprite->changeAnimation(STAND_LEFT);
+			else if (sprite->animation() == BALL || sprite->animation() == WATER)
+				sprite->changeAnimation(STAND_RIGHT);
 		}
 
 		if (bJumping)
@@ -249,8 +265,9 @@ void Player::update(int deltaTime)
 			else
 			{
 				posPlayer.y = int(startY - 48 * sin(3.14159f * jumpAngle / 180.f));
-				if (jumpAngle > 90)
+				if (jumpAngle > 90) {
 					bJumping = !map->collisionMoveDown(posPlayer, glm::ivec2(20, 20), &posPlayer.y);
+				}
 				else bJumping = !map->collisionMoveUp(posPlayer, glm::ivec2(16, 16));
 			}
 		}
@@ -271,7 +288,7 @@ void Player::update(int deltaTime)
 
 			if (map->collisionMoveDown(posPlayer, glm::ivec2(16, 20), &posPlayer.y))
 			{
-				if (Game::instance().getSpecialKey(GLUT_KEY_UP))
+				if (Game::instance().getSpecialKey(GLUT_KEY_UP) && sprite->animation() != BALL)
 				{
 					if (!map->collisionLiana(posPlayer, glm::ivec2(16, 20))) {
 						if (!bLiana) {
@@ -282,9 +299,12 @@ void Player::update(int deltaTime)
 								sprite->changeAnimation(STAND_LEFT);
 							else if (sprite->animation() == STAND_RIGHT)
 								sprite->changeAnimation(STAND_RIGHT);
+
 						}
 						bLiana = false;
 						if (sprite->animation() == MOVE_UP_DOWN) sprite->changeAnimation(STAND_LEFT);
+
+						
 
 					}
 					else {
@@ -296,6 +316,9 @@ void Player::update(int deltaTime)
 						posPlayer.x = (posPlayer.x / map->getTileSize()) * map->getTileSize() + 8;
 					}
 				}
+				else if (Game::instance().getSpecialKey(GLUT_KEY_DOWN) && !bLiana) {
+					if (sprite->animation() != BALL) sprite->changeAnimation(BALL);
+				}
 				else if (map->collisionLiana(posPlayer, glm::ivec2(16, 20))) {
 					if (map->getBlockCode(posPlayer) != 127 && map->getBlockCode(posPlayer) != 128 && sprite->animation() != STAND_UP && sprite->animation() != MOVE_UP_DOWN)
 						sprite->changeAnimation(STAND_UP);
@@ -306,10 +329,13 @@ void Player::update(int deltaTime)
 					sprite->changeAnimation(STAND_UP);
 
 			}
+			else if (Game::instance().getKey(66) || Game::instance().getKey(98) && !map->collisionMoveUp(posPlayer, glm::ivec2(16, 16))) {
+				posPlayer.y -= 5;
+				if (sprite->animation() != WATER) sprite->changeAnimation(WATER);
+			}
 		}
 	}
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
-
 }
 
 void Player::render()
@@ -430,4 +456,24 @@ bool Player::getYellowSpellbook() {
 
 bool Player::getBlueSpellbook() {
 	return blueSpellbook;
+}
+
+int Player::getLife() {
+	return life;
+}
+
+bool Player::isHurted() {
+	return sprite == spriteHurt;
+}
+
+bool Player::isBall() {
+	return sprite->animation() == BALL;
+}
+
+void Player::setPoints(int points) {
+	this->points += points;
+}
+
+int Player::getPoints() {
+	return points;
 }

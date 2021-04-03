@@ -51,7 +51,6 @@ void MenuInferior::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgr
 		spritePowerUps[i].setAnimationSpeed(NONE, 8);
 		spritePowerUps[i].addKeyframe(NONE, glm::vec2(0.9375f, 0.f));
 
-		spritePowerUps[i].changeAnimation(NONE);
 		spritePowerUps[i].setPosition(glm::vec2(float(tileMapPos.x + i * 32), float(tileMapPos.y)));
 		spritePowerUps[i].setScale(glm::vec3(2.f, 2.f, 0.f));
 	}
@@ -80,26 +79,14 @@ void MenuInferior::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgr
 		spriteSavedFriends[i].setAnimationSpeed(NONE_FRIENDS, 8);
 		spriteSavedFriends[i].addKeyframe(NONE, glm::vec2(0.5, 0.5f));
 
-		if (i > 16)
-			spriteSavedFriends[i].changeAnimation(ROUND_DOWN);
-		else if (i > 11 && i < 16)
-			spriteSavedFriends[i].changeAnimation(ROUND_UP);
-		else if (i == 11)
-			spriteSavedFriends[i].changeAnimation(LINE);
-		else if (i == 10)
-			spriteSavedFriends[i].changeAnimation(FRIEND_UP);
-		else 
-			spriteSavedFriends[i].changeAnimation(NONE_FRIENDS);
 		if (i < 17)
 			spriteSavedFriends[i].setPosition(glm::vec2(float(tileMapPos.x + 255 + i * 15), float(tileMapPos.y)));
 		else
 			spriteSavedFriends[i].setPosition(glm::vec2(float(tileMapPos.x + 255 + 12 * 15 + (i - 17) * 15), float(tileMapPos.y + 20)));
 		spriteSavedFriends[i].setScale(glm::vec3(2.f, 2.f, 0.f));
 	}
+	setInit();
 	tileMapDispl = tileMapPos;
-	text = new Text();
-	text->init(glm::vec2(float(tileMapPos.x), float(tileMapPos.y + 40)), shaderProgram, "ABCDEFGHIJKLMNOPQRSTUVWXYZ -!?.");
-	text->setText("ABCDIEH?-.KLMNOPQRSTUVWXYZ -!?.");
 }
 
 void MenuInferior::update(int deltaTime)
@@ -108,7 +95,6 @@ void MenuInferior::update(int deltaTime)
 		spritePowerUps[i].update(deltaTime);
 	for (int i = 0; i < 20; ++i)
 		spriteSavedFriends[i].update(deltaTime);
-	text->update(deltaTime);
 }
 
 void MenuInferior::render()
@@ -117,7 +103,7 @@ void MenuInferior::render()
 		spritePowerUps[i].render();
 	for (int i = 0; i < 20; ++i)
 		spriteSavedFriends[i].render();
-	text->render();
+	
 }
 
 void MenuInferior::setPowerUp(int numPowerUp) {
@@ -133,4 +119,22 @@ void MenuInferior::savedNewFriend() {
 	if (friendsSaved < 5)
 		spriteSavedFriends[11 + friendsSaved].changeAnimation(FRIEND_UP);
 	else spriteSavedFriends[12 + friendsSaved].changeAnimation(FRIEND_DOWN);
+}
+
+void MenuInferior::setInit() {
+	for (int i = 0; i < 20; i++) {
+		if (i > 16)
+			spriteSavedFriends[i].changeAnimation(ROUND_DOWN);
+		else if (i > 11 && i < 16)
+			spriteSavedFriends[i].changeAnimation(ROUND_UP);
+		else if (i == 11)
+			spriteSavedFriends[i].changeAnimation(LINE);
+		else if (i == 10)
+			spriteSavedFriends[i].changeAnimation(FRIEND_UP);
+		else
+			spriteSavedFriends[i].changeAnimation(NONE_FRIENDS);
+	}
+	for (int i = 0; i < 8; ++i) {
+		spritePowerUps[i].changeAnimation(NONE);
+	}
 }
