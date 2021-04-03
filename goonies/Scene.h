@@ -58,7 +58,7 @@ private:
 	int sceneNum, screenNum, numAsp, numCasc, numGotas, numSkullDoors, numGreenDoors, numObjects, numPowerUp;
 	bool changingScene;
 	int numFriends, nextPos;
-	bool first;
+	bool first, pressedN;
 };
 
 

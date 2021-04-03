@@ -11,13 +11,22 @@ enum PowerUps
 	HYPER_SHOES, BLUE_RAINCOAT, GRAY_RAINCOAT, YELLOW_SPELLBOOK, BLUE_SPELLBOOK, NONE
 };
 
+enum SavedFriends
+{
+	ROUND_UP, ROUND_DOWN, FRIEND_UP, FRIEND_DOWN, LINE, NONE_FRIENDS
+};
+
 MenuInferior::~MenuInferior() {
 	if (spritePowerUps != NULL)
 		delete spritePowerUps;
+	if (spriteSavedFriends != NULL)
+		delete spriteSavedFriends;
 }
 
 void MenuInferior::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 {
+	friendsSaved = 0;
+	activePowerUps = 0;
 	spritePowerUps = new Sprite[8];
 	spritesheetPowerUps.loadFromFile("images/powerups.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	for (int i = 0; i < 8; ++i) {
@@ -31,13 +40,13 @@ void MenuInferior::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgr
 		spritePowerUps[i].addKeyframe(BLUE_RAINCOAT, glm::vec2(0.f, 0.5f));
 
 		spritePowerUps[i].setAnimationSpeed(GRAY_RAINCOAT, 8);
-		spritePowerUps[i].addKeyframe(GRAY_RAINCOAT, glm::vec2(0.1875f, 0.5f));
+		spritePowerUps[i].addKeyframe(GRAY_RAINCOAT, glm::vec2(0.125f, 0.5f));
 
 		spritePowerUps[i].setAnimationSpeed(YELLOW_SPELLBOOK, 8);
-		spritePowerUps[i].addKeyframe(YELLOW_SPELLBOOK, glm::vec2(0.5625f, 0.0f));
+		spritePowerUps[i].addKeyframe(YELLOW_SPELLBOOK, glm::vec2(0.5f, 0.0f));
 
 		spritePowerUps[i].setAnimationSpeed(BLUE_SPELLBOOK, 8);
-		spritePowerUps[i].addKeyframe(BLUE_SPELLBOOK, glm::vec2(0.9375f, 0.0f));
+		spritePowerUps[i].addKeyframe(BLUE_SPELLBOOK, glm::vec2(0.875f, 0.0f));
 
 		spritePowerUps[i].setAnimationSpeed(NONE, 8);
 		spritePowerUps[i].addKeyframe(NONE, glm::vec2(0.9375f, 0.f));
@@ -46,24 +55,82 @@ void MenuInferior::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgr
 		spritePowerUps[i].setPosition(glm::vec2(float(tileMapPos.x + i * 32), float(tileMapPos.y)));
 		spritePowerUps[i].setScale(glm::vec3(2.f, 2.f, 0.f));
 	}
+	
+	spriteSavedFriends = new Sprite[20];
+	spriteSheetSavedFriends.loadFromFile("images/compis.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	for (int i = 0; i < 20; ++i) {
+		spriteSavedFriends[i] = *Sprite::createSprite(glm::ivec2(8, 8), glm::vec2(0.25, 0.5), &spriteSheetSavedFriends, &shaderProgram);
+		spriteSavedFriends[i].setNumberAnimations(6);
+
+		spriteSavedFriends[i].setAnimationSpeed(ROUND_UP, 8);
+		spriteSavedFriends[i].addKeyframe(ROUND_UP, glm::vec2(0.f, 0.f));
+
+		spriteSavedFriends[i].setAnimationSpeed(ROUND_DOWN, 8);
+		spriteSavedFriends[i].addKeyframe(ROUND_DOWN, glm::vec2(0.f, 0.5f));
+
+		spriteSavedFriends[i].setAnimationSpeed(FRIEND_UP, 8);
+		spriteSavedFriends[i].addKeyframe(FRIEND_UP, glm::vec2(0.5f, 0.f));
+
+		spriteSavedFriends[i].setAnimationSpeed(FRIEND_DOWN, 8);
+		spriteSavedFriends[i].addKeyframe(FRIEND_DOWN, glm::vec2(0.75f, 0.0f));
+
+		spriteSavedFriends[i].setAnimationSpeed(LINE, 8);
+		spriteSavedFriends[i].addKeyframe(LINE, glm::vec2(0.75f, 0.5f));
+
+		spriteSavedFriends[i].setAnimationSpeed(NONE_FRIENDS, 8);
+		spriteSavedFriends[i].addKeyframe(NONE, glm::vec2(0.5, 0.5f));
+
+		if (i > 16)
+			spriteSavedFriends[i].changeAnimation(ROUND_DOWN);
+		else if (i > 11 && i < 16)
+			spriteSavedFriends[i].changeAnimation(ROUND_UP);
+		else if (i == 11)
+			spriteSavedFriends[i].changeAnimation(LINE);
+		else if (i == 10)
+			spriteSavedFriends[i].changeAnimation(FRIEND_UP);
+		else 
+			spriteSavedFriends[i].changeAnimation(NONE_FRIENDS);
+		if (i < 17)
+			spriteSavedFriends[i].setPosition(glm::vec2(float(tileMapPos.x + 255 + i * 15), float(tileMapPos.y)));
+		else
+			spriteSavedFriends[i].setPosition(glm::vec2(float(tileMapPos.x + 255 + 12 * 15 + (i - 17) * 15), float(tileMapPos.y + 20)));
+		spriteSavedFriends[i].setScale(glm::vec3(2.f, 2.f, 0.f));
+	}
 	tileMapDispl = tileMapPos;
+	text = new Text();
+	text->init(glm::vec2(float(tileMapPos.x), float(tileMapPos.y + 40)), shaderProgram, "ABCDEFGHIJKLMNOPQRSTUVWXYZ -!?.");
+	text->setText("ABCDIEH?-.KLMNOPQRSTUVWXYZ -!?.");
 }
 
 void MenuInferior::update(int deltaTime)
 {
 	for (int i = 0; i < 8; ++i)
 		spritePowerUps[i].update(deltaTime);
+	for (int i = 0; i < 20; ++i)
+		spriteSavedFriends[i].update(deltaTime);
+	text->update(deltaTime);
 }
 
 void MenuInferior::render()
 {
 	for (int i = 0; i < 8; ++i)
 		spritePowerUps[i].render();
+	for (int i = 0; i < 20; ++i)
+		spriteSavedFriends[i].render();
+	text->render();
 }
 
-void MenuInferior::setPowerUp(int numPowerUp, bool active) {
-	if (active)
-		spritePowerUps[numPowerUp].changeAnimation(numPowerUp);
-	else
-		spritePowerUps[numPowerUp].changeAnimation(NONE);
+void MenuInferior::setPowerUp(int numPowerUp) {
+	for (int i = activePowerUps; i >= 1; --i) {
+		spritePowerUps[i].changeAnimation(spritePowerUps[i - 1].animation());
+	}
+	spritePowerUps[0].changeAnimation(numPowerUp);
+	++activePowerUps;
+}
+
+void MenuInferior::savedNewFriend() {
+	++friendsSaved;
+	if (friendsSaved < 5)
+		spriteSavedFriends[11 + friendsSaved].changeAnimation(FRIEND_UP);
+	else spriteSavedFriends[12 + friendsSaved].changeAnimation(FRIEND_DOWN);
 }

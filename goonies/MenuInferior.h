@@ -3,6 +3,7 @@
 
 
 #include "Sprite.h"
+#include "Text.h"
 
 
 class MenuInferior
@@ -15,12 +16,15 @@ public:
 	void update(int deltaTime);
 	void render();
 
-	void setPowerUp(int powerUp, bool active);
+	void setPowerUp(int powerUp);
+	void savedNewFriend();
 
 private:
 	glm::ivec2 tileMapDispl;
-	Texture spritesheetPowerUps;
-	Sprite* spritePowerUps;
+	Texture spritesheetPowerUps, spriteSheetSavedFriends;
+	Sprite* spritePowerUps, *spriteSavedFriends;
+	Text* text;
+	int friendsSaved, activePowerUps;
 };
 
 

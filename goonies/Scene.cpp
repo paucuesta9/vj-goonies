@@ -8,8 +8,8 @@
 #define SCREEN_X 60 //Posicion del nivel respecto la pantalla X
 #define SCREEN_Y 70 //Posicion del nivel respecto la pantalla Y
 
-#define INIT_PLAYER_X_TILES 22 //Posición X inicial del jugador contando en TILES (cuadrados)
-#define INIT_PLAYER_Y_TILES 4 //Posición Y inicial del jugador contando en TILES (cuadrados)
+#define INIT_PLAYER_X_TILES 22 //Posiciï¿½n X inicial del jugador contando en TILES (cuadrados)
+#define INIT_PLAYER_Y_TILES 4 //Posiciï¿½n Y inicial del jugador contando en TILES (cuadrados)
 
 
 Scene::Scene()
@@ -74,6 +74,7 @@ void Scene::init()
 	numFriends = 0;
 	numPowerUp = -1;
 	first = true;
+	pressedN = false;
 	changingScene = false;
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
@@ -93,6 +94,14 @@ void Scene::update(int deltaTime)
 	currentTime += deltaTime;
 	player->update(deltaTime);
 	glm::vec2 pos = player->getPosition();
+	if (Game::instance().getKey(110) && !pressedN) {
+		pressedN = true;
+		++numFriends;
+		menuInferior->savedNewFriend();
+	}
+	else if (!Game::instance().getKey(110))
+		pressedN = false;
+
 	if (cabezaFlotante != NULL) {
 		glm::vec2 posCabezaFlotante = cabezaFlotante->getPosition();
 		cabezaFlotante->update(deltaTime);
@@ -107,10 +116,7 @@ void Scene::update(int deltaTime)
 		}
 		else if (pos.x < posCabezaFlotante.x + 8 && posCabezaFlotante.x < pos.x + 32 &&
 			pos.y < posCabezaFlotante.y + 8 && posCabezaFlotante.y < pos.y + 32 && cabezaFlotante->getStatus()==1) {
-			if (!player->getBlueSpellbook()) {
-				player->hurted(5);
-				
-			}
+			if (!player->getBlueSpellbook()) player->hurted(5);
 		}	
 	}
 	if (esqueleto != NULL) {
@@ -223,6 +229,7 @@ void Scene::update(int deltaTime)
 			}
 		} else startEndDoor->update(deltaTime);
 	}
+	menuInferior->update(deltaTime);
 	int out = player->isOut();
 	switch (out) {
 		case 1: //Left
@@ -292,9 +299,8 @@ void Scene::update(int deltaTime)
 					player->pickPowerUp(numPowerUp);
 					object[i].setPicked();
 					object[i].update(deltaTime);
-					menuInferior->setPowerUp(numPowerUp, true);
+					menuInferior->setPowerUp(numPowerUp);
 					menuInferior->update(deltaTime);
-
 				}
 				else if (object[i].getType() == 0) {
 					object[i].setPicked();
