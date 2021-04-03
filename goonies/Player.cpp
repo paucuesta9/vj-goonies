@@ -278,13 +278,15 @@ void Player::update(int deltaTime)
 				if (map->collisionLiana(posPlayer, glm::ivec2(16, 20)) || map->collisionLiana(glm::ivec2(posPlayer.x, posPlayer.y + map->getTileSize()), glm::ivec2(16, 20))) {
 					bLiana = true;
 					posPlayer.y += FALL_STEP;
-					posPlayer.x = (posPlayer.x / map->getTileSize()) * map->getTileSize() + 8;
+					posPlayer.x = ((posPlayer.x - 1) / map->getTileSize()) * map->getTileSize() + 8;
 					if (sprite->animation() != MOVE_UP_DOWN)
 						sprite->changeAnimation(MOVE_UP_DOWN);
 				}
 			}
 			else if (sprite->animation() == MOVE_UP_DOWN && !Game::instance().getSpecialKey(GLUT_KEY_UP))
 				sprite->changeAnimation(STAND_UP);
+			else if (sprite->animation() == STAND_UP && !Game::instance().getSpecialKey(GLUT_KEY_UP))
+				sprite->changeAnimation(STAND_RIGHT);
 
 			if (map->collisionMoveDown(posPlayer, glm::ivec2(16, 20), &posPlayer.y))
 			{
@@ -303,9 +305,6 @@ void Player::update(int deltaTime)
 						}
 						bLiana = false;
 						if (sprite->animation() == MOVE_UP_DOWN) sprite->changeAnimation(STAND_LEFT);
-
-						
-
 					}
 					else {
 						bLiana = true;
@@ -313,7 +312,7 @@ void Player::update(int deltaTime)
 							sprite->changeAnimation(MOVE_UP_DOWN);
 						bJumping = false;
 						posPlayer.y -= FALL_STEP;
-						posPlayer.x = (posPlayer.x / map->getTileSize()) * map->getTileSize() + 8;
+						posPlayer.x = ((posPlayer.x - 1) / map->getTileSize()) * map->getTileSize() + 8;
 					}
 				}
 				else if (Game::instance().getSpecialKey(GLUT_KEY_DOWN) && !bLiana) {
@@ -322,10 +321,12 @@ void Player::update(int deltaTime)
 				else if (map->collisionLiana(posPlayer, glm::ivec2(16, 20))) {
 					if (map->getBlockCode(posPlayer) != 127 && map->getBlockCode(posPlayer) != 128 && sprite->animation() != STAND_UP && sprite->animation() != MOVE_UP_DOWN)
 						sprite->changeAnimation(STAND_UP);
+					else if ((map->getBlockCode(posPlayer) == 127 || map->getBlockCode(posPlayer) == 128) && sprite->animation() == MOVE_UP_DOWN)
+						sprite->changeAnimation(STAND_RIGHT);
 					else if (sprite->animation() != MOVE_RIGHT && sprite->animation() != MOVE_LEFT && sprite->animation() != STAND_LEFT && sprite->animation() != STAND_UP && sprite->animation() != MOVE_UP_DOWN)
 						sprite->changeAnimation(STAND_RIGHT);
 				}
-				else if (sprite->animation() == MOVE_UP_DOWN && sprite->animation() != STAND_UP && !Game::instance().getSpecialKey(GLUT_KEY_DOWN))
+				else if ((sprite->animation() == MOVE_UP_DOWN || sprite->animation() == STAND_UP) && !Game::instance().getSpecialKey(GLUT_KEY_DOWN))
 					sprite->changeAnimation(STAND_UP);
 
 			}
