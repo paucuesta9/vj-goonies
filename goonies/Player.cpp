@@ -126,15 +126,19 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 
 	spriteHurt->setAnimationSpeed(PUNCH_LEFT, 8);
 	spriteHurt->addKeyframe(PUNCH_LEFT, glm::vec2(0.75f, 0.5f));
+	spriteHurt->addKeyframe(PUNCH_LEFT, glm::vec2(0.75f, 0.75f));
 
 	spriteHurt->setAnimationSpeed(PUNCH_RIGHT, 8);
 	spriteHurt->addKeyframe(PUNCH_RIGHT, glm::vec2(0.5f, 0.5f));
+	spriteHurt->addKeyframe(PUNCH_RIGHT, glm::vec2(0.75f, 0.75f));
 
 	spriteHurt->setAnimationSpeed(BALL, 8);
-	spriteHurt->addKeyframe(BALL, glm::vec2(0.025f, 0.75f));
+	spriteHurt->addKeyframe(BALL, glm::vec2(0.25f, 0.75f));
+	spriteHurt->addKeyframe(BALL, glm::vec2(0.75f, 0.75f));
 
 	spriteHurt->setAnimationSpeed(WATER, 8);
 	spriteHurt->addKeyframe(WATER, glm::vec2(0.0f, 0.75f));
+	spriteHurt->addKeyframe(WATER, glm::vec2(0.75f, 0.75f));
 
 	spriteHurt->setAnimationSpeed(NONE, 8);
 	spriteHurt->addKeyframe(NONE, glm::vec2(0.75f, 0.75f));

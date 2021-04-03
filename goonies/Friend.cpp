@@ -15,7 +15,7 @@ void Friend::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	picked = false;
 	sprite = new Sprite();
 	spritesheet.loadFromFile("images/amigos.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	sprite = Sprite::createSprite(glm::ivec2(8, 8), glm::vec2(0.5, 1.0), &spritesheet, &shaderProgram);
+	sprite = Sprite::createSprite(glm::ivec2(8, 16), glm::vec2(0.5, 1.0), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(1);
 
 	sprite->setAnimationSpeed(FRIEND, 8);
@@ -23,7 +23,8 @@ void Friend::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	sprite->addKeyframe(FRIEND, glm::vec2(0.5f, 0.0f));
 
 	tileMapDispl = tileMapPos;
-	sprite->setScale(glm::vec3(2.f, 2.f, 0.f));
+	sprite->setPosition(tileMapDispl);
+	sprite->setScale(glm::vec3(2.0, 2.0, 0.0));
 }
 
 void Friend::update(int deltaTime)

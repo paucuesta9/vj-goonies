@@ -357,22 +357,21 @@ void Scene::update(int deltaTime)
 					numPowerUp = object[i].getPowerUp();
 					player->pickPowerUp(numPowerUp);
 					object[i].setPicked();
-					object[i].update(deltaTime);
 					menuInferior->setPowerUp(numPowerUp);
 					menuInferior->update(deltaTime);
 				}
 				else if (object[i].getType() == 0) {
 					object[i].setPicked();
-					object[i].update(deltaTime);
 					player->setKey(true);
+					menuInferior->setKey(true);
 				}
 				else if (object[i].getType() == 2) {
 					if (player->haveKey()) {
 						object[i].setPicked();
-						object[i].update(deltaTime);
 						if (sceneNum == 1 && screenNum == 2) {
 							greenDoor[0].open();
-							friends[0].setPosition(glm::vec2(17 * map->getTileSize(), 3 * map->getTileSize()));
+							menuInferior->setKey(false);
+							friends[0].setPosition(glm::vec2(3 * map->getTileSize(), 15 * map->getTileSize()));
 						}
 						else if (sceneNum == 2 && screenNum == 3) greenDoor[1].open();
 						else if (sceneNum == 3 && screenNum == 3) greenDoor[2].open();
@@ -382,6 +381,7 @@ void Scene::update(int deltaTime)
 						player->setKey(false);
 					}
 				}
+				object[i].update(deltaTime);
 			}
 		}
 	}
@@ -391,6 +391,8 @@ void Scene::update(int deltaTime)
 			if (pos.x < position.x + 16 && position.x < pos.x + 24 &&
 				pos.y < position.y + 16 && position.y < pos.y + 32 && !friends[i].isPicked()) {
 				friends[i].setPicked();
+				menuInferior->savedNewFriend();
+				++numFriends;
 			}
 		}
 		
@@ -462,7 +464,7 @@ void Scene::render()
 	if (greenDoor != NULL) {
 		for (int i = 0; i < numGreenDoors; ++i) {
 			if (friends != NULL && greenDoor[i].isOpen()) {
-				friends[i].render();
+				if(!friends[i].isPicked()) friends[i].render();
 			}
 			greenDoor[i].render();
 		}
@@ -762,11 +764,11 @@ void Scene::initFriends(ShaderProgram& texProgram) {
 	friends = new Friend[6];
 	for (int i = 0; i < 6; ++i) friends[i].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	
-	friends[1].setPosition(glm::vec2(20 * map->getTileSize(), 4 * map->getTileSize()));
-	friends[2].setPosition(glm::vec2(17 * map->getTileSize(), 2 * map->getTileSize()));
-	friends[3].setPosition(glm::vec2(5 * map->getTileSize(), 3 * map->getTileSize()));
-	friends[4].setPosition(glm::vec2(15 * map->getTileSize(), 2 * map->getTileSize()));
-	friends[5].setPosition(glm::vec2(2 * map->getTileSize(), 15 * map->getTileSize()));
+	//friends[1].setPosition(glm::vec2(20 * map->getTileSize(), 4 * map->getTileSize()));
+	//friends[2].setPosition(glm::vec2(17 * map->getTileSize(), 2 * map->getTileSize()));
+	//friends[3].setPosition(glm::vec2(5 * map->getTileSize(), 3 * map->getTileSize()));
+	//friends[4].setPosition(glm::vec2(15 * map->getTileSize(), 2 * map->getTileSize()));
+	//friends[5].setPosition(glm::vec2(2 * map->getTileSize(), 15 * map->getTileSize()));
 }
 
 void Scene::renderFriends() {

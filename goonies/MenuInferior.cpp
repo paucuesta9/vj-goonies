@@ -60,9 +60,9 @@ void MenuInferior::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgr
 		spritePowerUps[i].setScale(glm::vec3(2.f, 2.f, 0.f));
 	}
 	
-	spriteSavedFriends = new Sprite[20];
+	spriteSavedFriends = new Sprite[19];
 	spriteSheetSavedFriends.loadFromFile("images/compis.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	for (int i = 0; i < 20; ++i) {
+	for (int i = 0; i < 19; ++i) {
 		spriteSavedFriends[i] = *Sprite::createSprite(glm::ivec2(8, 8), glm::vec2(0.25, 0.5), &spriteSheetSavedFriends, &shaderProgram);
 		spriteSavedFriends[i].setNumberAnimations(6);
 
@@ -115,7 +115,7 @@ void MenuInferior::update(int deltaTime)
 {
 	for (int i = 0; i < 8; ++i)
 		spritePowerUps[i].update(deltaTime);
-	for (int i = 0; i < 20; ++i)
+	for (int i = 0; i < 19; ++i)
 		spriteSavedFriends[i].update(deltaTime);
 	spriteKey->update(deltaTime);
 }
@@ -124,7 +124,7 @@ void MenuInferior::render()
 {
 	for (int i = 0; i < 8; ++i)
 		spritePowerUps[i].render();
-	for (int i = 0; i < 20; ++i)
+	for (int i = 0; i < 19; ++i)
 		spriteSavedFriends[i].render();
 	spriteKey->render();
 }
@@ -145,7 +145,7 @@ void MenuInferior::savedNewFriend() {
 }
 
 void MenuInferior::setInit() {
-	for (int i = 0; i < 20; i++) {
+	for (int i = 0; i < 19; i++) {
 		if (i > 16)
 			spriteSavedFriends[i].changeAnimation(ROUND_DOWN);
 		else if (i > 11 && i < 16)

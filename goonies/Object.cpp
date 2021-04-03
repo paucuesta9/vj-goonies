@@ -23,20 +23,22 @@ void Object::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, gl
 	posObject = pos;
 	sprite = new Sprite();
 	spritesheet.loadFromFile("images/objects.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	sprite = Sprite::createSprite(glm::ivec2(8, 8), glm::vec2(0.5, 0.5), &spritesheet, &shaderProgram);
+	sprite = Sprite::createSprite(glm::ivec2(8, 8), glm::vec2(0.25, 0.5), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(4);
 
 	sprite->setAnimationSpeed(KEY, 8);
 	sprite->addKeyframe(KEY, glm::vec2(0.f, 0.f));
+	sprite->addKeyframe(KEY, glm::vec2(0.75f, 0.0f));
 
 	sprite->setAnimationSpeed(POWERUP, 8);
-	sprite->addKeyframe(POWERUP, glm::vec2(0.5f, 0.f));
+	sprite->addKeyframe(POWERUP, glm::vec2(0.25f, 0.f));
+	sprite->addKeyframe(POWERUP, glm::vec2(0.75f, 0.0f));
 
 	sprite->setAnimationSpeed(LOCK, 8);
 	sprite->addKeyframe(LOCK, glm::vec2(0.f, 0.5f));
 
 	sprite->setAnimationSpeed(POTION, 8);
-	sprite->addKeyframe(POTION, glm::vec2(0.5f, 0.5f));
+	sprite->addKeyframe(POTION, glm::vec2(0.25f, 0.5f));
 
 	sprite->changeAnimation(type);
 	tileMapDispl = tileMapPos;
@@ -47,8 +49,6 @@ void Object::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, gl
 void Object::update(int deltaTime)
 {
 	sprite->update(deltaTime);
-	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posObject.x), float(tileMapDispl.y + posObject.y)));
-
 }
 
 void Object::render()
