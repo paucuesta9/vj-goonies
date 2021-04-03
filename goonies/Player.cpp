@@ -29,6 +29,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	life = 1000;
 	exp = 0;
 	points = 0;
+	key = false;
 
 	Status = -1;
 	speed = 2;
@@ -476,4 +477,16 @@ void Player::setPoints(int points) {
 
 int Player::getPoints() {
 	return points;
+}
+
+int Player::getExp() {
+	return exp;
+}
+
+void Player::setKey(bool state) {
+	key = state;
+}
+
+bool Player::haveKey() {
+	return key;
 }

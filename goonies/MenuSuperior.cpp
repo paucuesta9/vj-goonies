@@ -116,18 +116,39 @@ void MenuSuperior::render()
 	for (int i = 0; i < 8; ++i) text[i].render();
 }
 
-void MenuSuperior::calculateVitExp(int vit, int exp) {
-	int Vit8 = vit / 100 + 1;
-	int aux = vit % 100;
-	for (int i = 1; i < Vit8; ++i) spriteVitExp[i].changeAnimation(VIT8);
-	for (int i = Vit8+1; i < 11; ++i) spriteVitExp[i].changeAnimation(VACIO);
-	if (aux < 3) spriteVitExp[Vit8].changeAnimation(VIT1);
-	else if (aux < 7) spriteVitExp[Vit8].changeAnimation(VIT2);
-	else if (aux < 15) spriteVitExp[Vit8].changeAnimation(VIT3);
-	else if (aux < 30) spriteVitExp[Vit8].changeAnimation(VIT4);
-	else if (aux < 60) spriteVitExp[Vit8].changeAnimation(VIT5);
-	else if (aux < 85) spriteVitExp[Vit8].changeAnimation(VIT6);
-	else if (aux < 95) spriteVitExp[Vit8].changeAnimation(VIT7);
+void MenuSuperior::calculateVitExp(int vitExp, int option) {
+	int VitExp8 = vitExp / 100 + 1;
+	if (VitExp8 < 0) VitExp8 = 0;
+	int aux = vitExp % 100;
+	if (option == 0) {
+		for (int i = 1; i < VitExp8; ++i) spriteVitExp[i].changeAnimation(VIT8);
+		for (int i = VitExp8 + 1; i < 11; ++i) spriteVitExp[i].changeAnimation(VACIO);
+		if (aux > 0) {
+		if (aux < 3) spriteVitExp[VitExp8].changeAnimation(VIT1);
+		else if (aux < 7) spriteVitExp[VitExp8].changeAnimation(VIT2);
+		else if (aux < 15) spriteVitExp[VitExp8].changeAnimation(VIT3);
+		else if (aux < 30) spriteVitExp[VitExp8].changeAnimation(VIT4);
+		else if (aux < 60) spriteVitExp[VitExp8].changeAnimation(VIT5);
+		else if (aux < 85) spriteVitExp[VitExp8].changeAnimation(VIT6);
+		else if (aux < 95) spriteVitExp[VitExp8].changeAnimation(VIT7);
+		}
+	}
+	else {
+		VitExp8 += 12;
+		if (vitExp >= 1000) {
+			aux = 100;
+			VitExp8 = 23;
+		}
+		for (int i = 13; i < VitExp8; ++i) spriteVitExp[i].changeAnimation(EXP8);
+		for (int i = VitExp8 + 1; i < 23; ++i) spriteVitExp[i].changeAnimation(VACIO);
+		if (aux < 3) spriteVitExp[VitExp8].changeAnimation(EXP1);
+		else if (aux < 7) spriteVitExp[VitExp8].changeAnimation(EXP2);
+		else if (aux < 15) spriteVitExp[VitExp8].changeAnimation(EXP3);
+		else if (aux < 30) spriteVitExp[VitExp8].changeAnimation(EXP4);
+		else if (aux < 60) spriteVitExp[VitExp8].changeAnimation(EXP5);
+		else if (aux < 85) spriteVitExp[VitExp8].changeAnimation(EXP6);
+		else if (aux < 95) spriteVitExp[VitExp8].changeAnimation(EXP7);
+	}
 }
 
 void MenuSuperior::setScreen(int scene, int screen) {

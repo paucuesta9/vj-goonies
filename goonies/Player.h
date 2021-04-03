@@ -39,9 +39,13 @@ public:
 	bool isBall();
 	void setPoints(int points);
 	int getPoints();
+	int getExp();
+	void die();
+	void setKey(bool state);
+	bool haveKey();
 	
 private:
-	bool bJumping, bLiana, bdoorCollision;
+	bool bJumping, bLiana, bdoorCollision, key;
 	glm::ivec2 tileMapDispl, posPlayer;
 	int jumpAngle, startY, animDoorNum, animationTime, punchTime;
 	Texture spritesheetNormal, spritesheetHurt;

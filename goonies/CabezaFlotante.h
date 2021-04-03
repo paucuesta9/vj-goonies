@@ -16,7 +16,7 @@ public:
 
 	void setTileMap(TileMap* tileMap);
 	void setPosition(const glm::vec2& pos);
-	void die();
+	void die(const glm::vec2& pos);
 	glm::ivec2 getPosition();
 	int getStatus();
 

@@ -14,7 +14,7 @@ public:
 
 	void update(int deltaTime);
 	void render();
-	void calculateVitExp(int vit, int exp);
+	void calculateVitExp(int vitExp, int option);
 	void setScreen(int scene, int screen);
 	void setPoints(int points);
 

@@ -19,6 +19,7 @@ public:
 	void setPosition(const glm::vec2& pos);
 	void open();
 	glm::ivec2 getPosition();
+	bool isOpen();
 
 private:
 	glm::ivec2 tileMapDispl, posDoor;

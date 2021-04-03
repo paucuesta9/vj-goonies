@@ -198,9 +198,9 @@ int Esqueleto::isOut() {
 	return 0;
 }
 
-void Esqueleto::die()
+void Esqueleto::die(const glm::vec2& pos)
 {
-	posEsqueleto.y -= 8;
+	posEsqueleto = pos;
 	spriteBornDie->setPosition(glm::vec2(float(tileMapDispl.x + posEsqueleto.x), float(tileMapDispl.y + posEsqueleto.y)));
 	sprite = spriteBornDie;
 	spriteBornDie->changeAnimation(DIE);

@@ -15,6 +15,7 @@
 #include "GreenDoor.h"
 #include "StartEndDoor.h"
 #include "Object.h"
+#include "Friend.h"
 #include "MenuSuperior.h"
 #include "MenuInferior.h"
 
@@ -34,7 +35,8 @@ public:
 	void update(int deltaTime);
 	void render();
 	void changeScreen(int scene, int screen, glm::vec2 pos);
-	void die();
+	void initFriends(ShaderProgram& shaderProgram);
+	void renderFriends();
 
 private:
 	void initShaders();
@@ -53,6 +55,7 @@ private:
 	Object* object;
 	MenuInferior* menuInferior;
 	MenuSuperior* menuSuperior;
+	Friend* friends;
 	ShaderProgram texProgram;
 	float currentTime;
 	glm::mat4 projection;

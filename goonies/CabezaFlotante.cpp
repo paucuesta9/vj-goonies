@@ -132,10 +132,10 @@ void CabezaFlotante::setPosition(const glm::vec2& pos)
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posCabeza.x), float(tileMapDispl.y + posCabeza.y)));
 }
 
-void CabezaFlotante::die()
+void CabezaFlotante::die(const glm::vec2& pos)
 {
-	posCabeza.y -= 8;
-	spriteBornDie->setPosition(glm::vec2(float(tileMapDispl.x + posCabeza.x), float(tileMapDispl.y + posCabeza.y)));
+	posCabeza = pos;
+	spriteBornDie->setPosition(glm::vec2(float(tileMapDispl.x + pos.x), float(tileMapDispl.y + pos.y)));
 	sprite = spriteBornDie;
 	spriteBornDie->changeAnimation(DIE);
 	Status = 2;

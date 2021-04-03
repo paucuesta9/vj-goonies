@@ -23,7 +23,7 @@ public:
 	glm::ivec2 getBonePosition();
 	int getBoneStatus();
 	int isOut();
-	void die();
+	void die(const glm::vec2& pos);
 	int getStatus();
 	bool isThereBone();
 	void deleteBone();
