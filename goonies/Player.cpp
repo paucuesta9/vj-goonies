@@ -322,6 +322,7 @@ sprite->changeAnimation(PUNCH_LEFT);
 							if (map->getBlockCode(glm::vec2(posPlayer.x, posPlayer.y - 36)) == 110 ||
 								map->getBlockCode(glm::vec2(posPlayer.x, posPlayer.y - 36)) == 53 ||
 								map->getBlockCode(glm::vec2(posPlayer.x, posPlayer.y - 36)) == 81 ||
+								map->getBlockCode(glm::vec2(posPlayer.x, posPlayer.y - 36)) == 56 ||
 								map->getBlockCode(glm::vec2(posPlayer.x, posPlayer.y - 36)) == 72 ||
 								map->getBlockCode(glm::vec2(posPlayer.x, posPlayer.y - 36)) == 73 ||
 								map->getBlockCode(glm::vec2(posPlayer.x, posPlayer.y - 36)) == 94)

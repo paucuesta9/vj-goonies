@@ -11,9 +11,9 @@ class Object
 
 public:
 	~Object();
-	void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, glm::ivec2 pos, int type, int powerUp);
+	void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, glm::ivec2 pos, int sceneNum, int screenNum, int type, int powerUp);
 	void update(int deltaTime);
-	void render();
+	void render(int sceneNum, int screenNum);
 
 	void setTileMap(TileMap* tileMap);
 	void setPosition(const glm::vec2& pos);
@@ -22,6 +22,7 @@ public:
 	int getPowerUp();
 	void setPicked();
 	bool getPicked();
+	glm::vec2 getLevel();
 
 private:
 	glm::ivec2 tileMapDispl, posObject;
@@ -30,6 +31,7 @@ private:
 	TileMap* map;
 	int powerUp;
 	bool picked;
+	int scene, screen;
 };
 
 

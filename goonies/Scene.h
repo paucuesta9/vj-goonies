@@ -36,6 +36,7 @@ public:
 	void render();
 	void changeScreen(int scene, int screen, glm::vec2 pos);
 	void initFriends(ShaderProgram& shaderProgram);
+	void initObjects(ShaderProgram& shaderProgram);
 	void renderFriends();
 
 private:

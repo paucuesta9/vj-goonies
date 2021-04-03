@@ -16,11 +16,13 @@ Object::~Object() {
 		delete sprite;
 }
 
-void Object::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, glm::ivec2 pos, int type, int power)
+void Object::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, glm::ivec2 pos, int sceneNum, int screenNum, int type, int power)
 {
 	powerUp = power;
 	picked = false;
 	posObject = pos;
+	scene = sceneNum;
+	screen = screenNum;
 	sprite = new Sprite();
 	spritesheet.loadFromFile("images/objects.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(8, 8), glm::vec2(0.25, 0.5), &spritesheet, &shaderProgram);
@@ -51,9 +53,10 @@ void Object::update(int deltaTime)
 	sprite->update(deltaTime);
 }
 
-void Object::render()
+void Object::render(int sceneNum, int screenNum)
 {
-	sprite->render();
+	if (sceneNum == scene && screenNum == screen)
+		sprite->render();
 }
 
 void Object::setTileMap(TileMap* tileMap)
@@ -87,3 +90,6 @@ bool Object::getPicked() {
 	return picked;
 }
 
+glm::vec2 Object::getLevel() {
+	return glm::vec2(scene, screen);
+}
