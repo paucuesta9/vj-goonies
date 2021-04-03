@@ -3,6 +3,7 @@
 
 
 #include "Sprite.h"
+#include "Text.h"
 
 
 class MenuInferior
@@ -22,6 +23,7 @@ private:
 	glm::ivec2 tileMapDispl;
 	Texture spritesheetPowerUps, spriteSheetSavedFriends;
 	Sprite* spritePowerUps, *spriteSavedFriends;
+	Text* text;
 	int friendsSaved, activePowerUps;
 };
 

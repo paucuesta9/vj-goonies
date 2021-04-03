@@ -33,4 +33,4 @@ private:
 };
 
 
-#endif // _GOTA_INCLUDE
+#endif // _OBJECT_INCLUDE

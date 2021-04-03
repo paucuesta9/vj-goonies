@@ -97,6 +97,9 @@ void MenuInferior::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgr
 		spriteSavedFriends[i].setScale(glm::vec3(2.f, 2.f, 0.f));
 	}
 	tileMapDispl = tileMapPos;
+	text = new Text();
+	text->init(glm::vec2(float(tileMapPos.x), float(tileMapPos.y + 40)), shaderProgram, "ABCDEFGHIJKLMNOPQRSTUVWXYZ -!?.");
+	text->setText("ABCDIEH?-.KLMNOPQRSTUVWXYZ -!?.");
 }
 
 void MenuInferior::update(int deltaTime)
@@ -105,6 +108,7 @@ void MenuInferior::update(int deltaTime)
 		spritePowerUps[i].update(deltaTime);
 	for (int i = 0; i < 20; ++i)
 		spriteSavedFriends[i].update(deltaTime);
+	text->update(deltaTime);
 }
 
 void MenuInferior::render()
@@ -113,6 +117,7 @@ void MenuInferior::render()
 		spritePowerUps[i].render();
 	for (int i = 0; i < 20; ++i)
 		spriteSavedFriends[i].render();
+	text->render();
 }
 
 void MenuInferior::setPowerUp(int numPowerUp) {
