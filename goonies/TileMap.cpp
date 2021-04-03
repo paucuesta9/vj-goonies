@@ -316,8 +316,6 @@ bool TileMap::collisionSkullDoor(const glm::ivec2& pos, const glm::ivec2& size) 
 			return true;
 		}
 	}
-
-
 	return false;
 }
 
@@ -325,29 +323,3 @@ int TileMap::getBlockCode(glm::ivec2 pos) const {
 	
 	return map[((pos.y + 20) / tileSize) * mapSize.x + (pos.x + 12) / tileSize];
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
