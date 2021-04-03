@@ -15,6 +15,7 @@
 #include "GreenDoor.h"
 #include "StartEndDoor.h"
 #include "Object.h"
+#include "MenuSuperior.h"
 #include "MenuInferior.h"
 
 
@@ -50,6 +51,7 @@ private:
 	StartEndDoor* startEndDoor;
 	Object* object;
 	MenuInferior* menuInferior;
+	MenuSuperior* menuSuperior;
 	ShaderProgram texProgram;
 	float currentTime;
 	glm::mat4 projection;

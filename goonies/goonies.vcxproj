@@ -157,6 +157,7 @@
     <ClCompile Include="GreenDoor.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MenuInferior.cpp" />
+    <ClCompile Include="MenuSuperior.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Scene.cpp" />
@@ -182,6 +183,7 @@
     <ClInclude Include="Gota.h" />
     <ClInclude Include="GreenDoor.h" />
     <ClInclude Include="MenuInferior.h" />
+    <ClInclude Include="MenuSuperior.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="Scene.h" />
