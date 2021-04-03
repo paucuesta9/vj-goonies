@@ -209,50 +209,52 @@ void Player::update(int deltaTime)
 		++animDoorNum;
 	}
 	else {
+		if (!map->collisionLiana(posPlayer, glm::ivec2(16, 20)))
+			bLiana = false;
 		if (Game::instance().getKey(32) && sprite->animation() != BALL) {
 			punchTime = 0;
 			if (sprite->animation() == STAND_LEFT || sprite->animation() == MOVE_LEFT)
-				sprite->changeAnimation(PUNCH_LEFT);
+sprite->changeAnimation(PUNCH_LEFT);
 			else if (sprite->animation() == STAND_RIGHT || sprite->animation() == MOVE_RIGHT)
-				sprite->changeAnimation(PUNCH_RIGHT);
+			sprite->changeAnimation(PUNCH_RIGHT);
 			Game::instance().keyReleased(32);
 		}
 		else if (Game::instance().getSpecialKey(GLUT_KEY_LEFT) && sprite->animation() != BALL && sprite->animation() != WATER)
 		{
-			if (sprite->animation() != MOVE_LEFT && !map->collisionLiana(posPlayer, glm::ivec2(16, 20))) {
-				sprite->changeAnimation(MOVE_LEFT);
-				bLiana = false;
-			}
-			posPlayer.x -= speed;
-			if (map->collisionMoveLeft(posPlayer, glm::ivec2(16, 16)))
-			{
-				posPlayer.x += speed;
-				sprite->changeAnimation(STAND_LEFT);
-			}
+		if (sprite->animation() != MOVE_LEFT && !map->collisionLiana(posPlayer, glm::ivec2(16, 20))) {
+			sprite->changeAnimation(MOVE_LEFT);
+			bLiana = false;
+		}
+		posPlayer.x -= speed;
+		if (map->collisionMoveLeft(posPlayer, glm::ivec2(16, 16)))
+		{
+			posPlayer.x += speed;
+			sprite->changeAnimation(STAND_LEFT);
+		}
 		}
 		else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT) && sprite->animation() != BALL && sprite->animation() != WATER)
 		{
-			if (sprite->animation() != MOVE_RIGHT && !map->collisionLiana(posPlayer, glm::ivec2(16, 20))) {
-				sprite->changeAnimation(MOVE_RIGHT);
-				bLiana = false;
-			}
-			posPlayer.x += speed;
-			if (map->collisionMoveRight(posPlayer, glm::ivec2(16, 16)))
-			{
-				posPlayer.x -= speed;
-				sprite->changeAnimation(STAND_RIGHT);
-			}
+		if (sprite->animation() != MOVE_RIGHT && !map->collisionLiana(posPlayer, glm::ivec2(16, 20))) {
+			sprite->changeAnimation(MOVE_RIGHT);
+			bLiana = false;
+		}
+		posPlayer.x += speed;
+		if (map->collisionMoveRight(posPlayer, glm::ivec2(16, 16)))
+		{
+			posPlayer.x -= speed;
+			sprite->changeAnimation(STAND_RIGHT);
+		}
 		}
 		else
 		{
-			if (sprite->animation() == MOVE_LEFT)
-				sprite->changeAnimation(STAND_LEFT);
-			else if (sprite->animation() == MOVE_RIGHT)
-				sprite->changeAnimation(STAND_RIGHT);
-			else if (sprite->animation() == STAND_UP && !bLiana)
-				sprite->changeAnimation(STAND_LEFT);
-			else if (sprite->animation() == BALL || sprite->animation() == WATER)
-				sprite->changeAnimation(STAND_RIGHT);
+		if (sprite->animation() == MOVE_LEFT)
+			sprite->changeAnimation(STAND_LEFT);
+		else if (sprite->animation() == MOVE_RIGHT)
+			sprite->changeAnimation(STAND_RIGHT);
+		else if (sprite->animation() == STAND_UP && !bLiana)
+			sprite->changeAnimation(STAND_LEFT);
+		else if (sprite->animation() == BALL || sprite->animation() == WATER)
+			sprite->changeAnimation(STAND_RIGHT);
 		}
 
 		if (bJumping)
@@ -279,13 +281,15 @@ void Player::update(int deltaTime)
 				if (map->collisionLiana(posPlayer, glm::ivec2(16, 20)) || map->collisionLiana(glm::ivec2(posPlayer.x, posPlayer.y + map->getTileSize()), glm::ivec2(16, 20))) {
 					bLiana = true;
 					posPlayer.y += FALL_STEP;
-					posPlayer.x = (posPlayer.x / map->getTileSize()) * map->getTileSize() + 8;
+					posPlayer.x = ((posPlayer.x - 1) / map->getTileSize()) * map->getTileSize() + 8;
 					if (sprite->animation() != MOVE_UP_DOWN)
 						sprite->changeAnimation(MOVE_UP_DOWN);
 				}
 			}
 			else if (sprite->animation() == MOVE_UP_DOWN && !Game::instance().getSpecialKey(GLUT_KEY_UP))
 				sprite->changeAnimation(STAND_UP);
+			else if (sprite->animation() == STAND_UP && !Game::instance().getSpecialKey(GLUT_KEY_UP))
+				sprite->changeAnimation(STAND_RIGHT);
 
 			if (map->collisionMoveDown(posPlayer, glm::ivec2(16, 20), &posPlayer.y))
 			{
@@ -304,17 +308,22 @@ void Player::update(int deltaTime)
 						}
 						bLiana = false;
 						if (sprite->animation() == MOVE_UP_DOWN) sprite->changeAnimation(STAND_LEFT);
-
-						
-
 					}
 					else {
 						bLiana = true;
 						if (sprite->animation() != MOVE_UP_DOWN)
 							sprite->changeAnimation(MOVE_UP_DOWN);
 						bJumping = false;
-						posPlayer.y -= FALL_STEP;
-						posPlayer.x = (posPlayer.x / map->getTileSize()) * map->getTileSize() + 8;
+						if (map->getBlockCode(glm::vec2(posPlayer.x, posPlayer.y - 6)) == 96 || map->getBlockCode(glm::vec2(posPlayer.x, posPlayer.y - 6)) == 125 || map->getBlockCode(glm::vec2(posPlayer.x, posPlayer.y - 16)) == 122) {
+							if (map->getBlockCode(glm::vec2(posPlayer.x, posPlayer.y - 36)) == 110 ||
+								map->getBlockCode(glm::vec2(posPlayer.x, posPlayer.y - 36)) == 53 ||
+								map->getBlockCode(glm::vec2(posPlayer.x, posPlayer.y - 36)) == 81 ||
+								map->getBlockCode(glm::vec2(posPlayer.x, posPlayer.y - 36)) == 72 ||
+								map->getBlockCode(glm::vec2(posPlayer.x, posPlayer.y - 36)) == 73 ||
+								map->getBlockCode(glm::vec2(posPlayer.x, posPlayer.y - 36)) == 94)
+								posPlayer.y -= FALL_STEP;
+						} else posPlayer.y -= FALL_STEP;
+						posPlayer.x = ((posPlayer.x - 1) / map->getTileSize()) * map->getTileSize() + 8;
 					}
 				}
 				else if (Game::instance().getSpecialKey(GLUT_KEY_DOWN) && !bLiana) {
@@ -323,10 +332,12 @@ void Player::update(int deltaTime)
 				else if (map->collisionLiana(posPlayer, glm::ivec2(16, 20))) {
 					if (map->getBlockCode(posPlayer) != 127 && map->getBlockCode(posPlayer) != 128 && sprite->animation() != STAND_UP && sprite->animation() != MOVE_UP_DOWN)
 						sprite->changeAnimation(STAND_UP);
+					else if ((map->getBlockCode(posPlayer) == 127 || map->getBlockCode(posPlayer) == 128) && sprite->animation() == MOVE_UP_DOWN)
+						sprite->changeAnimation(STAND_RIGHT);
 					else if (sprite->animation() != MOVE_RIGHT && sprite->animation() != MOVE_LEFT && sprite->animation() != STAND_LEFT && sprite->animation() != STAND_UP && sprite->animation() != MOVE_UP_DOWN)
 						sprite->changeAnimation(STAND_RIGHT);
 				}
-				else if (sprite->animation() == MOVE_UP_DOWN && sprite->animation() != STAND_UP && !Game::instance().getSpecialKey(GLUT_KEY_DOWN))
+				else if ((sprite->animation() == MOVE_UP_DOWN || sprite->animation() == STAND_UP) && !Game::instance().getSpecialKey(GLUT_KEY_DOWN))
 					sprite->changeAnimation(STAND_UP);
 
 			}

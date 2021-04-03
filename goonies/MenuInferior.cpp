@@ -16,6 +16,11 @@ enum SavedFriends
 	ROUND_UP, ROUND_DOWN, FRIEND_UP, FRIEND_DOWN, LINE, NONE_FRIENDS
 };
 
+enum KeyAnims
+{
+	KEY_ACTIVE, KEY_INACTIVE
+};
+
 MenuInferior::~MenuInferior() {
 	if (spritePowerUps != NULL)
 		delete spritePowerUps;
@@ -77,7 +82,7 @@ void MenuInferior::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgr
 		spriteSavedFriends[i].addKeyframe(LINE, glm::vec2(0.75f, 0.5f));
 
 		spriteSavedFriends[i].setAnimationSpeed(NONE_FRIENDS, 8);
-		spriteSavedFriends[i].addKeyframe(NONE, glm::vec2(0.5, 0.5f));
+		spriteSavedFriends[i].addKeyframe(NONE_FRIENDS, glm::vec2(0.5, 0.5f));
 
 		if (i < 17)
 			spriteSavedFriends[i].setPosition(glm::vec2(float(tileMapPos.x + 255 + i * 15), float(tileMapPos.y)));
@@ -86,6 +91,23 @@ void MenuInferior::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgr
 		spriteSavedFriends[i].setScale(glm::vec3(2.f, 2.f, 0.f));
 	}
 	setInit();
+	spriteKey = new Sprite();
+	spritesheetKey.loadFromFile("images/objects.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	spriteKey = Sprite::createSprite(glm::ivec2(8, 8), glm::vec2(0.25, 0.5), &spritesheetKey, &shaderProgram);
+	spriteKey->setNumberAnimations(2);
+
+	spriteKey->setAnimationSpeed(KEY_ACTIVE, 8);
+	spriteKey->addKeyframe(KEY_ACTIVE, glm::vec2(0.f, 0.f));
+	spriteKey->addKeyframe(KEY_ACTIVE, glm::vec2(0.5f, 0.f));
+
+	spriteKey->setAnimationSpeed(KEY_INACTIVE, 8);
+	spriteKey->addKeyframe(KEY_INACTIVE, glm::vec2(0.5f, 0.f));
+
+	spriteKey->changeAnimation(KEY_INACTIVE);
+
+	spriteKey->setPosition(glm::vec2(float(tileMapPos.x + 255 + 10 * 15), float(tileMapPos.y + 20)));
+	spriteKey->setScale(glm::vec3(2.f, 2.f, 0.f));
+
 	tileMapDispl = tileMapPos;
 }
 
@@ -95,6 +117,7 @@ void MenuInferior::update(int deltaTime)
 		spritePowerUps[i].update(deltaTime);
 	for (int i = 0; i < 20; ++i)
 		spriteSavedFriends[i].update(deltaTime);
+	spriteKey->update(deltaTime);
 }
 
 void MenuInferior::render()
@@ -103,7 +126,7 @@ void MenuInferior::render()
 		spritePowerUps[i].render();
 	for (int i = 0; i < 20; ++i)
 		spriteSavedFriends[i].render();
-	
+	spriteKey->render();
 }
 
 void MenuInferior::setPowerUp(int numPowerUp) {
@@ -137,4 +160,9 @@ void MenuInferior::setInit() {
 	for (int i = 0; i < 8; ++i) {
 		spritePowerUps[i].changeAnimation(NONE);
 	}
+}
+
+void MenuInferior::setKey(bool haveKey) {
+	if (haveKey) spriteKey->changeAnimation(KEY_ACTIVE);
+	else spriteKey->changeAnimation(KEY_INACTIVE);
 }

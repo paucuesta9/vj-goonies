@@ -18,12 +18,13 @@ public:
 
 	void setPowerUp(int powerUp);
 	void savedNewFriend();
+	void setKey(bool haveKey);
 	void setInit();
 
 private:
 	glm::ivec2 tileMapDispl;
-	Texture spritesheetPowerUps, spriteSheetSavedFriends;
-	Sprite* spritePowerUps, *spriteSavedFriends;
+	Texture spritesheetPowerUps, spriteSheetSavedFriends, spritesheetKey;
+	Sprite* spritePowerUps, *spriteSavedFriends, *spriteKey;
 	Text* text;
 	int friendsSaved, activePowerUps;
 };
