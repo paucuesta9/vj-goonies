@@ -12,7 +12,7 @@ void Game::init()
 {
 	bPlay = true;
 	glClearColor(0.f, 0.f, 0.f, 1.0f);
-	currentScreen = 0;
+	currentScreen = GAME;
 	//PlaySound("", NULL, SND_FILENAME);
 
 	intro.init();
@@ -76,7 +76,7 @@ void Game::render()
 }
 
 void Game::keyPressed(int key)
-{
+ {
 	if (key == 27) {// Escape code
 		switch (currentScreen)
 		{

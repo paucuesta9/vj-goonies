@@ -64,8 +64,8 @@ private:
 	glm::mat4 projection;
 	int sceneNum, screenNum, numAsp, numCasc, numGotas, numSkullDoors, numGreenDoors, numObjects, numPowerUp;
 	bool changingScene;
-	int numFriends, nextPos;
-	bool first, pressedN, releasedN, pressedG, releasedG;
+	int numFriends, nextPos, sceneToChange;
+	bool first, pressedN, releasedN, pressedG, releasedG, pressedS, releasedS, pressed1, released1, pressed2, released2, pressed3, released3, pressed4, released4, pressed5, released5;
 };
 
 

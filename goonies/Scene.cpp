@@ -75,6 +75,7 @@ void Scene::init()
 	numObjects = 0;
 	numFriends = 6;
 	numPowerUp = -1;
+	sceneToChange = 0;
 	first = true;
 	pressedN = false;
 	releasedN = false;
@@ -107,6 +108,7 @@ void Scene::restart() {
 	numObjects = 0;
 	numFriends = 6;
 	numPowerUp = -1;
+	sceneToChange = 0;
 	first = true;
 	pressedN = false;
 	releasedN = false;
@@ -141,6 +143,24 @@ void Scene::update(int deltaTime)
 	if (Game::instance().getKey(103)) pressedG = true;
 	else if (pressedG) releasedG = true;
 
+	if (Game::instance().getKey(115)) pressedS = true;
+	else if (pressedS) releasedS = true;
+
+	if (Game::instance().getKey(49)) pressed1 = true;
+	else if (pressed1) released1 = true;
+
+	if (Game::instance().getKey(50)) pressed2 = true;
+	else if (pressed2) released2 = true;
+
+	if (Game::instance().getKey(51)) pressed3 = true;
+	else if (pressed3) released3 = true;
+
+	if (Game::instance().getKey(52)) pressed4 = true;
+	else if (pressed4) released4 = true;
+
+	if (Game::instance().getKey(53)) pressed5 = true;
+	else if (pressed5) released5 = true;
+
 	if (releasedN) {
 		pressedN = releasedN = false;
 		++numFriends;
@@ -150,6 +170,93 @@ void Scene::update(int deltaTime)
 	if (releasedG) {
 		pressedG = releasedG = false;
 		player->swapGodMode();
+	}
+
+	if (released1) {
+		pressed1 = released1 = false;
+		if (releasedS) {
+			pressedS = releasedS = false;
+			sceneToChange = 1;
+		}
+		else if (sceneToChange != 0) {
+			changeScreen(sceneToChange, 1, glm::vec2(0, 0));
+			sceneToChange = 0;
+		}
+		else if (sceneToChange == 0) {
+			if (!player->hasPowerUp(0)) {
+				player->setPowerUp(0, true);
+				menuInferior->setPowerUp(0);
+				menuInferior->update(deltaTime);
+			}
+		}
+	}
+
+	if (released2) {
+		pressed2 = released2 = false;
+		if (releasedS) {
+			pressedS = releasedS = false;
+			sceneToChange = 2;
+		}
+		else if (sceneToChange != 0) {
+			changeScreen(sceneToChange, 2, glm::vec2(0, 0));
+			sceneToChange = 0;
+		}
+		else if (sceneToChange == 0) {
+			if (!player->hasPowerUp(1)) {
+				player->setPowerUp(1, true);
+				menuInferior->setPowerUp(1);
+				menuInferior->update(deltaTime);
+			}
+		}
+	}
+
+	if (released3) {
+		pressed3 = released3 = false;
+		if (releasedS) {
+			pressedS = releasedS = false;
+			sceneToChange = 3;
+		}
+		else if (sceneToChange != 0) {
+			changeScreen(sceneToChange, 3, glm::vec2(0, 0));
+			sceneToChange = 0;
+		}
+		else if (sceneToChange == 0) {
+			if (!player->hasPowerUp(2)) {
+				player->setPowerUp(2, true);
+				menuInferior->setPowerUp(2);
+				menuInferior->update(deltaTime);
+			}
+		}
+	}
+
+	if (released4) {
+		pressed4 = released4 = false;
+		if (releasedS) {
+			pressedS = releasedS = false;
+			sceneToChange = 4;
+		}
+		else if (sceneToChange == 0) {
+			if (!player->hasPowerUp(3)) {
+				player->setPowerUp(3, true);
+				menuInferior->setPowerUp(3);
+				menuInferior->update(deltaTime);
+			}
+		}
+	}
+
+	if (released5) {
+		pressed5 = released5 = false;
+		if (releasedS) {
+			pressedS = releasedS = false;
+			sceneToChange = 5;
+		}
+		else if (sceneToChange == 0) {
+			if (!player->hasPowerUp(4)) {
+				player->setPowerUp(4, true);
+				menuInferior->setPowerUp(4);
+				menuInferior->update(deltaTime);
+			}
+		}
 	}
 
 	if (cabezaFlotante != NULL) {

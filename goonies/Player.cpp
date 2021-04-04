@@ -517,3 +517,27 @@ bool Player::haveKey() {
 void Player::swapGodMode() {
 	godMode = !godMode;
 }
+
+bool Player::hasPowerUp(int powerUp) {
+	switch (powerUp)
+	{
+	case 0:
+		if (speed == 4)
+			return true;
+		else
+			return false;
+		break;
+	case 1:
+		return blueRaincoat;
+		break;
+	case 2:
+		return grayRaincoat;
+		break;
+	case 3:
+		return yellowSpellbook;
+		break;
+	case 4:
+		return blueSpellbook;
+		break;
+	}
+}

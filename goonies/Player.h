@@ -44,6 +44,7 @@ public:
 	void setKey(bool state);
 	bool haveKey();
 	void swapGodMode();
+	bool hasPowerUp(int powerUp);
 	
 private:
 	bool bJumping, bLiana, bdoorCollision, key;
