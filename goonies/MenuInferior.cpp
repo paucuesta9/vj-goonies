@@ -137,6 +137,12 @@ void MenuInferior::setPowerUp(int numPowerUp) {
 	++activePowerUps;
 }
 
+void MenuInferior::deletePowerUp() {
+	spritePowerUps[activePowerUps - 1].changeAnimation(NONE);
+	-activePowerUps;
+}
+
+
 void MenuInferior::savedNewFriend() {
 	++friendsSaved;
 	if (friendsSaved < 5)

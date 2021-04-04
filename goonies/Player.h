@@ -28,7 +28,7 @@ public:
 	void setSprite(int numSprite);
 	int isPunching();
 	void animateChange();
-	void pickPowerUp(int powerUp);
+	void setPowerUp(int powerUp, bool active);
 	void ganeExp(int quantity);
 	bool getBlueRaincoat();
 	bool getGrayRaincoat();

@@ -436,23 +436,26 @@ void Player::ganeExp(int quantity) {
 	exp += quantity;
 }
 
-void Player::pickPowerUp(int powerUp) {
+void Player::setPowerUp(int powerUp, bool active) {
 	switch (powerUp)
 	{
 	case 0:
-		speed *= 2;
+		if (active)
+			speed = 4;
+		else
+			speed = 2;
 		break;
 	case 1:
-		blueRaincoat = true;
+		blueRaincoat = active;
 		break;
 	case 2:
-		grayRaincoat = true;
+		grayRaincoat = active;
 		break;
 	case 3:
-		yellowSpellbook = true;
+		yellowSpellbook = active;
 		break;
 	case 4:
-		blueSpellbook = true;
+		blueSpellbook = active;
 		break;
 	default:
 		break;

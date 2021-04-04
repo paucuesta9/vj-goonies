@@ -23,6 +23,7 @@ public:
 	void setPicked();
 	bool getPicked();
 	glm::vec2 getLevel();
+	bool isActive();
 
 private:
 	glm::ivec2 tileMapDispl, posObject;
@@ -31,7 +32,7 @@ private:
 	TileMap* map;
 	int powerUp;
 	bool picked;
-	int scene, screen;
+	int scene, screen, time;
 };
 
 

@@ -366,7 +366,7 @@ void Scene::update(int deltaTime)
 					pos.y < position.y + 16 && position.y < pos.y + 32 && !object[i].getPicked()) {
 					if (object[i].getType() == 1) {
 						numPowerUp = object[i].getPowerUp();
-						player->pickPowerUp(numPowerUp);
+						player->setPowerUp(numPowerUp, true);
 						object[i].setPicked();
 						if (numPowerUp != 5) menuInferior->setPowerUp(numPowerUp);
 						else {
@@ -421,6 +421,10 @@ void Scene::update(int deltaTime)
 						}
 					}
 				}
+			}
+			if (object[i].getType() == 1 && object[i].getPowerUp() != 5 && object[i].getPicked() && !object[i].isActive()) {
+				menuInferior->deletePowerUp();
+				player->setPowerUp(object[i].getPowerUp(), false);
 			}
 			object[i].update(deltaTime);
 		}

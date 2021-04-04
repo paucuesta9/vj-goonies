@@ -18,6 +18,7 @@ Object::~Object() {
 
 void Object::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, glm::ivec2 pos, int sceneNum, int screenNum, int type, int power)
 {
+	time = 0;
 	powerUp = power;
 	picked = false;
 	posObject = pos;
@@ -51,6 +52,7 @@ void Object::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, gl
 void Object::update(int deltaTime)
 {
 	sprite->update(deltaTime);
+	time += deltaTime;
 }
 
 void Object::render(int sceneNum, int screenNum)
@@ -84,6 +86,7 @@ int Object::getPowerUp() {
 
 void Object::setPicked() {
 	picked = true;
+	time = 0;
 }
 
 bool Object::getPicked() {
@@ -92,4 +95,8 @@ bool Object::getPicked() {
 
 glm::vec2 Object::getLevel() {
 	return glm::vec2(scene, screen);
+}
+
+bool Object::isActive() {
+	return time < 10000;
 }
