@@ -1,7 +1,7 @@
 #ifndef _GAME_INCLUDE
 #define _GAME_INCLUDE
 
-
+#include "Intro.h"
 #include "Scene.h"
 #include "GameOver.h"
 #include "Pause.h"
@@ -47,6 +47,7 @@ public:
 
 private:
 	bool bPlay;                       // Continue to play game?
+	Intro intro;
 	Scene scene;                      // Scene to render
 	GameOver gameOver;
 	Pause pause;

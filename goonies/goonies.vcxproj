@@ -156,6 +156,7 @@
     <ClCompile Include="GameOver.cpp" />
     <ClCompile Include="Gota.cpp" />
     <ClCompile Include="GreenDoor.cpp" />
+    <ClCompile Include="Intro.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MenuInferior.cpp" />
     <ClCompile Include="MenuSuperior.cpp" />
@@ -185,6 +186,7 @@
     <ClInclude Include="GameOver.h" />
     <ClInclude Include="Gota.h" />
     <ClInclude Include="GreenDoor.h" />
+    <ClInclude Include="Intro.h" />
     <ClInclude Include="MenuInferior.h" />
     <ClInclude Include="MenuSuperior.h" />
     <ClInclude Include="Pause.h" />
