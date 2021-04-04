@@ -18,18 +18,32 @@ Text::~Text() {
 		delete sprite;
 }
 
-void Text::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, string newText)
+void Text::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, int size, int color, string newText)
 {
 	posText = tileMapPos;
 	sizeText = newText.size();
 	shader = shaderProgram;
 	sprite = new Sprite[sizeText];
-	spritesheet.loadFromFile("images/tipografia.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	initSprites();
+	switch (color)
+	{
+	case 1:
+		spritesheet.loadFromFile("images/tipografia_red.png", TEXTURE_PIXEL_FORMAT_RGBA);
+		break;
+	case 2:
+		spritesheet.loadFromFile("images/tipografia_blue.png", TEXTURE_PIXEL_FORMAT_RGBA);
+		break;
+	case 3:
+		spritesheet.loadFromFile("images/tipografia_green.png", TEXTURE_PIXEL_FORMAT_RGBA);
+		break;
+	default:
+		spritesheet.loadFromFile("images/tipografia.png", TEXTURE_PIXEL_FORMAT_RGBA);
+		break;
+	}
+	initSprites(size);
 	setText(newText);
 }
 
-void Text::initSprites() {
+void Text::initSprites(int size) {
 	for (int i = 0; i < sizeText; ++i) {
 		sprite[i] = *Sprite::createSprite(glm::ivec2(8, 8), glm::vec2(0.03125, 0.5), &spritesheet, &shader);
 		sprite[i].setNumberAnimations(41);
@@ -160,8 +174,8 @@ void Text::initSprites() {
 		sprite[i].addKeyframe(SPACE, glm::vec2(0.03125f * 30, 0.5f));
 
 		sprite[i].changeAnimation(SPACE);
-		sprite[i].setPosition(glm::vec2(float(posText.x + 16 * i), float(posText.y)));
-		sprite[i].setScale(glm::vec3(2.f, 2.f, 0.f));
+		sprite[i].setPosition(glm::vec2(float(posText.x + 8 * size * i), float(posText.y)));
+		sprite[i].setScale(glm::vec3(size, size, 0.f));
 	}
 }
 

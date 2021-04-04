@@ -11,6 +11,7 @@ class MenuSuperior
 public:
 	~MenuSuperior();
 	void init(glm::ivec2 pos, ShaderProgram& shaderProgram);
+	void restart();
 
 	void update(int deltaTime);
 	void render();

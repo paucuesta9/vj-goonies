@@ -1,18 +1,48 @@
 #include <GL/glew.h>
 #include <GL/glut.h>
 #include "Game.h"
+#include <Windows.h>
+#pragma comment(lib, "winmm.lib")
 
+enum CurrentScreen {
+	INTRO, MAIN_MENU, GAME, GAME_OVER, CREDITS, INTRUCTIONS, PAUSE
+};
 
 void Game::init()
 {
 	bPlay = true;
 	glClearColor(0.f, 0.f, 0.f, 1.0f);
+	currentScreen = 2;
+	//PlaySound("", NULL, SND_FILENAME);
+
 	scene.init();
+	gameOver.init();
+	pause.init();
 }
 
 bool Game::update(int deltaTime)
 {
-	scene.update(deltaTime);
+	switch (currentScreen)
+	{
+	case 0:
+		break;
+	case 1:
+		break;
+	case 2:
+		scene.update(deltaTime);
+		if (scene.isGameOver())
+			currentScreen = 3;
+		break;
+	case 3:
+		gameOver.update(deltaTime);
+		break;
+	case 4:
+		break;
+	case 5:
+		break;
+	case 6:
+		pause.update(deltaTime);
+	}
 	
 	return bPlay;
 }
@@ -20,13 +50,58 @@ bool Game::update(int deltaTime)
 void Game::render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	scene.render();
+	switch (currentScreen)
+	{
+	case 0:
+		break;
+	case 1:
+		break;
+	case 2:
+		scene.render();
+		break;
+	case 3:
+		gameOver.render();
+		break;
+	case 4:
+		break;
+	case 5:
+		break;
+	case 6:
+		pause.render();
+	}
 }
 
 void Game::keyPressed(int key)
 {
-	if(key == 27) // Escape code
-		bPlay = false;
+	if (key == 27) {// Escape code
+		switch (currentScreen)
+		{
+		case MAIN_MENU:
+			bPlay = false;
+			break;
+		case GAME:
+			currentScreen = PAUSE;
+			break;
+		case GAME_OVER:
+			currentScreen = MAIN_MENU;
+			break;
+		case CREDITS:
+			currentScreen = MAIN_MENU;
+			break;
+		case INTRUCTIONS:
+			currentScreen = MAIN_MENU;
+			break;
+		case PAUSE:
+			currentScreen = GAME;
+			break;
+		}
+	}
+	else if (key == 114) { // R code
+		if (currentScreen == GAME_OVER) {
+			currentScreen = GAME;
+			scene.restart();
+		}
+	}
 	keys[key] = true;
 }
 

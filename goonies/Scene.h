@@ -32,6 +32,8 @@ public:
 	~Scene();
 
 	void init();
+	void restart();
+	bool isGameOver();
 	void update(int deltaTime);
 	void render();
 	void changeScreen(int scene, int screen, glm::vec2 pos);

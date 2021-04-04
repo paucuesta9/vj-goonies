@@ -92,16 +92,20 @@ void MenuSuperior::init(glm::ivec2 pos, ShaderProgram& shaderProgram)
 		spriteVitExp[i].setScale(glm::vec3(2.f, 2.f, 0.f));
 
 		text = new Text[8];
-		text[0].init(glm::vec2(float(pos.x + 176), float(pos.y - 36)), shaderProgram, "VIT");
-		text[1].init(glm::vec2(float(pos.x + 176), float(pos.y - 20)), shaderProgram, "EXP");
-		text[2].init(glm::vec2(float(pos.x + 420), float(pos.y - 36)), shaderProgram, "SCENE");
-		text[3].init(glm::vec2(float(pos.x + 420), float(pos.y - 20)), shaderProgram, "01-01");
-		text[4].init(glm::vec2(float(pos.x), float(pos.y - 36)), shaderProgram, "HI-");
-		text[5].init(glm::vec2(float(pos.x + 50), float(pos.y - 36)), shaderProgram, "000000");
-		text[6].init(glm::vec2(float(pos.x), float(pos.y - 20)), shaderProgram, "1P-");
-		text[7].init(glm::vec2(float(pos.x + 50), float(pos.y - 20)), shaderProgram, "000000");
+		text[0].init(glm::vec2(float(pos.x + 176), float(pos.y - 36)), shaderProgram, 2, 0, "VIT");
+		text[1].init(glm::vec2(float(pos.x + 176), float(pos.y - 20)), shaderProgram, 2, 0, "EXP");
+		text[2].init(glm::vec2(float(pos.x + 420), float(pos.y - 36)), shaderProgram, 2, 0, "SCENE");
+		text[3].init(glm::vec2(float(pos.x + 420), float(pos.y - 20)), shaderProgram, 2, 0, "01-01");
+		text[4].init(glm::vec2(float(pos.x), float(pos.y - 36)), shaderProgram, 2, 0, "HI-");
+		text[5].init(glm::vec2(float(pos.x + 50), float(pos.y - 36)), shaderProgram, 2, 0, "000000");
+		text[6].init(glm::vec2(float(pos.x), float(pos.y - 20)), shaderProgram, 2, 0, "1P-");
+		text[7].init(glm::vec2(float(pos.x + 50), float(pos.y - 20)), shaderProgram, 2, 0, "000000");
 
 	}
+}
+
+void MenuSuperior::restart() {
+
 }
 
 void MenuSuperior::update(int deltaTime)

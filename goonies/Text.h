@@ -11,11 +11,11 @@ class Text
 
 public:
 	~Text();
-	void init(const glm::ivec2& pos, ShaderProgram& shaderProgram, string text);
+	void init(const glm::ivec2& pos, ShaderProgram& shaderProgram, int size, int color, string text);
 	void update(int deltaTime);
 	void render();
 
-	void initSprites();
+	void initSprites(int size);
 	void setText(string newText);
 
 private:

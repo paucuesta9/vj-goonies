@@ -93,6 +93,37 @@ void Scene::init()
 	currentTime = 0.0f;
 }
 
+void Scene::restart() {
+	sceneNum = 1;
+	screenNum = 1;
+	numAsp = 0;
+	numCasc = 0;
+	numGotas = 0;
+	numSkullDoors = 0;
+	numGreenDoors = 0;
+	numObjects = 0;
+	numFriends = 6;
+	numPowerUp = -1;
+	first = true;
+	pressedN = false;
+	changingScene = false;
+	player = new Player();
+	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	menuInferior->restart();
+	menuSuperior->restart();
+	initObjects(texProgram);
+	initFriends(texProgram);
+	changeScreen(sceneNum, screenNum, glm::vec2(INIT_PLAYER_X_TILES * 16 + 8, INIT_PLAYER_Y_TILES * 16 + 4));
+	startEndDoor = new StartEndDoor();
+	startEndDoor->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(22 * map->getTileSize(), 3 * map->getTileSize()), 1);
+	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
+	currentTime = 0.0f;
+}
+
+bool Scene::isGameOver() {
+	return player->getLife() <= 0;
+}
+
 void Scene::update(int deltaTime)
 {
 	currentTime += deltaTime;

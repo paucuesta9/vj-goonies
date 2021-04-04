@@ -111,6 +111,10 @@ void MenuInferior::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgr
 	tileMapDispl = tileMapPos;
 }
 
+void MenuInferior::restart() {
+	setInit();
+}
+
 void MenuInferior::update(int deltaTime)
 {
 	for (int i = 0; i < 8; ++i)

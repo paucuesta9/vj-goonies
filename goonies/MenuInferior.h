@@ -12,6 +12,7 @@ class MenuInferior
 public:
 	~MenuInferior();
 	void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram);
+	void restart();
 
 	void update(int deltaTime);
 	void render();

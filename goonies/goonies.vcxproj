@@ -153,11 +153,13 @@
     <ClCompile Include="Esqueleto.cpp" />
     <ClCompile Include="Friend.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameOver.cpp" />
     <ClCompile Include="Gota.cpp" />
     <ClCompile Include="GreenDoor.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MenuInferior.cpp" />
     <ClCompile Include="MenuSuperior.cpp" />
+    <ClCompile Include="Pause.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Scene.cpp" />
@@ -180,10 +182,12 @@
     <ClInclude Include="Enemigo.h" />
     <ClInclude Include="Esqueleto.h" />
     <ClInclude Include="Friend.h" />
+    <ClInclude Include="GameOver.h" />
     <ClInclude Include="Gota.h" />
     <ClInclude Include="GreenDoor.h" />
     <ClInclude Include="MenuInferior.h" />
     <ClInclude Include="MenuSuperior.h" />
+    <ClInclude Include="Pause.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="Scene.h" />
