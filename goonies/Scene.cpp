@@ -77,6 +77,9 @@ void Scene::init()
 	numPowerUp = -1;
 	first = true;
 	pressedN = false;
+	releasedN = false;
+	pressedG = false;
+	releasedG = false;
 	changingScene = false;
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
@@ -106,6 +109,9 @@ void Scene::restart() {
 	numPowerUp = -1;
 	first = true;
 	pressedN = false;
+	releasedN = false;
+	pressedG = false;
+	releasedG = false;
 	changingScene = false;
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
@@ -129,13 +135,22 @@ void Scene::update(int deltaTime)
 	currentTime += deltaTime;
 	player->update(deltaTime);
 	glm::vec2 pos = player->getPosition();
-	if (Game::instance().getKey(110) && !pressedN) {
-		pressedN = true;
+	if (Game::instance().getKey(110)) pressedN = true;
+	else if (pressedN) releasedN = true;
+
+	if (Game::instance().getKey(103)) pressedG = true;
+	else if (pressedG) releasedG = true;
+
+	if (releasedN) {
+		pressedN = releasedN = false;
 		++numFriends;
 		menuInferior->savedNewFriend();
 	}
-	else if (!Game::instance().getKey(110))
-		pressedN = false;
+
+	if (releasedG) {
+		pressedG = releasedG = false;
+		player->swapGodMode();
+	}
 
 	if (cabezaFlotante != NULL) {
 		glm::vec2 posCabezaFlotante = cabezaFlotante->getPosition();

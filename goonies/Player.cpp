@@ -34,6 +34,8 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	Status = -1;
 	speed = 2;
 
+	godMode = false;
+
 	blueRaincoat = false;
 	grayRaincoat = false;
 	yellowSpellbook = false;
@@ -399,13 +401,15 @@ void Player::setDoorCollision(bool state) {
 }
 
 void Player::hurted(int damage) {
-	if (sprite != spriteHurt) {
-		setSprite(2);
-		animationTime = 0;
-	}
-	life -= damage;
-	
+	if (!godMode) {
+		if (sprite != spriteHurt) {
+			setSprite(2);
+			animationTime = 0;
+		}
+		life -= damage;
+	}	
 }
+
 void Player::setSprite(int numSprite) {
 	if (numSprite == 1) {
 		spriteNormal->changeAnimation(sprite->animation());
@@ -508,4 +512,8 @@ void Player::setKey(bool state) {
 
 bool Player::haveKey() {
 	return key;
+}
+
+void Player::swapGodMode() {
+	godMode = !godMode;
 }

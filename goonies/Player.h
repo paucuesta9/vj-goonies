@@ -43,6 +43,7 @@ public:
 	void die();
 	void setKey(bool state);
 	bool haveKey();
+	void swapGodMode();
 	
 private:
 	bool bJumping, bLiana, bdoorCollision, key;
@@ -52,7 +53,7 @@ private:
 	Sprite *sprite, *spriteNormal, *spriteHurt;
 	TileMap *map;
 	int life, exp, Status, speed, points;
-	bool blueRaincoat, grayRaincoat, yellowSpellbook, blueSpellbook;
+	bool blueRaincoat, grayRaincoat, yellowSpellbook, blueSpellbook, godMode;
 };
 
 

@@ -65,7 +65,7 @@ private:
 	int sceneNum, screenNum, numAsp, numCasc, numGotas, numSkullDoors, numGreenDoors, numObjects, numPowerUp;
 	bool changingScene;
 	int numFriends, nextPos;
-	bool first, pressedN;
+	bool first, pressedN, releasedN, pressedG, releasedG;
 };
 
 
