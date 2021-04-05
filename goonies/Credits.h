@@ -27,7 +27,7 @@ private:
 	ShaderProgram texProgram;
 	glm::mat4 projection;
 	Texture spritesheetBackground, spritesheetLogo;
-	Sprite* background, * logo;
+	Sprite* background;
 	float currentTime;
 	Text* texts;
 };

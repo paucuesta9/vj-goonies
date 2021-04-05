@@ -18,22 +18,36 @@ void Credits::init() {
 	initShaders();
 	currentTime = 0.0f;
 	initSpriteBackground();
-	initSpriteLogo();
 	printTexts();
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 	currentTime = 0.0f;
 }
 
 void Credits::printTexts() {
+	texts = new Text[10];
 	
+	texts[0].init(glm::vec2(float(272), float(100)), texProgram, 1, 0, "DEVELOPED BY");
+	texts[1].init(glm::vec2(float(96), float(120)), texProgram, 2, 0, "JUDITH ALMONO AND PAU CUESTA");
+	
+	texts[2].init(glm::vec2(float(256), float(160)), texProgram, 1, 0, "MAPS DESIGNED BY");
+	texts[3].init(glm::vec2(float(96), float(180)), texProgram, 2, 0, "JUDITH ALMONO AND PAU CUESTA");
+
+	texts[4].init(glm::vec2(float(212), float(210)), texProgram, 1, 0, "CHARACTERS MODIFICATIONS BY");
+	texts[5].init(glm::vec2(float(96), float(230)), texProgram, 2, 0, "JUDITH ALMONO AND PAU CUESTA");
+
+	texts[6].init(glm::vec2(float(176), float(270)), texProgram, 1, 0, "ORIGINAL TILESHEET AND SPRITESHEETS FROM");
+	texts[7].init(glm::vec2(float(152), float(290)), texProgram, 2, 0, "THE SPRITERS RESOURCE");
+
+	texts[8].init(glm::vec2(float(288), float(330)), texProgram, 1, 0, "MUSIC BY");
+	texts[9].init(glm::vec2(float(216), float(350)), texProgram, 2, 0, "WWW.VGMPF.COM");
 }
 
 
 void Credits::update(int deltaTime) {
 	currentTime += deltaTime;
 	background->update(deltaTime);
-	logo->update(deltaTime);
-	texts->update(deltaTime);
+	for (int i = 0; i < 10; ++i)
+		texts[i].update(deltaTime);
 }
 
 void Credits::render() {
@@ -46,8 +60,8 @@ void Credits::render() {
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 	background->render();
-	logo->render();
-	texts->render();
+	for (int i = 0; i < 10; ++i)
+		texts[i].render();
 }
 
 void Credits::initSpriteBackground() {
@@ -61,20 +75,6 @@ void Credits::initSpriteBackground() {
 
 	background->changeAnimation(0);
 	background->setPosition(glm::vec2(0, 0));
-}
-
-void Credits::initSpriteLogo() {
-	spritesheetLogo.loadFromFile("images/logo_goonies.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	logo = new Sprite();
-	logo = Sprite::createSprite(glm::ivec2(140, 40), glm::vec2(1.0, 1.0), &spritesheetLogo, &texProgram);
-	logo->setNumberAnimations(1);
-
-	logo->setAnimationSpeed(0, 8);
-	logo->addKeyframe(0, glm::vec2(0.f, 0.f));
-
-	logo->changeAnimation(0);
-	logo->setPosition(glm::vec2(180, 64));
-	logo->setScale(glm::vec3(2.0f, 2.0f, 0.f));
 }
 
 void Credits::initShaders()

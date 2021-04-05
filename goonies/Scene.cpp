@@ -76,7 +76,7 @@ void Scene::init()
 	numFriends = 0;
 	numPowerUp = -1;
 	sceneToChange = 0;
-	timeFriend = -1;
+	for (int i = 0; i < 6; ++i) timeFriend[i] = -1;
 	first = true;
 	pressedN = false;
 	releasedN = false;
@@ -111,7 +111,7 @@ void Scene::restart() {
 	numFriends = 6;
 	numPowerUp = -1;
 	sceneToChange = 0;
-	timeFriend = -1;
+	for (int i = 0; i < 6; ++i) timeFriend[i] = -1;
 	first = true;
 	pressedN = false;
 	releasedN = false;
@@ -359,7 +359,6 @@ void Scene::update(int deltaTime)
 			delete esqueleto;
 		}
 		else {
-		
 			if (esqueleto->isThereBone()) {
 				glm::vec2 posBone = esqueleto->getBonePosition();
 				if (player->isPunching() == 1 && pos.x + 8 > posBone.x && pos.x - 22 < posBone.x &&
@@ -633,11 +632,15 @@ void Scene::update(int deltaTime)
 			glm::vec2 position = friends[i].getPosition();
 			if (pos.x < position.x + 16 && position.x < pos.x + 24 &&
 				pos.y < position.y + 16 && position.y < pos.y + 32 && !friends[i].isPicked()) {
-				timeFriend = 0;
+				timeFriend[i] = 0;
+			}
+			if (timeFriend[i] > 350) {
 				friends[i].setPicked();
 				menuInferior->savedNewFriend();
 				++numFriends;
+				timeFriend[i] = -1;
 			}
+			if (timeFriend[i] >= 0) timeFriend[i] += deltaTime;
 		}
 		
 	}

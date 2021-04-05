@@ -32,7 +32,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	key = false;
 
 	Status = -1;
-	speed = 2;
+	speed = 1;
 
 	godMode = false;
 
@@ -446,9 +446,9 @@ void Player::setPowerUp(int powerUp, bool active) {
 	{
 	case 0:
 		if (active)
-			speed = 4;
-		else
 			speed = 2;
+		else
+			speed = 1;
 		break;
 	case 1:
 		blueRaincoat = active;
@@ -523,7 +523,7 @@ bool Player::hasPowerUp(int powerUp) {
 	switch (powerUp)
 	{
 	case 0:
-		if (speed == 4)
+		if (speed == 2)
 			return true;
 		else
 			return false;
