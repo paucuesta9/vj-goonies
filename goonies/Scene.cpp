@@ -65,37 +65,10 @@ Scene::~Scene()
 void Scene::init()
 {
 	initShaders();
-	sceneNum = 1;
-	screenNum = 1;
-	numAsp = 0;
-	numCasc = 0;
-	numGotas = 0;
-	numSkullDoors = 0;
-	numGreenDoors = 0;
-	numObjects = 0;
-	numFriends = 0;
-	numPowerUp = -1;
-	sceneToChange = 0;
-	for (int i = 0; i < 6; ++i) timeFriend[i] = -1;
-	first = true;
-	pressedN = false;
-	releasedN = false;
-	pressedG = false;
-	releasedG = false;
-	changingScene = false;
-	win = false;
-	player = new Player();
-	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	menuInferior = new MenuInferior();
 	menuInferior->init(glm::ivec2(SCREEN_X, SCREEN_Y + 20 * 16), texProgram);
 	menuSuperior = new MenuSuperior();
 	menuSuperior->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	for (int i = 0; i < 5; ++i) special[i] = false;
-	initObjects(texProgram);
-	initFriends(texProgram);
-	changeScreen(sceneNum, screenNum, glm::vec2(INIT_PLAYER_X_TILES * 16 + 8, INIT_PLAYER_Y_TILES * 16 + 4));
-	startEndDoor = new StartEndDoor();
-	startEndDoor->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(22 * map->getTileSize(), 3 * map->getTileSize()), 1);
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 	currentTime = 0.0f;
 }
@@ -130,7 +103,6 @@ void Scene::restart() {
 	changeScreen(sceneNum, screenNum, glm::vec2(INIT_PLAYER_X_TILES * 16 + 8, INIT_PLAYER_Y_TILES * 16 + 4));
 	startEndDoor = new StartEndDoor();
 	startEndDoor->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(22 * map->getTileSize(), 3 * map->getTileSize()), 1);
-	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 	currentTime = 0.0f;
 }
 
@@ -594,9 +566,9 @@ void Scene::update(int deltaTime)
 						object[i].setPicked();
 						if (numPowerUp != 5 && !special[numPowerUp]) menuInferior->setPowerUp(numPowerUp);
 						else {
-							player->setPoints(250);
+							player->setPoints(100);
 							menuSuperior->setPoints(player->getPoints());
-							player->ganeExp(250);
+							player->ganeExp(100);
 							menuSuperior->calculateVitExp(player->getExp(), 1);
 						}
 						menuSuperior->update(deltaTime);
@@ -605,7 +577,7 @@ void Scene::update(int deltaTime)
 					else if (object[i].getType() == 3) {
 						Audio::instance().getPotionEffect();
 						object[i].setPicked();
-						player->setPoints(500);
+						player->setPoints(50);
 						menuSuperior->setPoints(player->getPoints());
 						menuSuperior->update(deltaTime);
 					}
@@ -613,6 +585,8 @@ void Scene::update(int deltaTime)
 						object[i].setPicked();
 						player->setKey(true);
 						menuInferior->setKey(true);
+						player->setPoints(10);
+						menuSuperior->setPoints(player->getPoints());
 						Audio::instance().getKeyEffect();
 					}
 					else if (object[i].getType() == 2) {
@@ -673,6 +647,8 @@ void Scene::update(int deltaTime)
 				friends[i].setPicked();
 				menuInferior->savedNewFriend();
 				++numFriends;
+				player->setPoints(100);
+				menuSuperior->setPoints(player->getPoints());
 				timeFriend[i] = -1;
 			}
 			if (timeFriend[i] >= 0) timeFriend[i] += deltaTime;
@@ -737,6 +713,11 @@ void Scene::update(int deltaTime)
 			win = true;
 		}
 		player->setDoorCollision(false);
+	}
+	if (player->getExp() >= 1000) {
+		player->setPoints(200);
+		menuSuperior->setPoints(player->getPoints());
+		menuSuperior->update(deltaTime);
 	}
 	first = false;
 }

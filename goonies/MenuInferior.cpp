@@ -22,10 +22,7 @@ enum KeyAnims
 };
 
 MenuInferior::~MenuInferior() {
-	if (spritePowerUps != NULL)
-		delete spritePowerUps;
-	if (spriteSavedFriends != NULL)
-		delete spriteSavedFriends;
+	
 }
 
 void MenuInferior::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)

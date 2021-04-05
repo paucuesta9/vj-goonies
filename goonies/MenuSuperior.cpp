@@ -13,8 +13,7 @@ enum Vitalidad_Experiencia
 
 
 MenuSuperior::~MenuSuperior() {
-	if (spriteVitExp != NULL)
-		delete spriteVitExp;
+	
 }
 
 void MenuSuperior::init(glm::ivec2 pos, ShaderProgram& shaderProgram)
@@ -135,14 +134,15 @@ void MenuSuperior::calculateVitExp(int vitExp, int option) {
 	if (option == 0) {
 		for (int i = 1; i < VitExp8; ++i) spriteVitExp[i].changeAnimation(VIT8);
 		for (int i = VitExp8 + 1; i < 11; ++i) spriteVitExp[i].changeAnimation(VACIO);
-		if (aux > 0) {
-		if (aux < 3) spriteVitExp[VitExp8].changeAnimation(VIT1);
-		else if (aux < 7) spriteVitExp[VitExp8].changeAnimation(VIT2);
-		else if (aux < 15) spriteVitExp[VitExp8].changeAnimation(VIT3);
-		else if (aux < 30) spriteVitExp[VitExp8].changeAnimation(VIT4);
-		else if (aux < 60) spriteVitExp[VitExp8].changeAnimation(VIT5);
-		else if (aux < 85) spriteVitExp[VitExp8].changeAnimation(VIT6);
-		else if (aux < 95) spriteVitExp[VitExp8].changeAnimation(VIT7);
+		if (aux >= 0 && VitExp8 < 11) {
+			if (aux == 0) spriteVitExp[VitExp8].changeAnimation(VACIO);
+			else if (aux < 3) spriteVitExp[VitExp8].changeAnimation(VIT1);
+			else if (aux < 7) spriteVitExp[VitExp8].changeAnimation(VIT2);
+			else if (aux < 15) spriteVitExp[VitExp8].changeAnimation(VIT3);
+			else if (aux < 30) spriteVitExp[VitExp8].changeAnimation(VIT4);
+			else if (aux < 60) spriteVitExp[VitExp8].changeAnimation(VIT5);
+			else if (aux < 85) spriteVitExp[VitExp8].changeAnimation(VIT6);
+			else if (aux < 95) spriteVitExp[VitExp8].changeAnimation(VIT7);
 		}
 	}
 	else {
