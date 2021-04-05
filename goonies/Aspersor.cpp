@@ -65,7 +65,7 @@ void Aspersor::update(int deltaTime)
 	timeAnimRight += deltaTime;
 	if (StatusLeft == NONE) {
 		srand(time(NULL) * (posAspersor.x - 32 - posAspersor.y + 20));
-		if (deltaTime * rand() % 250 < 20) {
+		if (deltaTime * rand() % 400 < 20) {
 			StatusLeft = BORN_LEFT;
 			timeAnimLeft = 0;
 			initSprite(0);
@@ -89,7 +89,7 @@ void Aspersor::update(int deltaTime)
 	}
 	if (StatusRight == NONE) {
 		srand(time(NULL) * (posAspersor.x + 16 - posAspersor.y + 20));
-		if ((deltaTime * rand()) % 250 < 20) {
+		if ((deltaTime * rand()) % 400 < 20) {
 			StatusRight = BORN_RIGHT;
 			timeAnimRight = 0;
 			initSprite(2);

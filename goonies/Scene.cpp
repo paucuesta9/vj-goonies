@@ -32,34 +32,6 @@ Scene::Scene()
 
 Scene::~Scene()
 {
-	if(map != NULL)
-		delete map;
-	if(player != NULL)
-		delete player;
-	if (cabezaFlotante != NULL)
-		delete cabezaFlotante;
-	if (esqueleto != NULL)
-		delete esqueleto;
-	if (cascada != NULL)
-		delete cascada;
-	if (aspersor != NULL)
-		delete aspersor;
-	if (gota != NULL)
-		delete gota;
-	if (skullDoor != NULL)
-		delete skullDoor;
-	if (greenDoor != NULL)
-		delete greenDoor;
-	if (startEndDoor != NULL)
-		delete startEndDoor;
-	if (object != NULL)
-		delete object;
-	if (menuInferior != NULL)
-		delete menuInferior;
-	if (menuSuperior != NULL)
-		delete menuSuperior;
-	if (friends != NULL)
-		delete friends;
 }
 
 void Scene::init()
