@@ -40,6 +40,7 @@ public:
 	void initFriends(ShaderProgram& shaderProgram);
 	void initObjects(ShaderProgram& shaderProgram);
 	void renderFriends();
+	bool hasWon();
 
 private:
 	void initShaders();
@@ -64,7 +65,8 @@ private:
 	glm::mat4 projection;
 	int sceneNum, screenNum, numAsp, numCasc, numGotas, numSkullDoors, numGreenDoors, numObjects, numPowerUp;
 	bool changingScene;
-	int numFriends, nextPos, sceneToChange;
+	int numFriends, nextPos, sceneToChange, timeFriend;
+	bool win;
 	bool first, pressedN, releasedN, pressedG, releasedG, pressedS, releasedS, pressed1, released1, pressed2, released2, pressed3, released3, pressed4, released4, pressed5, released5;
 };
 

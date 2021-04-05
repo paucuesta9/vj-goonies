@@ -24,6 +24,7 @@ public:
 	bool getPicked();
 	glm::vec2 getLevel();
 	bool isActive();
+	bool getAgotado();
 
 private:
 	glm::ivec2 tileMapDispl, posObject;
@@ -31,7 +32,7 @@ private:
 	Sprite* sprite;
 	TileMap* map;
 	int powerUp;
-	bool picked;
+	bool picked, agotado;
 	int scene, screen, time;
 };
 

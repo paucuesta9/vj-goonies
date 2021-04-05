@@ -283,7 +283,7 @@ int TileMap::isCollision(const glm::ivec2& pos) const {
 	if (find(begin(izquierda), end(izquierda), mapTile) != end(izquierda)) return 2;
 	int derecha[] = { 75, 91, 107, 83, 84, 97 };
 	if (find(begin(derecha), end(derecha), mapTile) != end(derecha)) return 3;
-	int abajo[] = { 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 72, 73, 80, 81, 83, 84, 109, 110, 111, 113, 114, 127, 128};
+	int abajo[] = { 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 72, 73, 80, 81, 83, 84, 109, 110, 111, 113, 114, 117, 118, 127, 128};
 	if (find(begin(abajo), end(abajo), mapTile) != end(abajo)) return 4;
 	return 0;
 }

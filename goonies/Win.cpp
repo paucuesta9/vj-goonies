@@ -1,53 +1,47 @@
 #include <iostream>
 #include <cmath>
 #include <glm/gtc/matrix_transform.hpp>
-#include "Pause.h"
+#include "Win.h"
 #include "Game.h"
 
-Pause::Pause()
+Win::Win()
 {
 
 }
 
-Pause::~Pause()
+Win::~Win()
 {
 
 }
 
-void Pause::init() {
+void Win::init() {
 	initShaders();
 	currentTime = 0.0f;
-	printPauseText();
+	printWinText();
 	printTextsActions();
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 	currentTime = 0.0f;
 }
 
-void Pause::printPauseText() {
-	textPaused = new Text();
-	textPaused->init(glm::vec2(float(128), float(200)), texProgram, 4, 2, "GAME PAUSED!");
+void Win::printWinText() {
+	textWin = new Text();
+	textWin->init(glm::vec2(float(192), float(200)), texProgram, 4, 3, "YOU WIN!");
 }
 
-void Pause::printTextsActions() {
-	textReturnToGame = new Text();
-	textReturnToGame->init(glm::vec2(float(128), float(350)), texProgram, 2, 0, "PRESS ESC TO RETURN GAME");
-	textOr = new Text();
-	textOr->init(glm::vec2(float(312), float(380)), texProgram, 1, 0, "OR");
+void Win::printTextsActions() {
 	textGoMenu = new Text();
-	textGoMenu->init(glm::vec2(float(152), float(402)), texProgram, 2, 0, "PRESS M TO GO TO MENU");
+	textGoMenu->init(glm::vec2(float(136), float(300)), texProgram, 2, 0, "PRESS ESC TO GO TO MENU");
 }
 
 
-void Pause::update(int deltaTime) {
+void Win::update(int deltaTime) {
 	currentTime += deltaTime;
 
-	textPaused->update(deltaTime);
-	textReturnToGame->update(deltaTime);
-	textOr->update(deltaTime);
+	textWin->update(deltaTime);
 	textGoMenu->update(deltaTime);
 }
 
-void Pause::render() {
+void Win::render() {
 	glm::mat4 modelview;
 
 	texProgram.use();
@@ -56,13 +50,11 @@ void Pause::render() {
 	modelview = glm::mat4(1.0f);
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
-	textPaused->render();
-	textReturnToGame->render();
-	textOr->render();
+	textWin->render();
 	textGoMenu->render();
 }
 
-void Pause::initShaders()
+void Win::initShaders()
 {
 	Shader vShader, fShader;
 

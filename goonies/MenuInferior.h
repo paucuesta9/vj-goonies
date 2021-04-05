@@ -18,7 +18,7 @@ public:
 	void render();
 
 	void setPowerUp(int powerUp);
-	void deletePowerUp();
+	void deletePowerUp(int powerUp);
 	void savedNewFriend();
 	void setKey(bool haveKey);
 	void setInit();

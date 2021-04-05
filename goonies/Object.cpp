@@ -19,6 +19,7 @@ Object::~Object() {
 void Object::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, glm::ivec2 pos, int sceneNum, int screenNum, int type, int power)
 {
 	time = 0;
+	agotado = false;
 	powerUp = power;
 	picked = false;
 	posObject = pos;
@@ -93,10 +94,18 @@ bool Object::getPicked() {
 	return picked;
 }
 
+bool Object::getAgotado() {
+	return agotado;
+}
+
 glm::vec2 Object::getLevel() {
 	return glm::vec2(scene, screen);
 }
 
 bool Object::isActive() {
-	return time < 10000;
+	if (time < 20000) return true;
+	else {
+		agotado = true;
+		return false;
+	}
 }

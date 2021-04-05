@@ -21,6 +21,7 @@ public:
 
 private:
 	glm::ivec2 tileMapDispl;
+	ShaderProgram shader;
 	Texture spritesheetVitExp;
 	Sprite* spriteVitExp;
 	Text* text;

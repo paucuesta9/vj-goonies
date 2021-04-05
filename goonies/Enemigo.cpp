@@ -175,6 +175,7 @@ int Enemigo::isOut() {
 	else if (posEnemigo.x > 512 - map->getTileSize()) return 2;
 	else if (posEnemigo.y < 0) return 3;
 	else if (posEnemigo.y > 320 - map->getTileSize()) return 4;
+	return 0;
 }
 
 

@@ -27,7 +27,7 @@ Scene::Scene()
 	object = NULL;
 	menuInferior = NULL;
 	menuSuperior = NULL;
-	friends == NULL;
+	friends = NULL;
 }
 
 Scene::~Scene()
@@ -73,15 +73,17 @@ void Scene::init()
 	numSkullDoors = 0;
 	numGreenDoors = 0;
 	numObjects = 0;
-	numFriends = 6;
+	numFriends = 0;
 	numPowerUp = -1;
 	sceneToChange = 0;
+	timeFriend = -1;
 	first = true;
 	pressedN = false;
 	releasedN = false;
 	pressedG = false;
 	releasedG = false;
 	changingScene = false;
+	win = false;
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	menuInferior = new MenuInferior();
@@ -109,12 +111,14 @@ void Scene::restart() {
 	numFriends = 6;
 	numPowerUp = -1;
 	sceneToChange = 0;
+	timeFriend = -1;
 	first = true;
 	pressedN = false;
 	releasedN = false;
 	pressedG = false;
 	releasedG = false;
 	changingScene = false;
+	win = false;
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	menuInferior->restart();
@@ -179,13 +183,23 @@ void Scene::update(int deltaTime)
 			sceneToChange = 1;
 		}
 		else if (sceneToChange != 0) {
-			changeScreen(sceneToChange, 1, glm::vec2(0, 0));
+			int tileSize = map->getTileSize();
+			if (sceneToChange == 1) changeScreen(sceneToChange, 1, glm::vec2(22 * tileSize, 4 * tileSize));
+			else if (sceneToChange == 2) changeScreen(sceneToChange, 1, glm::vec2(5 * tileSize, 3 * tileSize));
+			else if (sceneToChange == 3) changeScreen(sceneToChange, 1, glm::vec2(14 * tileSize, 16 * tileSize));
+			else if (sceneToChange == 4) changeScreen(sceneToChange, 1, glm::vec2(4 * tileSize, 13 * tileSize));
+			else if (sceneToChange == 5) changeScreen(sceneToChange, 1, glm::vec2(3 * tileSize, 3 * tileSize));
 			sceneToChange = 0;
 		}
 		else if (sceneToChange == 0) {
 			if (!player->hasPowerUp(0)) {
 				player->setPowerUp(0, true);
 				menuInferior->setPowerUp(0);
+				menuInferior->update(deltaTime);
+			}
+			else {
+				player->setPowerUp(0, false);
+				menuInferior->deletePowerUp(0);
 				menuInferior->update(deltaTime);
 			}
 		}
@@ -198,13 +212,23 @@ void Scene::update(int deltaTime)
 			sceneToChange = 2;
 		}
 		else if (sceneToChange != 0) {
-			changeScreen(sceneToChange, 2, glm::vec2(0, 0));
+			int tileSize = map->getTileSize();
+			if (sceneToChange == 1) changeScreen(sceneToChange, 2, glm::vec2(5 * tileSize, 6 * tileSize));
+			else if (sceneToChange == 2) changeScreen(sceneToChange, 2, glm::vec2(1 * tileSize, 3 * tileSize));
+			else if (sceneToChange == 3) changeScreen(sceneToChange, 2, glm::vec2(1 * tileSize, 7 * tileSize));
+			else if (sceneToChange == 4) changeScreen(sceneToChange, 2, glm::vec2(28 * tileSize, 16 * tileSize));
+			else if (sceneToChange == 5) changeScreen(sceneToChange, 2, glm::vec2(1 * tileSize, 1 * tileSize));
 			sceneToChange = 0;
 		}
 		else if (sceneToChange == 0) {
 			if (!player->hasPowerUp(1)) {
 				player->setPowerUp(1, true);
 				menuInferior->setPowerUp(1);
+				menuInferior->update(deltaTime);
+			}
+			else {
+				player->setPowerUp(1, false);
+				menuInferior->deletePowerUp(1);
 				menuInferior->update(deltaTime);
 			}
 		}
@@ -217,13 +241,23 @@ void Scene::update(int deltaTime)
 			sceneToChange = 3;
 		}
 		else if (sceneToChange != 0) {
-			changeScreen(sceneToChange, 3, glm::vec2(0, 0));
+			int tileSize = map->getTileSize();
+			if (sceneToChange == 1) changeScreen(sceneToChange, 3, glm::vec2(1 * tileSize, 3 * tileSize));
+			else if (sceneToChange == 2) changeScreen(sceneToChange, 3, glm::vec2(4 * tileSize, 3 * tileSize));
+			else if (sceneToChange == 3) changeScreen(sceneToChange, 3, glm::vec2(30 * tileSize, 11 * tileSize));
+			else if (sceneToChange == 4) changeScreen(sceneToChange, 3, glm::vec2(6 * tileSize, 15 * tileSize));
+			else if (sceneToChange == 5) changeScreen(sceneToChange, 3, glm::vec2(22 * tileSize, 3 * tileSize));
 			sceneToChange = 0;
 		}
 		else if (sceneToChange == 0) {
 			if (!player->hasPowerUp(2)) {
 				player->setPowerUp(2, true);
 				menuInferior->setPowerUp(2);
+				menuInferior->update(deltaTime);
+			}
+			else {
+				player->setPowerUp(2, false);
+				menuInferior->deletePowerUp(2);
 				menuInferior->update(deltaTime);
 			}
 		}
@@ -241,6 +275,11 @@ void Scene::update(int deltaTime)
 				menuInferior->setPowerUp(3);
 				menuInferior->update(deltaTime);
 			}
+			else {
+				player->setPowerUp(3, false);
+				menuInferior->deletePowerUp(3);
+				menuInferior->update(deltaTime);
+			}
 		}
 	}
 
@@ -256,13 +295,18 @@ void Scene::update(int deltaTime)
 				menuInferior->setPowerUp(4);
 				menuInferior->update(deltaTime);
 			}
+			else {
+				player->setPowerUp(4, false);
+				menuInferior->deletePowerUp(4);
+				menuInferior->update(deltaTime);
+			}
 		}
 	}
 
 	if (cabezaFlotante != NULL) {
 		glm::vec2 posCabezaFlotante = cabezaFlotante->getPosition();
 		cabezaFlotante->update(deltaTime);
-		if (player->isPunching() == 1 && pos.x - 16 < posCabezaFlotante.x && pos.x - 10 > posCabezaFlotante.x - 10  &&
+		if (player->isPunching() == 1 && pos.x + 8 > posCabezaFlotante.x && pos.x - 24 < posCabezaFlotante.x &&
 			pos.y < posCabezaFlotante.y + 8 && posCabezaFlotante.y < pos.y + 32 && cabezaFlotante->getStatus() == 1) {
 				cabezaFlotante->die(glm::vec2(pos.x - 20, pos.y - 8));
 				player->setPoints(50);
@@ -270,7 +314,7 @@ void Scene::update(int deltaTime)
 				player->ganeExp(50);
 				menuSuperior->calculateVitExp(player->getExp(), 1);
 		}
-		else if (player->isPunching() == 2 && pos.x + 32 > posCabezaFlotante.x + 8 && pos.x + 26 < posCabezaFlotante.x + 18 &&
+		else if (player->isPunching() == 2 && pos.x + 8 < posCabezaFlotante.x + 8 && pos.x + 40 > posCabezaFlotante.x + 8 &&
 			pos.y < posCabezaFlotante.y + 8 && posCabezaFlotante.y < pos.y + 32 && cabezaFlotante->getStatus() == 1) {
 				cabezaFlotante->die(glm::vec2(pos.x + 20, pos.y - 8));
 				player->setPoints(50);
@@ -285,7 +329,7 @@ void Scene::update(int deltaTime)
 		else if (pos.x < posCabezaFlotante.x + 8 && posCabezaFlotante.x < pos.x + 32 &&
 			pos.y < posCabezaFlotante.y + 8 && posCabezaFlotante.y < pos.y + 32 && cabezaFlotante->getStatus()==1 && !player->isHurted() && !player->isBall()) {
 			if (!player->getBlueSpellbook()) {
-				player->hurted(100);
+				player->hurted(200);
 				menuSuperior->calculateVitExp(player->getLife(), 0);
 			}
 		}	
@@ -293,7 +337,7 @@ void Scene::update(int deltaTime)
 	if (esqueleto != NULL) {
 		esqueleto->update(deltaTime);
 		glm::vec2 posEsqueleto = esqueleto->getPosition();
-		if (player->isPunching() == 1 && pos.x - 16 < posEsqueleto.x && pos.x - 10 > posEsqueleto.x - 10 &&
+		if (player->isPunching() == 1 && pos.x + 8 > posEsqueleto.x && pos.x - 32 < posEsqueleto.x &&
 			pos.y < posEsqueleto.y + 8 && posEsqueleto.y < pos.y + 32 && esqueleto->getStatus() == 1) {
 				esqueleto->die(glm::vec2 (pos.x - 20, pos.y- 8));
 				player->setPoints(50);
@@ -302,7 +346,7 @@ void Scene::update(int deltaTime)
 				menuSuperior->calculateVitExp(player->getExp(), 1);
 		}
 			
-		else if (player->isPunching() == 2 && pos.x + 32 > posEsqueleto.x + 16 && pos.x + 26 < posEsqueleto.x + 26 && 
+		else if (player->isPunching() == 2 && pos.x + 8 < posEsqueleto.x + 16 && pos.x + 48 > posEsqueleto.x + 8 &&
 			pos.y < posEsqueleto.y + 8 && posEsqueleto.y < pos.y + 32 && esqueleto->getStatus() == 1) {
 				esqueleto->die(glm::vec2(pos.x + 20, pos.y - 8));
 				player->setPoints(50);
@@ -318,7 +362,7 @@ void Scene::update(int deltaTime)
 		
 			if (esqueleto->isThereBone()) {
 				glm::vec2 posBone = esqueleto->getBonePosition();
-				if (player->isPunching() == 1 && pos.x > posBone.x + 6 && pos.x < posBone.x + 24 &&
+				if (player->isPunching() == 1 && pos.x + 8 > posBone.x && pos.x - 22 < posBone.x &&
 					pos.y < posBone.y + 8 && posBone.y < pos.y + 32) {
 					esqueleto->dieBone();
 					if (esqueleto->getBoneStatus() == 2) {
@@ -328,7 +372,7 @@ void Scene::update(int deltaTime)
 						menuSuperior->calculateVitExp(player->getExp(), 1);
 					}
 				}
-				else if (player->isPunching() == 2 && pos.x + 38 > posBone.x && pos.x + 32 < posBone.x &&
+				else if (player->isPunching() == 2 && pos.x + 8 < posBone.x + 6 && pos.x + 38 > posBone.x + 6 &&
 					pos.y < posBone.y + 8 && posBone.y < pos.y + 32) {
 					esqueleto->dieBone();
 					if (esqueleto->getBoneStatus() == 2) {
@@ -343,7 +387,7 @@ void Scene::update(int deltaTime)
 				}
 				else if (pos.x < posBone.x + 6 && posBone.x < pos.x + 32 &&
 					pos.y < posBone.y + 8 && posBone.y < pos.y + 32 && esqueleto->getBoneStatus() == 1 && !player->isBall()) {
-					player->hurted(80);
+					player->hurted(150);
 					esqueleto->deleteBone();
 					menuSuperior->calculateVitExp(player->getLife(), 0);
 				}
@@ -352,7 +396,7 @@ void Scene::update(int deltaTime)
 			if (pos.x < posEsqueleto.x + 8 && posEsqueleto.x < pos.x + 32 &&
 				pos.y < posEsqueleto.y + 8 && posEsqueleto.y < pos.y + 32 && esqueleto->getStatus() == 1 && !player->isHurted() && !player->isBall()) {
 				if (!player->getYellowSpellbook()) {
-					player->hurted(100);
+					player->hurted(200);
 					menuSuperior->calculateVitExp(player->getLife(), 0);
 				}
 			}
@@ -367,7 +411,7 @@ void Scene::update(int deltaTime)
 				if (pos.x < positionCascada.x + 40 && positionCascada.x < pos.x + 24 &&
 					pos.y < positionCascada.y + size * 16 && positionCascada.y < pos.y + 32 && !player->isBall()) {
 					if (!player->getBlueRaincoat()) {
-						player->hurted(1);
+						player->hurted(5);
 						menuSuperior->calculateVitExp(player->getLife(), 0);
 					}
 				}
@@ -382,7 +426,7 @@ void Scene::update(int deltaTime)
 				glm::vec2 position = aspersor[i].getPosition(true);
 				if (pos.x < position.x + sizeLeft && position.x < pos.x + 24 &&
 					pos.y < position.y + 32 && position.y < pos.y + 32 && !player->isBall()) {
-					player->hurted(1);
+					player->hurted(5);
 					menuSuperior->calculateVitExp(player->getLife(), 0);
 				}
 			}
@@ -391,7 +435,7 @@ void Scene::update(int deltaTime)
 				glm::vec2 position = aspersor[i].getPosition(false);
 				if (pos.x < position.x + sizeRight && position.x < pos.x + 24 &&
 					pos.y < position.y + 32 && position.y < pos.y + 32 && !player->isBall()) {
-					player->hurted(1);
+					player->hurted(5);
 					menuSuperior->calculateVitExp(player->getLife(), 0);
 				}
 			}
@@ -404,7 +448,7 @@ void Scene::update(int deltaTime)
 				pos.y < position.y + 16 && position.y < pos.y + 32 && gota[i].getStatus() != 5 
 				&& gota[i].getStatus() != 4 && gota[i].getStatus() != 3 && !player->isHurted() && !player->isBall()) {
 				if (!player->getGrayRaincoat()) {
-					player->hurted(20);
+					player->hurted(100);
 					menuSuperior->calculateVitExp(player->getLife(), 0);
 				}
 				gota[i].hitObject();
@@ -416,8 +460,8 @@ void Scene::update(int deltaTime)
 		for (int i = 0; i < numSkullDoors; ++i) {
 			skullDoor[i].update(deltaTime);
 			glm::vec2 position = skullDoor[i].getPosition();
-			if (pos.x < position.x + 40 && position.x < pos.x + 24 &&
-				pos.y < position.y + 32 && position.y < pos.y + 32 && !changingScene && Game::instance().getSpecialKey(0x0065)) {
+			if (pos.x < position.x + 36 && position.x < pos.x + 16 &&
+				pos.y < position.y + 16 && position.y < pos.y + 32 && !changingScene && Game::instance().getSpecialKey(0x0065)) {
 				changingScene = true;
 				player->setPosition(glm::vec2(position.x + 10, position.y + 28));
 				player->setDoorCollision(true);
@@ -444,6 +488,8 @@ void Scene::update(int deltaTime)
 			glm::vec2 position = startEndDoor->getPosition();
 			if (pos.x < position.x + 40 && position.x < pos.x + 24 &&
 				pos.y < position.y + 32 && position.y < pos.y + 32 && !changingScene && Game::instance().getSpecialKey(0x0065)) {
+				changingScene = true;
+				player->setPosition(glm::vec2(position.x + 10, position.y + 28));
 				player->setDoorCollision(true);
 			}
 			startEndDoor->update(deltaTime);
@@ -575,8 +621,8 @@ void Scene::update(int deltaTime)
 					}
 				}
 			}
-			if (object[i].getType() == 1 && object[i].getPowerUp() != 5 && object[i].getPicked() && !object[i].isActive()) {
-				menuInferior->deletePowerUp();
+			if (object[i].getType() == 1 && object[i].getPowerUp() != 5 && object[i].getPicked() && !object[i].getAgotado() && !object[i].isActive() ) {
+				menuInferior->deletePowerUp(object[i].getPowerUp());
 				player->setPowerUp(object[i].getPowerUp(), false);
 			}
 			object[i].update(deltaTime);
@@ -587,6 +633,7 @@ void Scene::update(int deltaTime)
 			glm::vec2 position = friends[i].getPosition();
 			if (pos.x < position.x + 16 && position.x < pos.x + 24 &&
 				pos.y < position.y + 16 && position.y < pos.y + 32 && !friends[i].isPicked()) {
+				timeFriend = 0;
 				friends[i].setPicked();
 				menuInferior->savedNewFriend();
 				++numFriends;
@@ -596,6 +643,10 @@ void Scene::update(int deltaTime)
 	}
 
 	int tileSize = map->getTileSize();
+	if (map->getBlockCode(pos) == 117 || map->getBlockCode(pos) == 118 && !player->isHurted()) {
+		player->hurted(500);
+		menuSuperior->calculateVitExp(player->getLife(), 0);
+	}
 	if (player->getAnimDoorNum() == -2) {
 		glm::ivec2 position = player->getPosition();
 		if (sceneNum == 1 && screenNum == 3) {
@@ -633,6 +684,9 @@ void Scene::update(int deltaTime)
 		else if (sceneNum == 5 && screenNum == 1) {
 			changeScreen(4, 3, glm::ivec2(14 * tileSize, 15 * tileSize - 8));
 		}
+		else if (sceneNum == 5 && screenNum == 3) {
+			win = true;
+		}
 		player->setDoorCollision(false);
 	}
 	first = false;
@@ -667,11 +721,6 @@ void Scene::render()
 			greenDoor[i].render();
 		}
 	}
-	/////////////////////////////////////////////////////////////
-	if (!changingScene && startEndDoor != NULL) startEndDoor->render();
-	player->render();
-	if (changingScene && startEndDoor != NULL) startEndDoor->render();
-	///////////////////////////////////////////////////////////////
 	if (object != NULL) {
 		for (int i = 0; i < numObjects; ++i) {
 			if (!object[i].getPicked()) object[i].render(sceneNum, screenNum);
@@ -679,9 +728,11 @@ void Scene::render()
 	}
 	menuInferior->render();
 	menuSuperior->render();
+	if (!changingScene && startEndDoor != NULL) startEndDoor->render();
 	if (!changingScene && skullDoor != NULL) for (int i = 0; i < numSkullDoors; ++i) skullDoor[i].render();
 	player->render();
 	if (changingScene && skullDoor != NULL) for (int i = 0; i < numSkullDoors; ++i) skullDoor[i].render();
+	if (changingScene && startEndDoor != NULL) startEndDoor->render();
 	if (cabezaFlotante != NULL) cabezaFlotante->render();
 	if (esqueleto != NULL) esqueleto->render();
 }
@@ -716,12 +767,14 @@ void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
 		cabezaFlotante->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 		cabezaFlotante->setPosition(glm::vec2(22 * map->getTileSize(), 10 * map->getTileSize()));
 		cabezaFlotante->setTileMap(map);
-		numGotas = 2;
-		gota = new Gota[2];
+		numGotas = 3;
+		gota = new Gota[3];
 		gota[0].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(6 * map->getTileSize(), 2 * map->getTileSize()));
 		gota[0].setTileMap(map);
 		gota[1].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(3 * map->getTileSize(), 14 * map->getTileSize()));
 		gota[1].setTileMap(map);
+		gota[2].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(21 * map->getTileSize(), 14 * map->getTileSize()));
+		gota[2].setTileMap(map);
 		object[0].setTileMap(map);
 	}
 	else if (scene == 1 && screen == 2) {
@@ -742,6 +795,10 @@ void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
 		greenDoor[0].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(2 * map->getTileSize(), 13 * map->getTileSize()));
 		greenDoor[0].setTileMap(map);
 		if (friends[0].isPicked()) greenDoor[0].open();
+		numGotas = 1;
+		gota = new Gota[1];
+		gota[0].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(17 * map->getTileSize(), 7 * map->getTileSize()));
+		gota[0].setTileMap(map);
 		object[1].setTileMap(map);
 	} 
 	else if (scene == 1 and screen == 3) {
@@ -753,6 +810,10 @@ void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
 		skullDoor = new SkullDoor[1];
 		skullDoor[0].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(27 * map->getTileSize(), 5 * map->getTileSize()));
 		skullDoor[0].setTileMap(map);
+		numGotas = 1;
+		gota = new Gota[1];
+		gota[0].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(4 * map->getTileSize(), 1 * map->getTileSize()));
+		gota[0].setTileMap(map);
 		object[2].setTileMap(map);
 	}
 	else if (scene == 2 && screen == 1) {
@@ -768,6 +829,24 @@ void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
 		skullDoor = new SkullDoor[1];
 		skullDoor[0].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(4 * map->getTileSize(), 2 * map->getTileSize()));
 		skullDoor[0].setTileMap(map);
+		numGotas = 8;
+		gota = new Gota[8];
+		gota[0].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(9 * map->getTileSize(), 1 * map->getTileSize()));
+		gota[0].setTileMap(map);
+		gota[1].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(21 * map->getTileSize(), 1 * map->getTileSize()));
+		gota[1].setTileMap(map);
+		gota[2].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(23 * map->getTileSize(), 7 * map->getTileSize()));
+		gota[2].setTileMap(map);
+		gota[3].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(10 * map->getTileSize(), 7 * map->getTileSize()));
+		gota[3].setTileMap(map);
+		gota[4].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(6 * map->getTileSize(), 11 * map->getTileSize()));
+		gota[4].setTileMap(map);
+		gota[5].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(12 * map->getTileSize(), 17 * map->getTileSize()));
+		gota[5].setTileMap(map);
+		gota[6].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(25 * map->getTileSize(), 13 * map->getTileSize()));
+		gota[6].setTileMap(map);
+		gota[7].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(29 * map->getTileSize(), 13 * map->getTileSize()));
+		gota[7].setTileMap(map);
 		object[3].setTileMap(map);
 		object[4].setTileMap(map);
 	}
@@ -780,6 +859,18 @@ void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
 		cabezaFlotante->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 		cabezaFlotante->setPosition(glm::vec2(23 * map->getTileSize(), 14 * map->getTileSize()));
 		cabezaFlotante->setTileMap(map);
+		numGotas = 5;
+		gota = new Gota[5];
+		gota[0].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(5 * map->getTileSize(), 1 * map->getTileSize()));
+		gota[0].setTileMap(map);
+		gota[1].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(15 * map->getTileSize(), 1 * map->getTileSize()));
+		gota[1].setTileMap(map);
+		gota[2].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(29 * map->getTileSize(), 1 * map->getTileSize()));
+		gota[2].setTileMap(map);
+		gota[3].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(25 * map->getTileSize(), 11 * map->getTileSize()));
+		gota[3].setTileMap(map);
+		gota[4].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(9 * map->getTileSize(), 13 * map->getTileSize()));
+		gota[4].setTileMap(map);
 		object[5].setTileMap(map);
 	}
 	else if (scene == 2 && screen == 3) {
@@ -800,6 +891,13 @@ void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
 		greenDoor[0].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(20 * map->getTileSize(), 4 * map->getTileSize()));
 		greenDoor[0].setTileMap(map);
 		if (friends[1].isPicked()) greenDoor[0].open();
+		numGotas = 2;
+		gota = new Gota[2];
+		gota[0].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(7 * map->getTileSize(), 7 * map->getTileSize()));
+		gota[0].setTileMap(map);
+		gota[1].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(15 * map->getTileSize(), 13 * map->getTileSize()));
+		gota[1].setTileMap(map);
+		gota[7].setTileMap(map);
 		object[6].setTileMap(map);
 		object[7].setTileMap(map);
 	}
@@ -822,6 +920,16 @@ void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
 		skullDoor = new SkullDoor[1];
 		skullDoor[0].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(13 * map->getTileSize(), 15 * map->getTileSize()));
 		skullDoor[0].setTileMap(map);
+		numGotas = 4;
+		gota = new Gota[4];
+		gota[0].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(5 * map->getTileSize(), 3 * map->getTileSize()));
+		gota[0].setTileMap(map);
+		gota[1].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(15 * map->getTileSize(), 7 * map->getTileSize()));
+		gota[1].setTileMap(map);
+		gota[2].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(18 * map->getTileSize(), 2 * map->getTileSize()));
+		gota[2].setTileMap(map);
+		gota[3].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(28 * map->getTileSize(), 2 * map->getTileSize()));
+		gota[3].setTileMap(map);
 		object[8].setTileMap(map);
 	}
 	else if (scene == 3 && screen == 2) {
@@ -839,6 +947,14 @@ void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
 		aspersor[0].setTileMap(map);
 		aspersor[1].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(14 * map->getTileSize(), 7 * map->getTileSize()));
 		aspersor[1].setTileMap(map);
+		numGotas = 3;
+		gota = new Gota[3];
+		gota[0].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(16 * map->getTileSize(), 2 * map->getTileSize()));
+		gota[0].setTileMap(map);
+		gota[1].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(4 * map->getTileSize(), 2 * map->getTileSize()));
+		gota[1].setTileMap(map);
+		gota[2].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(15 * map->getTileSize(), 15 * map->getTileSize()));
+		gota[2].setTileMap(map);
 		object[9].setTileMap(map);
 		object[10].setTileMap(map);
 	}
@@ -852,6 +968,14 @@ void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
 		greenDoor[0].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(17 * map->getTileSize(), 2 * map->getTileSize()));
 		greenDoor[0].setTileMap(map);
 		if (friends[2].isPicked()) greenDoor[0].open();
+		numGotas = 3;
+		gota = new Gota[3];
+		gota[0].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(23 * map->getTileSize(), 3 * map->getTileSize()));
+		gota[0].setTileMap(map);
+		gota[1].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(24 * map->getTileSize(), 7 * map->getTileSize()));
+		gota[1].setTileMap(map);
+		gota[2].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(6 * map->getTileSize(), 7 * map->getTileSize()));
+		gota[2].setTileMap(map);
 		object[11].setTileMap(map);
 	}
 	else if (scene == 4 && screen == 1) {
@@ -889,6 +1013,18 @@ void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
 		greenDoor[0].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(5 * map->getTileSize(), 3 * map->getTileSize()));
 		greenDoor[0].setTileMap(map);
 		if (friends[4].isPicked()) greenDoor[0].open();
+		numGotas = 5;
+		gota = new Gota[5];
+		gota[0].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(23 * map->getTileSize(), 10 * map->getTileSize()));
+		gota[0].setTileMap(map);
+		gota[1].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(25 * map->getTileSize(), 14 * map->getTileSize()));
+		gota[1].setTileMap(map);
+		gota[2].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(19 * map->getTileSize(), 2 * map->getTileSize()));
+		gota[2].setTileMap(map);
+		gota[3].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(26 * map->getTileSize(), 4 * map->getTileSize()));
+		gota[3].setTileMap(map);
+		gota[4].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(9 * map->getTileSize(), 8 * map->getTileSize()));
+		gota[4].setTileMap(map);
 		object[13].setTileMap(map);
 		object[14].setTileMap(map);
 	}
@@ -912,6 +1048,18 @@ void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
 		greenDoor[0].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(15 * map->getTileSize(), 2 * map->getTileSize()));
 		greenDoor[0].setTileMap(map);
 		if (friends[5].isPicked()) greenDoor[0].open();
+		numGotas = 5;
+		gota = new Gota[5];
+		gota[0].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(4 * map->getTileSize(), 2 * map->getTileSize()));
+		gota[0].setTileMap(map);
+		gota[1].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(6 * map->getTileSize(), 7 * map->getTileSize()));
+		gota[1].setTileMap(map);
+		gota[2].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(12 * map->getTileSize(), 2 * map->getTileSize()));
+		gota[2].setTileMap(map);
+		gota[3].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(25 * map->getTileSize(), 2 * map->getTileSize()));
+		gota[3].setTileMap(map);
+		gota[4].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(22 * map->getTileSize(), 8 * map->getTileSize()));
+		gota[4].setTileMap(map);
 		object[15].setTileMap(map);
 		object[16].setTileMap(map);
 	}
@@ -934,6 +1082,12 @@ void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
 		greenDoor = new GreenDoor[1];
 		greenDoor[0].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(2 * map->getTileSize(), 15 * map->getTileSize()));
 		greenDoor[0].setTileMap(map);
+		numGotas = 2;
+		gota = new Gota[2];
+		gota[0].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(10 * map->getTileSize(), 1 * map->getTileSize()));
+		gota[0].setTileMap(map);
+		gota[1].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(23 * map->getTileSize(), 1 * map->getTileSize()));
+		gota[1].setTileMap(map);
 		object[17].setTileMap(map);
 		object[18].setTileMap(map);
 	}
@@ -946,6 +1100,16 @@ void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
 		aspersor = new Aspersor[1];
 		aspersor[0].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(4 * map->getTileSize(), 15 * map->getTileSize()));
 		aspersor[0].setTileMap(map);
+		numGotas = 4;
+		gota = new Gota[4];
+		gota[0].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(26 * map->getTileSize(), 9 * map->getTileSize()));
+		gota[0].setTileMap(map);
+		gota[1].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(7 * map->getTileSize(), 1 * map->getTileSize()));
+		gota[1].setTileMap(map);
+		gota[2].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(15 * map->getTileSize(), 1 * map->getTileSize()));
+		gota[2].setTileMap(map);
+		gota[3].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(13 * map->getTileSize(), 14 * map->getTileSize()));
+		gota[3].setTileMap(map);
 		object[19].setTileMap(map);
 		object[20].setTileMap(map);
 	}
@@ -973,7 +1137,7 @@ void Scene::initFriends(ShaderProgram& texProgram) {
 }
 
 void Scene::initObjects(ShaderProgram& texProgram) {
-	numObjects = 22;
+	numObjects = 23;
 	object = new Object[numObjects];
 	object[0].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(3 * 16, 5 * 16), 1, 1, 0, 0);
 	object[1].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(1 * 16, 14 * 16), 1, 2, 2, 0);
@@ -997,6 +1161,7 @@ void Scene::initObjects(ShaderProgram& texProgram) {
 	object[19].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(27 * 16, 6 * 16), 5, 2, 1, 2);
 	object[20].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(3 * 16, 6 * 16), 5, 2, 1, 5);
 	object[21].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(28 * 16, 6 * 16), 5, 3, 0, 0);
+	object[22].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(28 * 16, 8 * 16), 3, 2, 1, 5);
 }
 
 void Scene::renderFriends() {
@@ -1018,6 +1183,10 @@ void Scene::renderFriends() {
 	else if (sceneNum == 5 && screenNum == 1 && !friends[5].isPicked()) {
 		friends[5].render();
 	}
+}
+
+bool Scene::hasWon() {
+	return win;
 }
 
 void Scene::initShaders()

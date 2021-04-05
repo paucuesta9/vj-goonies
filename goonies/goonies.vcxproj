@@ -149,6 +149,7 @@
     <ClCompile Include="Bone.cpp" />
     <ClCompile Include="CabezaFlotante.cpp" />
     <ClCompile Include="Cascada.cpp" />
+    <ClCompile Include="Credits.cpp" />
     <ClCompile Include="Enemigo.cpp" />
     <ClCompile Include="Esqueleto.cpp" />
     <ClCompile Include="Friend.cpp" />
@@ -156,8 +157,10 @@
     <ClCompile Include="GameOver.cpp" />
     <ClCompile Include="Gota.cpp" />
     <ClCompile Include="GreenDoor.cpp" />
+    <ClCompile Include="Instructions.cpp" />
     <ClCompile Include="Intro.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="MenuInferior.cpp" />
     <ClCompile Include="MenuSuperior.cpp" />
     <ClCompile Include="Pause.cpp" />
@@ -172,6 +175,7 @@
     <ClCompile Include="Text.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TileMap.cpp" />
+    <ClCompile Include="Win.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Windows Kits\10\Include\10.0.18362.0\ucrt\locale.h" />
@@ -180,13 +184,16 @@
     <ClInclude Include="Bone.h" />
     <ClInclude Include="CabezaFlotante.h" />
     <ClInclude Include="Cascada.h" />
+    <ClInclude Include="Credits.h" />
     <ClInclude Include="Enemigo.h" />
     <ClInclude Include="Esqueleto.h" />
     <ClInclude Include="Friend.h" />
     <ClInclude Include="GameOver.h" />
     <ClInclude Include="Gota.h" />
     <ClInclude Include="GreenDoor.h" />
+    <ClInclude Include="Instructions.h" />
     <ClInclude Include="Intro.h" />
+    <ClInclude Include="MainMenu.h" />
     <ClInclude Include="MenuInferior.h" />
     <ClInclude Include="MenuSuperior.h" />
     <ClInclude Include="Pause.h" />
@@ -200,6 +207,7 @@
     <ClInclude Include="StartEndDoor.h" />
     <ClInclude Include="Text.h" />
     <ClInclude Include="TileMap.h" />
+    <ClInclude Include="Win.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

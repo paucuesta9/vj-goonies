@@ -1,53 +1,39 @@
 #include <iostream>
 #include <cmath>
 #include <glm/gtc/matrix_transform.hpp>
-#include "Pause.h"
+#include "Instructions.h"
 #include "Game.h"
 
-Pause::Pause()
+Instructions::Instructions()
 {
 
 }
 
-Pause::~Pause()
+Instructions::~Instructions()
 {
 
 }
 
-void Pause::init() {
+void Instructions::init() {
 	initShaders();
 	currentTime = 0.0f;
-	printPauseText();
-	printTextsActions();
+	printTexts();
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 	currentTime = 0.0f;
 }
 
-void Pause::printPauseText() {
-	textPaused = new Text();
-	textPaused->init(glm::vec2(float(128), float(200)), texProgram, 4, 2, "GAME PAUSED!");
-}
+void Instructions::printTexts() {
 
-void Pause::printTextsActions() {
-	textReturnToGame = new Text();
-	textReturnToGame->init(glm::vec2(float(128), float(350)), texProgram, 2, 0, "PRESS ESC TO RETURN GAME");
-	textOr = new Text();
-	textOr->init(glm::vec2(float(312), float(380)), texProgram, 1, 0, "OR");
-	textGoMenu = new Text();
-	textGoMenu->init(glm::vec2(float(152), float(402)), texProgram, 2, 0, "PRESS M TO GO TO MENU");
 }
 
 
-void Pause::update(int deltaTime) {
+void Instructions::update(int deltaTime) {
 	currentTime += deltaTime;
 
-	textPaused->update(deltaTime);
-	textReturnToGame->update(deltaTime);
-	textOr->update(deltaTime);
-	textGoMenu->update(deltaTime);
+	texts->update(deltaTime);
 }
 
-void Pause::render() {
+void Instructions::render() {
 	glm::mat4 modelview;
 
 	texProgram.use();
@@ -56,13 +42,10 @@ void Pause::render() {
 	modelview = glm::mat4(1.0f);
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
-	textPaused->render();
-	textReturnToGame->render();
-	textOr->render();
-	textGoMenu->render();
+	texts->render();
 }
 
-void Pause::initShaders()
+void Instructions::initShaders()
 {
 	Shader vShader, fShader;
 
@@ -91,4 +74,3 @@ void Pause::initShaders()
 	vShader.free();
 	fShader.free();
 }
-

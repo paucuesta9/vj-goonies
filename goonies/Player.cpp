@@ -382,6 +382,7 @@ int Player::isOut() {
 	else if (posPlayer.x > 512 - map->getTileSize()) return 2;
 	else if (posPlayer.y < 0) return 3;
 	else if (posPlayer.y > 320 - map->getTileSize()) return 4;
+	return 0;
 }
 
 int Player::getAnimDoorNum() {
@@ -539,5 +540,7 @@ bool Player::hasPowerUp(int powerUp) {
 	case 4:
 		return blueSpellbook;
 		break;
+	default:
+		return false;
 	}
 }

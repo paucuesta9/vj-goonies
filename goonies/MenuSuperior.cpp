@@ -19,6 +19,7 @@ MenuSuperior::~MenuSuperior() {
 
 void MenuSuperior::init(glm::ivec2 pos, ShaderProgram& shaderProgram)
 {
+	shader = shaderProgram;
 	int high = 0;
 	spriteVitExp = new Sprite[24];
 	spritesheetVitExp.loadFromFile("images/vida_experiencia.png", TEXTURE_PIXEL_FORMAT_RGBA);
@@ -105,7 +106,14 @@ void MenuSuperior::init(glm::ivec2 pos, ShaderProgram& shaderProgram)
 }
 
 void MenuSuperior::restart() {
-
+	text[0].init(glm::vec2(float(60 + 176), float(70 - 36)), shader, 2, 0, "VIT");
+	text[1].init(glm::vec2(float(60 + 176), float(70 - 20)), shader, 2, 0, "EXP");
+	text[2].init(glm::vec2(float(60 + 420), float(70 - 36)), shader, 2, 0, "SCENE");
+	text[3].init(glm::vec2(float(60 + 420), float(70 - 20)), shader, 2, 0, "01-01");
+	text[6].init(glm::vec2(float(60), float(70 - 20)), shader, 2, 0, "1P-");
+	text[7].init(glm::vec2(float(60 + 50), float(70 - 20)), shader, 2, 0, "000000");
+	calculateVitExp(1000, 0);
+	calculateVitExp(0, 1);
 }
 
 void MenuSuperior::update(int deltaTime)

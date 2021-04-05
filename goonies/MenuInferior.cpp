@@ -141,9 +141,17 @@ void MenuInferior::setPowerUp(int numPowerUp) {
 	++activePowerUps;
 }
 
-void MenuInferior::deletePowerUp() {
-	spritePowerUps[activePowerUps - 1].changeAnimation(NONE);
-	-activePowerUps;
+void MenuInferior::deletePowerUp(int powerUp) {
+	for (int i = 0; i < 8; ++i) {
+		if (spritePowerUps[i].animation() == powerUp) {
+			spritePowerUps[i].changeAnimation(NONE);
+			for (int j = i; j + 1 < activePowerUps; ++j) {
+				spritePowerUps[j].changeAnimation(spritePowerUps[j + 1].animation());
+			}
+			spritePowerUps[activePowerUps - 1].changeAnimation(NONE);
+		}
+	}
+	--activePowerUps;
 }
 
 

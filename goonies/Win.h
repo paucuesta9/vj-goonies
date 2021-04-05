@@ -1,17 +1,17 @@
-#ifndef _PAUSE_INCLUDE
-#define _PAUSE_INCLUDE
+#ifndef _WIN_INCLUDE
+#define _WIN_INCLUDE
 
 
 #include <glm/glm.hpp>
 #include "ShaderProgram.h"
 #include "Text.h"
 
-class Pause
+class Win
 {
 
 public:
-	Pause();
-	~Pause();
+	Win();
+	~Win();
 
 	void init();
 	void update(int deltaTime);
@@ -19,16 +19,16 @@ public:
 
 private:
 	void initShaders();
-	void printPauseText();
+	void printWinText();
 	void printTextsActions();
 
 private:
 	ShaderProgram texProgram;
 	glm::mat4 projection;
 	float currentTime;
-	Text* textPaused, *textReturnToGame, *textOr, * textGoMenu;
+	Text* textWin, * textGoMenu;
 };
 
 
-#endif // _PAUSE_INCLUDE
+#endif // _WIN_INCLUDE
 
