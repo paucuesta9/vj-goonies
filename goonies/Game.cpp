@@ -18,7 +18,7 @@ void Game::init()
 	bPlay = true;
 	glClearColor(0.f, 0.f, 0.f, 1.0f);
 	Audio::instance().playMenu();
-	currentScreen = MAIN_MENU;
+	currentScreen = INTRO;
 	intro.init();
 	mainMenu.init();
 	scene.init();
