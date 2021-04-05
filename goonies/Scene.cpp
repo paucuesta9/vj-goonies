@@ -90,6 +90,7 @@ void Scene::init()
 	menuInferior->init(glm::ivec2(SCREEN_X, SCREEN_Y + 20 * 16), texProgram);
 	menuSuperior = new MenuSuperior();
 	menuSuperior->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	for (int i = 0; i < 5; ++i) special[i] = false;
 	initObjects(texProgram);
 	initFriends(texProgram);
 	changeScreen(sceneNum, screenNum, glm::vec2(INIT_PLAYER_X_TILES * 16 + 8, INIT_PLAYER_Y_TILES * 16 + 4));
@@ -108,7 +109,7 @@ void Scene::restart() {
 	numSkullDoors = 0;
 	numGreenDoors = 0;
 	numObjects = 0;
-	numFriends = 6;
+	numFriends = 0;
 	numPowerUp = -1;
 	sceneToChange = 0;
 	for (int i = 0; i < 6; ++i) timeFriend[i] = -1;
@@ -123,6 +124,7 @@ void Scene::restart() {
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	menuInferior->restart();
 	menuSuperior->restart();
+	for (int i = 0; i < 5; ++i) special[i] = false;
 	initObjects(texProgram);
 	initFriends(texProgram);
 	changeScreen(sceneNum, screenNum, glm::vec2(INIT_PLAYER_X_TILES * 16 + 8, INIT_PLAYER_Y_TILES * 16 + 4));
@@ -196,11 +198,13 @@ void Scene::update(int deltaTime)
 				player->setPowerUp(0, true);
 				menuInferior->setPowerUp(0);
 				menuInferior->update(deltaTime);
+				special[0] = true;
 			}
 			else {
 				player->setPowerUp(0, false);
 				menuInferior->deletePowerUp(0);
 				menuInferior->update(deltaTime);
+				special[0] = false;
 			}
 		}
 	}
@@ -225,11 +229,13 @@ void Scene::update(int deltaTime)
 				player->setPowerUp(1, true);
 				menuInferior->setPowerUp(1);
 				menuInferior->update(deltaTime);
+				special[1] = true;
 			}
 			else {
 				player->setPowerUp(1, false);
 				menuInferior->deletePowerUp(1);
 				menuInferior->update(deltaTime);
+				special[1] = false;
 			}
 		}
 	}
@@ -254,11 +260,13 @@ void Scene::update(int deltaTime)
 				player->setPowerUp(2, true);
 				menuInferior->setPowerUp(2);
 				menuInferior->update(deltaTime);
+				special[2] = true;
 			}
 			else {
 				player->setPowerUp(2, false);
 				menuInferior->deletePowerUp(2);
 				menuInferior->update(deltaTime);
+				special[2] = false;
 			}
 		}
 	}
@@ -274,11 +282,13 @@ void Scene::update(int deltaTime)
 				player->setPowerUp(3, true);
 				menuInferior->setPowerUp(3);
 				menuInferior->update(deltaTime);
+				special[3] = true;
 			}
 			else {
 				player->setPowerUp(3, false);
 				menuInferior->deletePowerUp(3);
 				menuInferior->update(deltaTime);
+				special[3] = false;
 			}
 		}
 	}
@@ -294,11 +304,13 @@ void Scene::update(int deltaTime)
 				player->setPowerUp(4, true);
 				menuInferior->setPowerUp(4);
 				menuInferior->update(deltaTime);
+				special[4] = true;
 			}
 			else {
 				player->setPowerUp(4, false);
 				menuInferior->deletePowerUp(4);
 				menuInferior->update(deltaTime);
+				special[4] = true;
 			}
 		}
 	}
@@ -313,6 +325,7 @@ void Scene::update(int deltaTime)
 				menuSuperior->setPoints(player->getPoints());
 				player->ganeExp(50);
 				menuSuperior->calculateVitExp(player->getExp(), 1);
+				Audio::instance().killEffect();
 		}
 		else if (player->isPunching() == 2 && pos.x + 8 < posCabezaFlotante.x + 8 && pos.x + 40 > posCabezaFlotante.x + 8 &&
 			pos.y < posCabezaFlotante.y + 8 && posCabezaFlotante.y < pos.y + 32 && cabezaFlotante->getStatus() == 1) {
@@ -321,6 +334,7 @@ void Scene::update(int deltaTime)
 				menuSuperior->setPoints(player->getPoints());
 				player->ganeExp(50);
 				menuSuperior->calculateVitExp(player->getExp(), 1);
+				Audio::instance().killEffect();
 		}
 		if (cabezaFlotante->getStatus() == 3) {
 			cabezaFlotante = NULL;
@@ -329,6 +343,7 @@ void Scene::update(int deltaTime)
 		else if (pos.x < posCabezaFlotante.x + 8 && posCabezaFlotante.x < pos.x + 32 &&
 			pos.y < posCabezaFlotante.y + 8 && posCabezaFlotante.y < pos.y + 32 && cabezaFlotante->getStatus()==1 && !player->isHurted() && !player->isBall()) {
 			if (!player->getBlueSpellbook()) {
+				Audio::instance().hurtedEffect();
 				player->hurted(200);
 				menuSuperior->calculateVitExp(player->getLife(), 0);
 			}
@@ -344,6 +359,7 @@ void Scene::update(int deltaTime)
 				menuSuperior->setPoints(player->getPoints());
 				player->ganeExp(50);
 				menuSuperior->calculateVitExp(player->getExp(), 1);
+				Audio::instance().killEffect();
 		}
 			
 		else if (player->isPunching() == 2 && pos.x + 8 < posEsqueleto.x + 16 && pos.x + 48 > posEsqueleto.x + 8 &&
@@ -353,6 +369,7 @@ void Scene::update(int deltaTime)
 				menuSuperior->setPoints(player->getPoints());
 				player->ganeExp(50);
 				menuSuperior->calculateVitExp(player->getExp(), 1);
+				Audio::instance().killEffect();
 		}
 		if (esqueleto->getStatus() == 3) {
 			esqueleto = NULL;
@@ -369,6 +386,7 @@ void Scene::update(int deltaTime)
 						menuSuperior->setPoints(player->getPoints());
 						player->ganeExp(25);
 						menuSuperior->calculateVitExp(player->getExp(), 1);
+						Audio::instance().killEffect();
 					}
 				}
 				else if (player->isPunching() == 2 && pos.x + 8 < posBone.x + 6 && pos.x + 38 > posBone.x + 6 &&
@@ -379,6 +397,7 @@ void Scene::update(int deltaTime)
 						menuSuperior->setPoints(player->getPoints());
 						player->ganeExp(25);
 						menuSuperior->calculateVitExp(player->getExp(), 1);
+						Audio::instance().killEffect();
 					}
 				}
 				if (esqueleto->getBoneStatus() == 3) {
@@ -386,6 +405,7 @@ void Scene::update(int deltaTime)
 				}
 				else if (pos.x < posBone.x + 6 && posBone.x < pos.x + 32 &&
 					pos.y < posBone.y + 8 && posBone.y < pos.y + 32 && esqueleto->getBoneStatus() == 1 && !player->isBall()) {
+					Audio::instance().hurtedEffect();
 					player->hurted(150);
 					esqueleto->deleteBone();
 					menuSuperior->calculateVitExp(player->getLife(), 0);
@@ -395,6 +415,7 @@ void Scene::update(int deltaTime)
 			if (pos.x < posEsqueleto.x + 8 && posEsqueleto.x < pos.x + 32 &&
 				pos.y < posEsqueleto.y + 8 && posEsqueleto.y < pos.y + 32 && esqueleto->getStatus() == 1 && !player->isHurted() && !player->isBall()) {
 				if (!player->getYellowSpellbook()) {
+					Audio::instance().hurtedEffect();
 					player->hurted(200);
 					menuSuperior->calculateVitExp(player->getLife(), 0);
 				}
@@ -410,6 +431,7 @@ void Scene::update(int deltaTime)
 				if (pos.x < positionCascada.x + 40 && positionCascada.x < pos.x + 24 &&
 					pos.y < positionCascada.y + size * 16 && positionCascada.y < pos.y + 32 && !player->isBall()) {
 					if (!player->getBlueRaincoat()) {
+						if (!player->isHurted()) Audio::instance().waterHurtEffect();
 						player->hurted(5);
 						menuSuperior->calculateVitExp(player->getLife(), 0);
 					}
@@ -425,6 +447,7 @@ void Scene::update(int deltaTime)
 				glm::vec2 position = aspersor[i].getPosition(true);
 				if (pos.x < position.x + sizeLeft && position.x < pos.x + 24 &&
 					pos.y < position.y + 32 && position.y < pos.y + 32 && !player->isBall()) {
+					if (!player->isHurted()) Audio::instance().waterHurtEffect();
 					player->hurted(5);
 					menuSuperior->calculateVitExp(player->getLife(), 0);
 				}
@@ -434,6 +457,7 @@ void Scene::update(int deltaTime)
 				glm::vec2 position = aspersor[i].getPosition(false);
 				if (pos.x < position.x + sizeRight && position.x < pos.x + 24 &&
 					pos.y < position.y + 32 && position.y < pos.y + 32 && !player->isBall()) {
+					if (!player->isHurted()) Audio::instance().waterHurtEffect();
 					player->hurted(5);
 					menuSuperior->calculateVitExp(player->getLife(), 0);
 				}
@@ -447,6 +471,7 @@ void Scene::update(int deltaTime)
 				pos.y < position.y + 16 && position.y < pos.y + 32 && gota[i].getStatus() != 5 
 				&& gota[i].getStatus() != 4 && gota[i].getStatus() != 3 && !player->isHurted() && !player->isBall()) {
 				if (!player->getGrayRaincoat()) {
+					Audio::instance().hitGotaEffect();
 					player->hurted(100);
 					menuSuperior->calculateVitExp(player->getLife(), 0);
 				}
@@ -563,10 +588,11 @@ void Scene::update(int deltaTime)
 				if (pos.x < position.x + 16 && position.x < pos.x + 24 &&
 					pos.y < position.y + 16 && position.y < pos.y + 32 && !object[i].getPicked()) {
 					if (object[i].getType() == 1) {
+						Audio::instance().getBagEffect();
 						numPowerUp = object[i].getPowerUp();
 						player->setPowerUp(numPowerUp, true);
 						object[i].setPicked();
-						if (numPowerUp != 5) menuInferior->setPowerUp(numPowerUp);
+						if (numPowerUp != 5 && !special[numPowerUp]) menuInferior->setPowerUp(numPowerUp);
 						else {
 							player->setPoints(250);
 							menuSuperior->setPoints(player->getPoints());
@@ -577,6 +603,7 @@ void Scene::update(int deltaTime)
 						menuInferior->update(deltaTime);
 					}
 					else if (object[i].getType() == 3) {
+						Audio::instance().getPotionEffect();
 						object[i].setPicked();
 						player->setPoints(500);
 						menuSuperior->setPoints(player->getPoints());
@@ -586,41 +613,48 @@ void Scene::update(int deltaTime)
 						object[i].setPicked();
 						player->setKey(true);
 						menuInferior->setKey(true);
+						Audio::instance().getKeyEffect();
 					}
 					else if (object[i].getType() == 2) {
 						if (player->haveKey()) {
 							object[i].setPicked();
 							menuInferior->setKey(false);
 							if (sceneNum == 1 && screenNum == 2) {
+								Audio::instance().openDoorEffect();
 								greenDoor[0].open();
 								friends[0].setPosition(glm::vec2(3 * map->getTileSize(), 15 * map->getTileSize()));
 							}
 							else if (sceneNum == 2 && screenNum == 3) {
+								Audio::instance().openDoorEffect();
 								greenDoor[0].open();
-								friends[1].setPosition(glm::vec2(21 * map->getTileSize(), 5 * map->getTileSize()));
+								friends[1].setPosition(glm::vec2(21 * map->getTileSize(), 6 * map->getTileSize()));
 							}
 							else if (sceneNum == 3 && screenNum == 3) {
+								Audio::instance().openDoorEffect();
 								greenDoor[0].open();
-								friends[2].setPosition(glm::vec2(18 * map->getTileSize(), 3 * map->getTileSize()));
+								friends[2].setPosition(glm::vec2(18 * map->getTileSize(), 4 * map->getTileSize()));
 							}
 							else if (sceneNum == 4 && screenNum == 2) {
+								Audio::instance().openDoorEffect();
 								greenDoor[0].open();
-								friends[3].setPosition(glm::vec2(6 * map->getTileSize(), 4 * map->getTileSize()));
+								friends[3].setPosition(glm::vec2(6 * map->getTileSize(), 5 * map->getTileSize()));
 							}
 							else if (sceneNum == 4 && screenNum == 3) {
+								Audio::instance().openDoorEffect();
 								greenDoor[0].open();
-								friends[4].setPosition(glm::vec2(16 * map->getTileSize(), 3 * map->getTileSize()));
+								friends[4].setPosition(glm::vec2(16 * map->getTileSize(), 4 * map->getTileSize()));
 							}
 							else if (sceneNum == 5 && screenNum == 1) {
+								Audio::instance().openDoorEffect();
 								greenDoor[0].open();
-								friends[5].setPosition(glm::vec2(3 * map->getTileSize(), 16 * map->getTileSize()));
+								friends[5].setPosition(glm::vec2(3 * map->getTileSize(), 17 * map->getTileSize()));
 							}
 							player->setKey(false);
 						}
 					}
 				}
 			}
-			if (object[i].getType() == 1 && object[i].getPowerUp() != 5 && object[i].getPicked() && !object[i].getAgotado() && !object[i].isActive() ) {
+			if (object[i].getType() == 1 && object[i].getPowerUp() != 5 && object[i].getPicked() && !object[i].getAgotado() && !object[i].isActive() && !special[numPowerUp]) {
 				menuInferior->deletePowerUp(object[i].getPowerUp());
 				player->setPowerUp(object[i].getPowerUp(), false);
 			}
@@ -635,6 +669,7 @@ void Scene::update(int deltaTime)
 				timeFriend[i] = 0;
 			}
 			if (timeFriend[i] > 350) {
+				Audio::instance().rescueFriedEffect();
 				friends[i].setPicked();
 				menuInferior->savedNewFriend();
 				++numFriends;
@@ -652,26 +687,34 @@ void Scene::update(int deltaTime)
 	}
 	if (player->getAnimDoorNum() == -2) {
 		glm::ivec2 position = player->getPosition();
+		Audio::instance().changeScreenEffect();
 		if (sceneNum == 1 && screenNum == 3) {
 			changeScreen(2, 1, glm::ivec2(5 * tileSize, 4 * tileSize - 8));
+			Audio::instance().playLevel(2);
 		}
 		else if (sceneNum == 2 && screenNum == 1) {
 			changeScreen(1, 3, glm::ivec2(28 * tileSize, 7 * tileSize - 8));
+			Audio::instance().playLevel(1);
 		}
 		else if (sceneNum == 2 && screenNum == 3) {
 			changeScreen(3, 1, glm::ivec2(14 * tileSize, 17 * tileSize - 8));
+			Audio::instance().playLevel(3);
 		}
 		else if (sceneNum == 3 && screenNum == 1) {
 			changeScreen(2, 3, glm::ivec2(10 * tileSize, 10 * tileSize - 8));
+			Audio::instance().playLevel(2);
 		}
 		else if (sceneNum == 3 && screenNum == 3) {
 			changeScreen(4, 1, glm::ivec2(4 * tileSize, 14 * tileSize - 8));
+			Audio::instance().playLevel(4);
 		}
 		else if (sceneNum == 4 && screenNum == 1) {
 			if (position.x == 4*tileSize + 24 && position.y == 5*tileSize - 8)
 				changeScreen(4, 2, glm::ivec2(28 * tileSize, 17 * tileSize - 8));
-			else if (position.x == 4*tileSize + 24 && position.y == 14*tileSize - 8)
+			else if (position.x == 4 * tileSize + 24 && position.y == 14 * tileSize - 8) {
 				changeScreen(3, 3, glm::ivec2(2 * tileSize, 13 * tileSize - 8));
+				Audio::instance().playLevel(3);
+			}
 			else if (position.x == 27*tileSize + 24 && position.y == 5*tileSize - 8)
 				changeScreen(4, 3, glm::ivec2(6 * tileSize, 16 * tileSize - 8));
 		}
@@ -679,13 +722,16 @@ void Scene::update(int deltaTime)
 			changeScreen(4, 1, glm::ivec2(4 * tileSize, 5 * tileSize - 8));
 		}
 		else if (sceneNum == 4 && screenNum == 3) {
-			if (position.x == 14 * tileSize + 24 && position.y == 15*tileSize - 8)
+			if (position.x == 14 * tileSize + 24 && position.y == 15 * tileSize - 8) {
 				changeScreen(5, 1, glm::ivec2(3 * tileSize, 4 * tileSize - 8));
+				Audio::instance().playLevel(5);
+			}
 			else if (position.x == 6*tileSize + 24 && position.y == 16*tileSize - 8)
 				changeScreen(4, 1, glm::ivec2(26 * tileSize, 5 * tileSize - 8));
 		}
 		else if (sceneNum == 5 && screenNum == 1) {
 			changeScreen(4, 3, glm::ivec2(14 * tileSize, 15 * tileSize - 8));
+			Audio::instance().playLevel(4);
 		}
 		else if (sceneNum == 5 && screenNum == 3) {
 			win = true;
@@ -719,7 +765,24 @@ void Scene::render()
 	if (greenDoor != NULL) {
 		for (int i = 0; i < numGreenDoors; ++i) {
 			if (friends != NULL && greenDoor[i].isOpen()) {
-				if(!friends[i].isPicked()) friends[i].render();
+				if (sceneNum == 1 && screenNum == 2) {
+					if (!friends[0].isPicked()) friends[0].render();
+				}
+				else if (sceneNum == 2 && screenNum == 3) {
+					if (!friends[1].isPicked()) friends[1].render();
+				}
+				else if (sceneNum == 3 && screenNum == 3) {
+					if (!friends[2].isPicked()) friends[2].render();
+				}
+				else if (sceneNum == 4 && screenNum == 2) {
+					if (!friends[3].isPicked()) friends[3].render();
+				}
+				else if (sceneNum == 4 && screenNum == 3) {
+					if (!friends[4].isPicked()) friends[4].render();
+				}
+				else if (sceneNum == 5 && screenNum == 1) {
+					if (!friends[5].isPicked()) friends[5].render();
+				}
 			}
 			greenDoor[i].render();
 		}
@@ -779,6 +842,7 @@ void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
 		gota[2].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(21 * map->getTileSize(), 14 * map->getTileSize()));
 		gota[2].setTileMap(map);
 		object[0].setTileMap(map);
+		Audio::instance().bornEnemiesEffect();
 	}
 	else if (scene == 1 && screen == 2) {
 		esqueleto = new Esqueleto();
@@ -803,6 +867,7 @@ void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
 		gota[0].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(17 * map->getTileSize(), 7 * map->getTileSize()));
 		gota[0].setTileMap(map);
 		object[1].setTileMap(map);
+		Audio::instance().bornEnemiesEffect();
 	} 
 	else if (scene == 1 and screen == 3) {
 		numAsp = 1;
@@ -852,6 +917,7 @@ void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
 		gota[7].setTileMap(map);
 		object[3].setTileMap(map);
 		object[4].setTileMap(map);
+		Audio::instance().bornEnemiesEffect();
 	}
 	else if (scene == 2 && screen == 2) {
 		esqueleto = new Esqueleto();
@@ -875,6 +941,7 @@ void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
 		gota[4].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(9 * map->getTileSize(), 13 * map->getTileSize()));
 		gota[4].setTileMap(map);
 		object[5].setTileMap(map);
+		Audio::instance().bornEnemiesEffect();
 	}
 	else if (scene == 2 && screen == 3) {
 		esqueleto = new Esqueleto();
@@ -900,9 +967,9 @@ void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
 		gota[0].setTileMap(map);
 		gota[1].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(15 * map->getTileSize(), 13 * map->getTileSize()));
 		gota[1].setTileMap(map);
-		gota[7].setTileMap(map);
 		object[6].setTileMap(map);
 		object[7].setTileMap(map);
+		Audio::instance().bornEnemiesEffect();
 	}
 	else if (scene == 3 && screen == 1) {
 		cabezaFlotante = new CabezaFlotante();
@@ -934,6 +1001,7 @@ void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
 		gota[3].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(28 * map->getTileSize(), 2 * map->getTileSize()));
 		gota[3].setTileMap(map);
 		object[8].setTileMap(map);
+		Audio::instance().bornEnemiesEffect();
 	}
 	else if (scene == 3 && screen == 2) {
 		esqueleto = new Esqueleto();
@@ -960,6 +1028,7 @@ void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
 		gota[2].setTileMap(map);
 		object[9].setTileMap(map);
 		object[10].setTileMap(map);
+		Audio::instance().bornEnemiesEffect();
 	}
 	else if (scene == 3 && screen == 3) {
 		numSkullDoors = 1;
@@ -1015,7 +1084,7 @@ void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
 		greenDoor = new GreenDoor[1];
 		greenDoor[0].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(5 * map->getTileSize(), 3 * map->getTileSize()));
 		greenDoor[0].setTileMap(map);
-		if (friends[4].isPicked()) greenDoor[0].open();
+		if (friends[3].isPicked()) greenDoor[0].open();
 		numGotas = 5;
 		gota = new Gota[5];
 		gota[0].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(23 * map->getTileSize(), 10 * map->getTileSize()));
@@ -1030,6 +1099,7 @@ void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
 		gota[4].setTileMap(map);
 		object[13].setTileMap(map);
 		object[14].setTileMap(map);
+		Audio::instance().bornEnemiesEffect();
 	}
 	else if (scene == 4 && screen == 3) {
 		esqueleto = new Esqueleto();
@@ -1050,7 +1120,7 @@ void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
 		greenDoor = new GreenDoor[1];
 		greenDoor[0].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(15 * map->getTileSize(), 2 * map->getTileSize()));
 		greenDoor[0].setTileMap(map);
-		if (friends[5].isPicked()) greenDoor[0].open();
+		if (friends[4].isPicked()) greenDoor[0].open();
 		numGotas = 5;
 		gota = new Gota[5];
 		gota[0].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(4 * map->getTileSize(), 2 * map->getTileSize()));
@@ -1065,6 +1135,7 @@ void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
 		gota[4].setTileMap(map);
 		object[15].setTileMap(map);
 		object[16].setTileMap(map);
+		Audio::instance().bornEnemiesEffect();
 	}
 	else if (scene == 5 && screen == 1) {
 		cabezaFlotante = new CabezaFlotante();
@@ -1085,6 +1156,7 @@ void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
 		greenDoor = new GreenDoor[1];
 		greenDoor[0].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(2 * map->getTileSize(), 15 * map->getTileSize()));
 		greenDoor[0].setTileMap(map);
+		if (friends[5].isPicked()) greenDoor[0].open();
 		numGotas = 2;
 		gota = new Gota[2];
 		gota[0].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(10 * map->getTileSize(), 1 * map->getTileSize()));
@@ -1093,6 +1165,7 @@ void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
 		gota[1].setTileMap(map);
 		object[17].setTileMap(map);
 		object[18].setTileMap(map);
+		Audio::instance().bornEnemiesEffect();
 	}
 	else if (scene == 5 && screen == 2) {
 		cabezaFlotante = new CabezaFlotante();
@@ -1115,6 +1188,7 @@ void Scene::changeScreen(int scene, int screen, glm::vec2 pos)
 		gota[3].setTileMap(map);
 		object[19].setTileMap(map);
 		object[20].setTileMap(map);
+		Audio::instance().bornEnemiesEffect();
 	}
 	else if (scene = 5 && screen == 3) {
 		numCasc = 1;
@@ -1153,14 +1227,14 @@ void Scene::initObjects(ShaderProgram& texProgram) {
 	object[8].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(4 * 16, 17 * 16), 3, 1, 3, 0);
 	object[9].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(19 * 16, 3 * 16), 3, 2, 1, 1);
 	object[10].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(21 * 16, 16 * 16), 3, 2, 0, 0);
-	object[11].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(20 * 16, 3 * 16), 3, 3, 2, 0);
+	object[11].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(16 * 16, 3 * 16), 3, 3, 2, 0);
 	object[12].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(27 * 16, 14 * 16), 4, 1, 0, 0);
 	object[13].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(13 * 16, 16 * 16), 4, 2, 1, 4);
 	object[14].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(8 * 16, 4 * 16), 4, 2, 2, 0);
 	object[15].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(7 * 16, 10 * 16), 4, 3, 0, 0);
 	object[16].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(18 * 16, 3 * 16), 4, 3, 2, 0);
 	object[17].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(16 * 16, 4 * 16), 5, 1, 3, 0);
-	object[18].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(5 * 16, 16 * 16), 5, 1, 2, 0);
+	object[18].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(1 * 16, 16 * 16), 5, 1, 2, 0);
 	object[19].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(27 * 16, 6 * 16), 5, 2, 1, 2);
 	object[20].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(3 * 16, 6 * 16), 5, 2, 1, 5);
 	object[21].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, glm::vec2(28 * 16, 6 * 16), 5, 3, 0, 0);

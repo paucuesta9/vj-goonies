@@ -54,7 +54,7 @@ private:
 	Sprite *sprite, *spriteNormal, *spriteHurt;
 	TileMap *map;
 	int life, exp, Status, speed, points;
-	bool blueRaincoat, grayRaincoat, yellowSpellbook, blueSpellbook, godMode;
+	bool blueRaincoat, grayRaincoat, yellowSpellbook, blueSpellbook, godMode, pressedB;
 };
 
 

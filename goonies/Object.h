@@ -32,7 +32,7 @@ private:
 	Sprite* sprite;
 	TileMap* map;
 	int powerUp;
-	bool picked, agotado;
+	bool picked, agotado, specialKey;
 	int scene, screen, time;
 };
 

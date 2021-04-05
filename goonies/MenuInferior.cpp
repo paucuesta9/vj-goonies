@@ -112,6 +112,8 @@ void MenuInferior::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgr
 }
 
 void MenuInferior::restart() {
+	friendsSaved = 0;
+	activePowerUps = 0;
 	setInit();
 }
 
@@ -149,9 +151,9 @@ void MenuInferior::deletePowerUp(int powerUp) {
 				spritePowerUps[j].changeAnimation(spritePowerUps[j + 1].animation());
 			}
 			spritePowerUps[activePowerUps - 1].changeAnimation(NONE);
+			--activePowerUps;
 		}
 	}
-	--activePowerUps;
 }
 
 

@@ -30,6 +30,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	exp = 0;
 	points = 0;
 	key = false;
+	pressedB = false;
 
 	Status = -1;
 	speed = 1;
@@ -303,6 +304,7 @@ sprite->changeAnimation(PUNCH_LEFT);
 				{
 					if (!map->collisionLiana(posPlayer, glm::ivec2(16, 20))) {
 						if (!bLiana) {
+							Audio::instance().jumpEffect();
 							bJumping = true;
 							jumpAngle = 0;
 							startY = posPlayer.y;
@@ -349,8 +351,14 @@ sprite->changeAnimation(PUNCH_LEFT);
 
 			}
 			else if (Game::instance().getKey(66) || Game::instance().getKey(98) && !map->collisionMoveUp(posPlayer, glm::ivec2(16, 16))) {
+				if (!pressedB)
+					Audio::instance().flotarEffect();
 				posPlayer.y -= 5;
 				if (sprite->animation() != WATER) sprite->changeAnimation(WATER);
+				pressedB = true;
+			}
+			else {
+				pressedB = false;
 			}
 		}
 	}
@@ -402,11 +410,12 @@ void Player::setDoorCollision(bool state) {
 }
 
 void Player::hurted(int damage) {
+	if (sprite != spriteHurt) {
+		setSprite(2);
+		animationTime = 0;
+	}
+
 	if (!godMode) {
-		if (sprite != spriteHurt) {
-			setSprite(2);
-			animationTime = 0;
-		}
 		life -= damage;
 	}	
 }

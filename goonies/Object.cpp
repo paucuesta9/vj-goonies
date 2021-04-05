@@ -22,6 +22,7 @@ void Object::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, gl
 	agotado = false;
 	powerUp = power;
 	picked = false;
+	specialKey = false;
 	posObject = pos;
 	scene = sceneNum;
 	screen = screenNum;

@@ -9,6 +9,7 @@
 #include "Credits.h"
 #include "Instructions.h"
 #include "Win.h"
+#include "Audio.h"
 
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 480

@@ -3,6 +3,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "Intro.h"
 #include "Game.h"
+#include "Audio.h"
 
 enum AnimsProfessor {
 	STAND_RIGHT, STAND_LEFT, PAUSED_RIGHT, PAUSED_LEFT, MOVE_RIGHT, MOVE_LEFT, GIVE_FIVE_RIGHT, GIVE_FIVE_LEFT, FALL
@@ -35,7 +36,7 @@ void Intro::init() {
 	initSpriteKids();
 	initSpriteMalo();
 	credits = new Text[3];
-	credits[0].init(glm::vec2(float(48), float(250)), texProgram, 2, 0, "JUDITH ALMONO GOMEZ AND PAU CUESTA");
+	credits[0].init(glm::vec2(float(96), float(250)), texProgram, 2, 0, "JUDITH ALMONO AND PAU CUESTA");
 	credits[1].init(glm::vec2(float(168), float(280)), texProgram, 2, 0, "VIDEOJOCS - FIB UPC");
 	credits[2].init(glm::vec2(float(224), float(310)), texProgram, 2, 0, "2021-2021 Q2");
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
@@ -48,6 +49,7 @@ void Intro::update(int deltaTime) {
 	if (animTime < 100) {
 		for (int i = 0; i < 3; ++i) credits[i].update(deltaTime);
 		++animTime;
+		if (animTime == 100) Audio::instance().playIntro();
 	}
 	else if (animTime > 200 && animTime < 300) {
 		++animTime;
@@ -89,43 +91,43 @@ void Intro::update(int deltaTime) {
 		else {
 			profesor->changeAnimation(PAUSED_LEFT);
 			if (posKid[0].x < 450) {
-				posKid[0].x += 4;
+				posKid[0].x += 6;
 				kids[0].setPosition(posKid[0]);
 			}
 			else {
 				kids[0].changeAnimation(STAND_FRONT);
 				if (posKid[1].x < 400) {
-					posKid[1].x += 4;
+					posKid[1].x += 6;
 					kids[1].setPosition(posKid[1]);
 				}
 				else {
 					kids[1].changeAnimation(STAND_FRONT);
 					if (posKid[2].x < 350) {
-						posKid[2].x += 4;
+						posKid[2].x += 6;
 						kids[2].setPosition(posKid[2]);
 					}
 					else {
 						kids[2].changeAnimation(STAND_FRONT);
 						if (posKid[3].x < 300) {
-							posKid[3].x += 4;
+							posKid[3].x += 6;
 							kids[3].setPosition(posKid[3]);
 						}
 						else {
 							kids[3].changeAnimation(STAND_FRONT);
 							if (posKid[4].x < 250) {
-								posKid[4].x += 4;
+								posKid[4].x += 6;
 								kids[4].setPosition(posKid[4]);
 							}
 							else {
 								kids[4].changeAnimation(STAND_FRONT);
 								if (posKid[5].x < 200) {
-									posKid[5].x += 4;
+									posKid[5].x += 6;
 									kids[5].setPosition(posKid[5]);
 								}
 								else {
 									kids[5].changeAnimation(STAND_FRONT);
 									if (posKid[6].x < 150) {
-										posKid[6].x += 4;
+										posKid[6].x += 6;
 										kids[6].setPosition(posKid[6]);
 									}
 									else {

@@ -69,6 +69,7 @@ private:
 	int timeFriend[6];
 	bool win;
 	bool first, pressedN, releasedN, pressedG, releasedG, pressedS, releasedS, pressed1, released1, pressed2, released2, pressed3, released3, pressed4, released4, pressed5, released5;
+	bool special[5];
 };
 
 
