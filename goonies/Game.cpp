@@ -167,6 +167,13 @@ void Game::moveMouse(int x, int y)
 		if (x >= 288 && x < 352 && y >= 352 && y < 368) mainMenu.hover(3, 1);
 		else mainMenu.hover(3, 0);
 	}
+	else if (currentScreen == INSTRUCTIONS) {
+		if (x >= 10 && x < 42 && y >= 224 && y < 256) instructions.hover(0, true);
+		else instructions.hover(0, false);
+
+		if (x >= 598 && x < 630 && y >= 224 && y < 256) instructions.hover(1, true);
+		else instructions.hover(1, false);
+	}
 }
 
 void Game::mousePress(int button, int x, int y)
@@ -177,10 +184,17 @@ void Game::mousePress(int button, int x, int y)
 void Game::mouseRelease(int button, int x, int y)
 {
 	if (currentScreen == MAIN_MENU) {
-		if (x >= 288 && x < 352 && y >= 160 && y < 176) currentScreen = GAME;
+		if (x >= 288 && x < 352 && y >= 160 && y < 176) {
+			currentScreen = GAME;
+			scene.restart();
+		}
 		if (x >= 224 && x < 416 && y >= 224 && y < 240) currentScreen = INSTRUCTIONS;
 		if (x >= 264 && x < 376 && y >= 288 && y < 304) currentScreen = CREDITS;
 		if (x >= 288 && x < 352 && y >= 352 && y < 368) bPlay = false;
+	}
+	else if (currentScreen == INSTRUCTIONS) {
+		if (x >= 10 && x < 42 && y >= 224 && y < 256) instructions.clicked(0);
+		if (x >= 598 && x < 630 && y >= 224 && y < 256) instructions.clicked(1);
 	}
 }
 

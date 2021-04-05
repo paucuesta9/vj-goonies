@@ -24,7 +24,7 @@ void Credits::init() {
 }
 
 void Credits::printTexts() {
-	texts = new Text[10];
+	texts = new Text[11];
 	
 	texts[0].init(glm::vec2(float(272), float(100)), texProgram, 1, 0, "DEVELOPED BY");
 	texts[1].init(glm::vec2(float(96), float(120)), texProgram, 2, 0, "JUDITH ALMONO AND PAU CUESTA");
@@ -40,13 +40,15 @@ void Credits::printTexts() {
 
 	texts[8].init(glm::vec2(float(288), float(330)), texProgram, 1, 0, "MUSIC BY");
 	texts[9].init(glm::vec2(float(216), float(350)), texProgram, 2, 0, "WWW.VGMPF.COM");
+
+	texts[10].init(glm::vec2(float(136), float(450)), texProgram, 2, 1, "PRESS ESC TO GO TO MENU");
 }
 
 
 void Credits::update(int deltaTime) {
 	currentTime += deltaTime;
 	background->update(deltaTime);
-	for (int i = 0; i < 10; ++i)
+	for (int i = 0; i < 11; ++i)
 		texts[i].update(deltaTime);
 }
 
@@ -60,7 +62,7 @@ void Credits::render() {
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 	background->render();
-	for (int i = 0; i < 10; ++i)
+	for (int i = 0; i < 11; ++i)
 		texts[i].render();
 }
 
