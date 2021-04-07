@@ -278,7 +278,9 @@ sprite->changeAnimation(PUNCH_LEFT);
 				if (jumpAngle > 90) {
 					bJumping = !map->collisionMoveDown(posPlayer, glm::ivec2(20, 20), &posPlayer.y);
 				}
-				else bJumping = !map->collisionMoveUp(posPlayer, glm::ivec2(16, 16));
+				else if (map->collisionMoveUp(posPlayer, glm::ivec2(16, 16))) {
+					jumpAngle = 180 - jumpAngle;
+				}
 			}
 		}
 		else

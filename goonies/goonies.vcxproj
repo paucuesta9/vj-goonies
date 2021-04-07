@@ -105,12 +105,15 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>..\libs\Simple OpenGL Image Library\src;..\libs\freeglut\include;..\libs\glew-1.13.0\include;..\libs\glm;..\libs\irrKlang-1.6.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>SOIL.lib;glew32.lib;irrKlang.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\libs\glew-1.13.0\lib\Release\Win32;..\libs\freeglut\lib;..\libs\Simple OpenGL Image Library\projects\VC9\Debug;..\libs\irrKlang-1.6.0\lib\Win32-visualStudio;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -151,7 +154,6 @@
     <ClCompile Include="CabezaFlotante.cpp" />
     <ClCompile Include="Cascada.cpp" />
     <ClCompile Include="Credits.cpp" />
-    <ClCompile Include="Enemigo.cpp" />
     <ClCompile Include="Esqueleto.cpp" />
     <ClCompile Include="Friend.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -187,7 +189,6 @@
     <ClInclude Include="CabezaFlotante.h" />
     <ClInclude Include="Cascada.h" />
     <ClInclude Include="Credits.h" />
-    <ClInclude Include="Enemigo.h" />
     <ClInclude Include="Esqueleto.h" />
     <ClInclude Include="Friend.h" />
     <ClInclude Include="GameOver.h" />

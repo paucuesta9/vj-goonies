@@ -111,8 +111,12 @@ void MenuSuperior::restart() {
 	text[3].init(glm::vec2(float(60 + 420), float(70 - 20)), shader, 2, 0, "01-01");
 	text[6].init(glm::vec2(float(60), float(70 - 20)), shader, 2, 0, "1P-");
 	text[7].init(glm::vec2(float(60 + 50), float(70 - 20)), shader, 2, 0, "000000");
-	calculateVitExp(1000, 0);
-	calculateVitExp(0, 1);
+	for (int i = 0; i < 24; ++i) {
+		if (i == 0 || i == 12) spriteVitExp[i].changeAnimation(INICIO);
+		else if (i == 23 || i == 11) spriteVitExp[i].changeAnimation(FIN);
+		else if (i < 12) spriteVitExp[i].changeAnimation(VIT8);
+		else spriteVitExp[i].changeAnimation(VACIO);
+	}
 }
 
 void MenuSuperior::update(int deltaTime)

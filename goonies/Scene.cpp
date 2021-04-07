@@ -113,8 +113,11 @@ void Scene::update(int deltaTime)
 
 	if (releasedN) {
 		pressedN = releasedN = false;
-		++numFriends;
-		menuInferior->savedNewFriend();
+		if (numFriends < 6) {
+			++numFriends;
+			menuInferior->savedNewFriend();
+			if (startEndDoor != NULL && sceneNum == 5 && screenNum == 3 && numFriends == 6) startEndDoor->open();
+		}
 	}
 
 	if (releasedG) {

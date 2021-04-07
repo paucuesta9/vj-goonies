@@ -38,7 +38,7 @@ void Intro::init() {
 	credits = new Text[3];
 	credits[0].init(glm::vec2(float(96), float(250)), texProgram, 2, 0, "JUDITH ALMONO AND PAU CUESTA");
 	credits[1].init(glm::vec2(float(168), float(280)), texProgram, 2, 0, "VIDEOJOCS - FIB UPC");
-	credits[2].init(glm::vec2(float(224), float(310)), texProgram, 2, 0, "2021-2021 Q2");
+	credits[2].init(glm::vec2(float(224), float(310)), texProgram, 2, 0, "2020-2021 Q2");
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 	currentTime = 0.0f;
 }

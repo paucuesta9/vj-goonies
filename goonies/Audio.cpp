@@ -49,7 +49,7 @@ void Audio::playIntro()
 void Audio::playMenu()
 {
 	engineMusic->stopAllSounds();
-	music = engineMusic->play2D("sound/menu.ogg", false, false, true);
+	music = engineMusic->play2D("sound/menu.ogg", true, false, true);
 	music->setVolume(0.1f);
 }
 

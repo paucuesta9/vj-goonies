@@ -42,9 +42,6 @@
     <ClCompile Include="TileMap.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="Enemigo.cpp">
-      <Filter>Archivos de origen</Filter>
-    </ClCompile>
     <ClCompile Include="CabezaFlotante.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
@@ -135,9 +132,6 @@
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Windows Kits\10\Include\10.0.18362.0\ucrt\locale.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
-    <ClInclude Include="Enemigo.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="CabezaFlotante.h">
